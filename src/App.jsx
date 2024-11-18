@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import PrivateRoute from './components/PrivateRoute';
 import YoutubeScraper from './pages/Youtube';
 import TwitchScraper from './pages/Twitch';
+import TikTokScraper from './pages/TiktokScrapper';
 import { ToastContainer } from 'react-toastify';
 
 
@@ -39,6 +40,7 @@ function App() {
             <Route path="/linkedin" element={<PrivateRoute><LinkedInScraper /></PrivateRoute>} />
             <Route path="/youtube" element={<PrivateRoute><YoutubeScraper /></PrivateRoute>} />
             <Route path="/twitch" element={<PrivateRoute><TwitchScraper/></PrivateRoute>} />
+            <Route path="/tiktok" element={<PrivateRoute><TikTokScraper/></PrivateRoute>} />
 
           </Routes>
         </main>

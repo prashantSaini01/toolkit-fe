@@ -25,6 +25,12 @@ const Home = () => {
 >
   Twitch Scraper
 </Link>
+<Link 
+  to="/tiktok" 
+  className="bg-gradient-to-r from-pink-500 to-indigo-300 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300"
+>
+  Tiktok Scraper
+</Link>
       </div>
     </div>
   );

@@ -21,6 +21,9 @@ const Header = () => {
           <li><Link to="/linkedin" className="hover:text-secondary transition-colors duration-300">LinkedIn</Link></li>
           <li><Link to="/youtube" className="hover:text-secondary transition-colors duration-300">Youtube</Link></li>
           <li><Link to="/twitch" className="hover:text-secondary transition-colors duration-300">Twitch</Link></li>
+          <li><Link to="/tiktok" className="hover:text-secondary transition-colors duration-300">Tiktok</Link></li>
+
+
         </ul>
         <div className="flex space-x-4">
           {/* Conditionally render buttons based on authentication */}
