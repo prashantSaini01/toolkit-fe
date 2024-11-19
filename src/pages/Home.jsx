@@ -40,6 +40,7 @@ import {
   FaLinkedin,
   FaYoutube,
   FaTwitch,
+  FaTiktok
 } from "react-icons/fa";
 
 const Home = () => {
@@ -128,6 +129,20 @@ const Home = () => {
             Retrieve streams, chat messages, and viewer data from Twitch.
           </p>
           <Link to="/twitch" className="text-blue-600 hover:text-blue-800">
+            Start Scraping
+          </Link>
+        </div>
+
+        {/* TikTok Scraper */}
+        <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50">
+          <FaTiktok className="text-4xl text-black mb-4" /> {/* TikTok icon */}
+          <h3 className="text-xl font-semibold text-gray-800 mb-2">
+            TikTok Scraper
+          </h3>
+          <p className="text-gray-600 mb-4">
+            Extract TikTok user profiles, videos, likes, and comments.
+          </p>
+          <Link to="/tiktok" className="text-blue-600 hover:text-blue-800">
             Start Scraping
           </Link>
         </div>
