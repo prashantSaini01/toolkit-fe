@@ -20,7 +20,7 @@ const TikTokScraper = () => {
     try {
       const response = await axios.post(
         `${API_URL}/scrape_tiktok`,
-        { hashtag, post_count },  // Backend expects post_count
+        { hashtag, post_count }, // Backend expects post_count
         { headers: { 'Content-Type': 'application/json', 'x-access-token': token } }
       );
       setPosts(response.data); // Assuming backend returns an array of posts
@@ -50,7 +50,7 @@ const TikTokScraper = () => {
         <input
           type="number"
           value={post_count}
-          onChange={(e) => setPostCount(e.target.value)}  // Renamed to setPostCount
+          onChange={(e) => setPostCount(e.target.value)} // Renamed to setPostCount
           placeholder="Number of posts (e.g., 10)"
           className="w-full p-4 text-lg border-2 border-purple-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
         />
@@ -92,42 +92,36 @@ const TikTokScraper = () => {
                     className="text-center hover:bg-gray-50 transition-colors duration-200"
                   >
                     {tableHeaders.map((header, colIndex) => (
-                      <td key={colIndex} className="border p-2 whitespace-nowrap">
-                        {/* Render images dynamically */}
-                        {header.toLowerCase().includes('image') || header.toLowerCase().includes('avatar') ? (
-                          <a href={post[header]} target="_blank" rel="noopener noreferrer">
-                            <img
-                              src={post[header]}
-                              alt={header}
-                              className="w-16 h-16 object-cover rounded-lg shadow-sm hover:shadow-md transition-shadow"
-                            />
-                          </a>
-                        ) : header.toLowerCase().includes('video') ? (
-                          <a
-                            href={post[header]}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                          >
-                            Watch Video
-                          </a>
-                        ) : header.toLowerCase().includes('music') && header !== 'Music URL' ? (
-                          // For music title and author, render as plain text
-                          <span>{post[header]}</span>
-                        ) : header.toLowerCase() === 'music url' ? (
-                          // For music URL, render as a link
-                          <a
-                            href={post[header]}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-purple-600 hover:underline"
-                          >
-                            Music
-                          </a>
-                        ) : (
-                          post[header]
-                        )}
-                      </td>
+                      <td
+  key={colIndex}
+  className={`border p-2 ${
+    header.toLowerCase().includes('hashtag') || header.toLowerCase().includes('title')
+      ? 'max-w-xs break-words whitespace-normal'
+      : ''
+  }`}
+>
+  {/* Render images dynamically */}
+  {header.toLowerCase().includes('image') || header.toLowerCase().includes('avatar') ? (
+    <a href={post[header]} target="_blank" rel="noopener noreferrer">
+      <img
+        src={post[header]}
+        alt={header}
+        className="w-16 h-16 object-cover rounded-lg shadow-sm hover:shadow-md transition-shadow"
+      />
+    </a>
+  ) : header.toLowerCase().includes('video') ? (
+    <a
+      href={post[header]}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-600 hover:underline"
+    >
+      Watch Video
+    </a>
+  ) : (
+    post[header]
+  )}
+</td>
                     ))}
                   </tr>
                 ))}
