@@ -40,7 +40,7 @@ import {
   FaLinkedin,
   FaYoutube,
   FaTwitch,
-  FaTiktok
+  FaTiktok,
 } from "react-icons/fa";
 
 const Home = () => {
@@ -72,7 +72,10 @@ const Home = () => {
           <p className="text-gray-600 mb-4">
             Extract user profiles, posts, comments, and likes from Instagram.
           </p>
-          <Link to="/instagram" className="text-blue-600 hover:text-blue-800">
+          <Link
+            to="/instagram"
+            className="bg-gradient-to-r from-pink-500 to-red-500 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300"
+          >
             Start Scraping
           </Link>
         </div>
@@ -86,7 +89,10 @@ const Home = () => {
           <p className="text-gray-600 mb-4">
             Collect tweets, hashtags, and user information from Twitter.
           </p>
-          <Link to="/twitter" className="text-blue-600 hover:text-blue-800">
+          <Link
+            to="/twitter"
+            className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300"
+          >
             Start Scraping
           </Link>
         </div>
@@ -100,7 +106,10 @@ const Home = () => {
           <p className="text-gray-600 mb-4">
             Scrape profiles, connections, and job listings from LinkedIn.
           </p>
-          <Link to="/linkedin" className="text-blue-600 hover:text-blue-800">
+          <Link
+            to="/linkedin"
+            className="bg-gradient-to-r from-blue-800 to-purple-800 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300"
+          >
             Start Scraping
           </Link>
         </div>
@@ -114,7 +123,10 @@ const Home = () => {
           <p className="text-gray-600 mb-4">
             Gather video details, comments, and channel statistics from YouTube.
           </p>
-          <Link to="/youtube" className="text-blue-600 hover:text-blue-800">
+          <Link
+            to="/youtube"
+            className="bg-gradient-to-r from-red-800 to-red-400 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300"
+          >
             Start Scraping
           </Link>
         </div>
@@ -128,21 +140,27 @@ const Home = () => {
           <p className="text-gray-600 mb-4">
             Retrieve streams, chat messages, and viewer data from Twitch.
           </p>
-          <Link to="/twitch" className="text-blue-600 hover:text-blue-800">
+          <Link
+            to="/twitch"
+            className="bg-gradient-to-r from-pink-500 to-indigo-600 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300"
+          >
             Start Scraping
           </Link>
         </div>
 
         {/* TikTok Scraper */}
         <div className="flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50">
-          <FaTiktok className="text-4xl text-black mb-4" /> {/* TikTok icon */}
+          <FaTiktok className="text-4xl text-black mb-4" />
           <h3 className="text-xl font-semibold text-gray-800 mb-2">
             TikTok Scraper
           </h3>
           <p className="text-gray-600 mb-4">
             Extract TikTok user profiles, videos, likes, and comments.
           </p>
-          <Link to="/tiktok" className="text-blue-600 hover:text-blue-800">
+          <Link
+            to="/tiktok"
+            className="bg-gradient-to-r from-gray-900 to-gray-600 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300"
+          >
             Start Scraping
           </Link>
         </div>
