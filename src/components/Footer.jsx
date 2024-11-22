@@ -9,6 +9,7 @@ const Footer = () => {
           <a href="https://github.com" className="hover:text-primary transition-colors duration-300">GitHub</a>
           <a href="https://twitter.com" className="hover:text-primary transition-colors duration-300">Twitter</a>
           <a href="https://linkedin.com" className="hover:text-primary transition-colors duration-300">LinkedIn</a>
+          
         </div>
       </div>
     </footer>

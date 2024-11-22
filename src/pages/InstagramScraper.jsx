@@ -1,19 +1,9 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import API_URL from './config';
 import { format } from 'date-fns';
-import { useTokenCheck } from '../components/token_check';
 
 const InstagramScraper = () => {
-
-
-  const checkToken = useTokenCheck();
-
-  useEffect(() => {
-    checkToken();
-  }, []);
-
-
   const [query, setQuery] = useState('');
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -33,7 +23,7 @@ const InstagramScraper = () => {
         { hashtag },
         { headers: { 'Content-Type': 'application/json', 'x-access-token': token } }
       );
-      setPosts(response.data);
+      setPosts(response.data.response);
     } catch (error) {
       console.error("Error scraping data", error.response ? error.response.data : error.message);
       alert("Error: " + (error.response?.data?.error || "Scraping failed!"));
