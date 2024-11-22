@@ -29,7 +29,7 @@ function App() {
         <main className="flex-grow container mx-auto p-4">
           <Routes>
             {/* Public routes */}
-            <Route path="/" element={<Login />} />
+            <Route path="/" element={<Home />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
 
