@@ -1,9 +1,12 @@
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import API_URL from "./config";
 import { format } from "date-fns";
-import { useTokenCheck } from "../components/token_check";
+
+
+
 import {
   FaUser,
   FaHeart,
@@ -12,13 +15,8 @@ import {
   FaLink,
   FaRegComment,
 } from "react-icons/fa";
-
 const InstagramScraper = () => {
-  const checkToken = useTokenCheck();
-
-  useEffect(() => {
-    checkToken();
-  }, []);
+  const navigate = useNavigate();
 
   const [query, setQuery] = useState("");
   const [posts, setPosts] = useState([]);

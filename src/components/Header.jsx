@@ -1,20 +1,33 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
- 
+
 const Header = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
- 
+  const [menuOpen, setMenuOpen] = useState(false); // State to toggle the mobile menu
+
   const handleLogout = () => {
     localStorage.removeItem('token'); // Remove token on logout
     navigate('/login'); // Redirect to login page after logout
   };
- 
+
   return (
     <header className="bg-primary text-white p-3 shadow-custom">
       <nav className="container mx-auto flex justify-between items-center">
         <h1 className="text-3xl font-bold tracking-wide">Scraping Assistant</h1>
-        <ul className="flex space-x-6">
+
+        {/* Mobile Menu Toggle */}
+        <div className="block lg:hidden">
+          <button
+            className="text-white"
+            onClick={() => setMenuOpen(!menuOpen)} // Toggle mobile menu
+          >
+            &#9776; {/* Hamburger icon */}
+          </button>
+        </div>
+
+        {/* Desktop Navigation */}
+        <ul className={`lg:flex space-x-6 ${menuOpen ? 'block' : 'hidden'}`}>
           <li><Link to="/home" className="hover:text-secondary transition-colors duration-300">Home</Link></li>
           <li><Link to="/instagram" className="hover:text-secondary transition-colors duration-300">Instagram</Link></li>
           <li><Link to="/twitter" className="hover:text-secondary transition-colors duration-300">Twitter</Link></li>
@@ -22,9 +35,9 @@ const Header = () => {
           <li><Link to="/youtube" className="hover:text-secondary transition-colors duration-300">Youtube</Link></li>
           <li><Link to="/twitch" className="hover:text-secondary transition-colors duration-300">Twitch</Link></li>
           <li><Link to="/tiktok" className="hover:text-secondary transition-colors duration-300">Tiktok</Link></li>
-
-
         </ul>
+
+        {/* Authentication Buttons */}
         <div className="flex space-x-4">
           {/* Conditionally render buttons based on authentication */}
           {!token ? (
@@ -40,6 +53,5 @@ const Header = () => {
     </header>
   );
 };
- 
+
 export default Header;
- 

@@ -1,5 +1,4 @@
-
-import React, { useState ,useEffect} from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -38,7 +37,7 @@ const Login = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-slate-200">
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md">
+      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-lg">
         <h1 className="text-center text-3xl font-bold text-gray-800 mb-6">
           Welcome Back!
         </h1>
