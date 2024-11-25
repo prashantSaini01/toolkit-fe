@@ -17,15 +17,17 @@ const LinkedInScraper = () => {
   const [query, setQuery] = useState("");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(""); // Added error state
   const token = localStorage.getItem("token");
 
   const handleScrape = async () => {
     const hashtag = query.trim();
     if (!hashtag) {
-      alert("Please enter a hashtag to search.");
+      setError("Please enter a hashtag to search.");
       return;
     }
 
+    setError(""); // Clear any existing error
     setLoading(true);
     try {
       const response = await axios.post(
@@ -43,14 +45,9 @@ const LinkedInScraper = () => {
       if (error.response && error.response.status === 401) {
         setError("Session expired. Please log in again.");
         localStorage.removeItem("token");
-        
-        // Show alert and add delay before redirecting
-        window.alert("Session expired. Please log in again."); // Show alert
-        setTimeout(() => {
-          navigate("/login"); // Redirect after delay
-        }, 2000); // 2-second delay
+        setTimeout(() => navigate("/login"), 2000); // Delay redirect
       } else {
-        setError("An error occurred while scraping Linkedin.");
+        setError("An error occurred while scraping LinkedIn.");
       }
     } finally {
       setLoading(false);
@@ -59,19 +56,21 @@ const LinkedInScraper = () => {
 
   const downloadCSV = () => {
     if (!posts.length) {
-      alert("No data available to download.");
+      setError("No data available to download.");
       return;
     }
 
     const csvHeader =
       "Author Name,Author Username,Post Content,Hashtags,Post Date,Post URL\n";
     const csvRows = posts.map((post) => {
-      const authorName = post.author_name || "";
-      const authorUsername = post.author_username || "";
-      const content = post.post_content || "";
+      const authorName = post.author_name || "N/A";
+      const authorUsername = post.author_username || "N/A";
+      const content = post.post_content || "N/A";
       const hashtags = (post.hashtags || []).join(", ");
-      const postDate = format(new Date(post.posted_date), "PPpp");
-      const postUrl = post.post_url || "";
+      const postDate = post.posted_date
+        ? format(new Date(post.posted_date), "PPpp")
+        : "N/A";
+      const postUrl = post.post_url || "N/A";
 
       return `"${authorName}","${authorUsername}","${content}","${hashtags}","${postDate}","${postUrl}"`;
     });
@@ -88,7 +87,6 @@ const LinkedInScraper = () => {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
-  // Code above remains unchanged
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8">
@@ -115,67 +113,22 @@ const LinkedInScraper = () => {
         </button>
       </div>
 
-      {/* Icons Section */}
-      <div className="grid grid-cols-3 gap-4 mt-8">
-        <div className="flex flex-col items-center">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-blue-200 text-blue-800">
-            <FaUser size={28} />
-          </div>
-          <p className="text-sm text-center mt-2 font-medium text-blue-800">
-            Author Name
-          </p>
+      {/* Error Message */}
+      {error && (
+        <div className="mt-4 text-red-600 text-center font-medium">
+          {error}
         </div>
-        <div className="flex flex-col items-center">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-blue-200 text-blue-800">
-            <FaAt size={28} />
-          </div>
-          <p className="text-sm text-center mt-2 font-medium text-blue-800">
-            Username
-          </p>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-blue-200 text-blue-800">
-            <FaPenFancy size={28} />
-          </div>
-          <p className="text-sm text-center mt-2 font-medium text-blue-800">
-            Post Content
-          </p>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-blue-200 text-blue-800">
-            <FaHashtag size={28} />
-          </div>
-          <p className="text-sm text-center mt-2 font-medium text-blue-800">
-            Hashtags
-          </p>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-blue-200 text-blue-800">
-            <FaCalendarAlt size={28} />
-          </div>
-          <p className="text-sm text-center mt-2 font-medium text-blue-800">
-            Post Date
-          </p>
-        </div>
-        <div className="flex flex-col items-center">
-          <div className="flex items-center justify-center w-16 h-16 rounded-full bg-blue-200 text-blue-800">
-            <FaLink size={28} />
-          </div>
-          <p className="text-sm text-center mt-2 font-medium text-blue-800">
-            Post URL
-          </p>
-        </div>
-      </div>
+      )}
 
-      {/* Rest of the component remains unchanged */}
+      {/* Loading Spinner */}
       {loading && (
         <div className="flex justify-center items-center mt-10">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
         </div>
       )}
 
-      {/* Posts Section */}
-      {posts.length > 0 && (
+      {/* Posts Table */}
+      {posts.length > 0 ? (
         <div className="w-full max-w-4xl mt-10 p-4 bg-white border-2 border-gray-200 rounded-lg shadow-inner">
           <h3 className="text-xl font-semibold mb-4 text-center text-blue-800">
             Scraped LinkedIn Data
@@ -195,20 +148,16 @@ const LinkedInScraper = () => {
               <tbody>
                 {posts.map((post, index) => (
                   <tr key={index} className="hover:bg-blue-50">
-                    <td className="px-4 py-2 border">
-                      {post.author_name || "N/A"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {post.author_username || "N/A"}
-                    </td>
-                    <td className="px-4 py-2 border">
-                      {post.post_content || "N/A"}
-                    </td>
+                    <td className="px-4 py-2 border">{post.author_name || "N/A"}</td>
+                    <td className="px-4 py-2 border">{post.author_username || "N/A"}</td>
+                    <td className="px-4 py-2 border">{post.post_content || "N/A"}</td>
                     <td className="px-4 py-2 border">
                       {(post.hashtags || []).join(", ")}
                     </td>
                     <td className="px-4 py-2 border">
-                      {format(new Date(post.posted_date), "PPpp")}
+                      {post.posted_date
+                        ? format(new Date(post.posted_date), "PPpp")
+                        : "N/A"}
                     </td>
                     <td className="px-4 py-2 border">
                       <a
@@ -232,6 +181,12 @@ const LinkedInScraper = () => {
             Download CSV
           </button>
         </div>
+      ) : (
+        !loading && (
+          <div className="mt-8 text-gray-600 font-medium">
+            No data available. Start by fetching posts using a hashtag.
+          </div>
+        )
       )}
     </div>
   );

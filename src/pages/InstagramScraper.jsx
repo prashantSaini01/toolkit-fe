@@ -1,12 +1,8 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import API_URL from "./config";
 import { format } from "date-fns";
-
-
-
 import {
   FaUser,
   FaHeart,
@@ -15,12 +11,14 @@ import {
   FaLink,
   FaRegComment,
 } from "react-icons/fa";
+
 const InstagramScraper = () => {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState("");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(""); // Add error state
   const token = localStorage.getItem("token");
 
   const handleScrape = async () => {
@@ -31,6 +29,7 @@ const InstagramScraper = () => {
     }
 
     setLoading(true);
+    setError(""); // Clear any existing error
     try {
       const response = await axios.post(
         `${API_URL}/scrape_instagram`,
@@ -47,16 +46,16 @@ const InstagramScraper = () => {
       if (error.response && error.response.status === 401) {
         setError("Session expired. Please log in again.");
         localStorage.removeItem("token");
-        
+
         // Show alert and add delay before redirecting
         window.alert("Session expired. Please log in again."); // Show alert
         setTimeout(() => {
           navigate("/login"); // Redirect after delay
         }, 2000); // 2-second delay
-      }else {
+      } else {
         setError("An error occurred while scraping Instagram.");
       }
-    }finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -98,6 +97,12 @@ const InstagramScraper = () => {
       <h2 className="text-4xl text-center text-purple-800 font-bold mb-6">
         Instagram Scraper
       </h2>
+
+      {error && ( // Display error message if present
+        <div className="w-full max-w-lg mb-4 p-4 bg-red-100 text-red-600 border border-red-400 rounded-lg">
+          {error}
+        </div>
+      )}
 
       <div className="w-full max-w-lg space-y-4">
         <input

@@ -13,20 +13,60 @@ import {
   FaExternalLinkAlt,
 } from "react-icons/fa";
 
+const PostRow = ({ post }) => (
+  <tr className="text-center hover:bg-gray-50 transition-colors duration-200">
+    <td className="border p-2">{post["Author Name"]}</td>
+    <td className="border p-2">@{post["Author Username"]}</td>
+    <td className="border p-2">{post["Author Description"]}</td>
+    <td className="border p-2">
+      <a
+        href={post["Profile URL"]}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:underline"
+      >
+        Profile Link
+      </a>
+    </td>
+    <td className="border p-2">{post["Tweet Text"]}</td>
+    <td className="border p-2">
+      {format(new Date(post["Created At"]), "PPpp")}
+    </td>
+    <td className="border p-2">
+      <a
+        href={`https://twitter.com/${post["Author Username"]}/status/${post["Tweet ID"]}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-blue-600 hover:underline"
+      >
+        View Tweet
+      </a>
+    </td>
+  </tr>
+);
+
 const TwitterScraper = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const token = localStorage.getItem("token");
 
-  const handleScrape = async () => {
+  const handleScrape = async (e) => {
+    e.preventDefault();
+
     const keyword = query.trim();
+    if (!token) {
+      setError("You are not logged in. Please log in to continue.");
+      return;
+    }
     if (!keyword) {
-      alert("Please enter a keyword to search.");
+      setError("Please enter a keyword to search.");
       return;
     }
 
+    setError("");
     setLoading(true);
     try {
       const response = await axios.post(
@@ -40,22 +80,22 @@ const TwitterScraper = () => {
         }
       );
       setPosts(response.data.response);
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        setError("Session expired. Please log in again.");
+    } catch (err) {
+      if (err.response && err.response.status === 401) {
+        setError("Session expired. Redirecting to login...");
         localStorage.removeItem("token");
-        
-        // Show alert and add delay before redirecting
-        window.alert("Session expired. Please log in again."); // Show alert
-        setTimeout(() => {
-          navigate("/login"); // Redirect after delay
-        }, 2000); // 2-second delay
+        setTimeout(() => navigate("/login"), 2000);
       } else {
         setError("An error occurred while scraping Twitter.");
       }
     } finally {
       setLoading(false);
     }
+  };
+
+  const clearResults = () => {
+    setQuery("");
+    setPosts([]);
   };
 
   const convertToCSV = (objArray) => {
@@ -84,56 +124,31 @@ const TwitterScraper = () => {
         Twitter Scraper
       </h2>
 
-      <div className="w-full max-w-lg space-y-4">
+      <form
+        className="w-full max-w-lg space-y-4"
+        onSubmit={handleScrape}
+      >
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Enter a keyword (e.g., UFC)"
           className="w-full p-4 text-lg border-2 border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+          aria-label="Keyword input"
         />
         <button
-          onClick={handleScrape}
-          className={`w-full mt-6 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300 ${
+          type="submit"
+          className={`w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300 ${
             loading ? "opacity-50 cursor-not-allowed" : ""
           }`}
           disabled={loading || !query.trim()}
         >
           {loading ? "Scraping..." : "Start Scraping"}
         </button>
-      </div>
+        {posts.length > 0}
+      </form>
 
-      {/* Icons Section */}
-      <div className="grid grid-cols-4 sm:grid-cols-7 gap-4 mt-10 text-center">
-        <div className="flex flex-col items-center text-blue-600">
-          <FaUser className="text-3xl" />
-          <span className="mt-2 text-sm">Author Name</span>
-        </div>
-        <div className="flex flex-col items-center text-blue-600">
-          <FaAt className="text-3xl" />
-          <span className="mt-2 text-sm">Username</span>
-        </div>
-        <div className="flex flex-col items-center text-blue-600">
-          <FaInfoCircle className="text-3xl" />
-          <span className="mt-2 text-sm">Author Description</span>
-        </div>
-        <div className="flex flex-col items-center text-blue-600">
-          <FaLink className="text-3xl" />
-          <span className="mt-2 text-sm">Profile URL</span>
-        </div>
-        <div className="flex flex-col items-center text-blue-600">
-          <FaRegComment className="text-3xl" />
-          <span className="mt-2 text-sm">Tweet Text</span>
-        </div>
-        <div className="flex flex-col items-center text-blue-600">
-          <FaCalendarAlt className="text-3xl" />
-          <span className="mt-2 text-sm">Created At</span>
-        </div>
-        <div className="flex flex-col items-center text-blue-600">
-          <FaExternalLinkAlt className="text-3xl" />
-          <span className="mt-2 text-sm">Post Link</span>
-        </div>
-      </div>
+      {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
 
       {loading && (
         <div className="flex justify-center items-center mt-10">
@@ -161,38 +176,7 @@ const TwitterScraper = () => {
               </thead>
               <tbody>
                 {posts.map((post, index) => (
-                  <tr
-                    key={index}
-                    className="text-center hover:bg-gray-50 transition-colors duration-200"
-                  >
-                    <td className="border p-2">{post["Author Name"]}</td>
-                    <td className="border p-2">@{post["Author Username"]}</td>
-                    <td className="border p-2">{post["Author Description"]}</td>
-                    <td className="border p-2">
-                      <a
-                        href={post["Profile URL"]}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                      >
-                        Profile Link
-                      </a>
-                    </td>
-                    <td className="border p-2">{post["Tweet Text"]}</td>
-                    <td className="border p-2">
-                      {format(new Date(post["Created At"]), "PPpp")}
-                    </td>
-                    <td className="border p-2">
-                      <a
-                        href={`https://twitter.com/${post["Author Username"]}/status/${post["Tweet ID"]}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:underline"
-                      >
-                        View Tweet
-                      </a>
-                    </td>
-                  </tr>
+                  <PostRow key={index} post={post} />
                 ))}
               </tbody>
             </table>
