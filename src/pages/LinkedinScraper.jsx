@@ -9,9 +9,10 @@ const LinkedInScraper = () => {
   const [query, setQuery] = useState("");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); // Error message state
   const token = localStorage.getItem("token");
 
+  // Handle LinkedIn scraping based on hashtag
   const handleScrape = async () => {
     const hashtag = query.trim();
 
@@ -20,7 +21,7 @@ const LinkedInScraper = () => {
       return;
     }
 
-    setError("");
+    setError(""); // Clear any existing error
     setLoading(true);
 
     try {
@@ -52,6 +53,7 @@ const LinkedInScraper = () => {
     }
   };
 
+  // Download scraped data as CSV
   const downloadCSV = () => {
     if (!posts.length) {
       setError("No data available to download.");
@@ -88,12 +90,12 @@ const LinkedInScraper = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-8 px-4">
-        <h1 className="text-4xl font-bold text-blue-800 text-center">
-          LinkedIn Scraper
-        </h1>
-    
+      <h1 className="text-4xl text-center text-purple-800 font-bold mb-6">
+        LinkedIn Scraper
+      </h1>
 
-      <div className="w-full max-w-lg space-y-4 mt-8">
+      {/* Input Section */}
+      <div className="w-full max-w-lg space-y-4">
         <input
           type="text"
           value={query}
@@ -112,62 +114,80 @@ const LinkedInScraper = () => {
         </button>
       </div>
 
+      {/* Error Message */}
       {error && (
-        <div className="mt-4 text-red-600 text-center font-medium">{error}</div>
+        <div className="mt-4 text-red-600 text-center font-medium">
+          {error}
+        </div>
       )}
 
+      {/* Loading Spinner */}
       {loading && (
         <div className="flex justify-center items-center mt-10">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
         </div>
       )}
 
+      {/* Data Table */}
       {posts.length > 0 ? (
-        <div className="w-full max-w-6xl mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post, idx) => (
-            <div
-              key={idx}
-              className="p-4 bg-white border rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-transform duration-300"
-            >
-              <h3 className="text-lg font-bold text-blue-800 mb-2">
-                {post.author_name || "Anonymous"}
-              </h3>
-              <p className="text-gray-600 mb-2">
-                <strong>Username:</strong> {post.author_username || "N/A"}
-              </p>
-              <p className="text-gray-700 mb-2">{post.post_content || "No content available."}</p>
-              <p className="text-sm text-gray-500 mb-2">
-                <strong>Hashtags:</strong>{" "}
-                {(post.hashtags || []).join(", ") || "None"}
-              </p>
-              <p className="text-sm text-gray-500 mb-2">
-                <strong>Date:</strong>{" "}
-                {post.posted_date
-                  ? format(new Date(post.posted_date), "PPpp")
-                  : "N/A"}
-              </p>
-              <a
-                href={post.post_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 underline"
-              >
-                View Post
-              </a>
-            </div>
-          ))}
+        <div className="w-full max-w-4xl mt-10 p-4 bg-white border-2 border-gray-200 rounded-lg shadow-inner">
+          <h3 className="text-xl font-semibold mb-4 text-center text-blue-800">
+            Scraped LinkedIn Data
+          </h3>
+          <div className="overflow-x-auto">
+            <table className="table-auto w-full border-collapse bg-white shadow-md rounded-lg">
+              <thead>
+                <tr className="bg-blue-100">
+                  <th className="px-4 py-2 border">Author Name</th>
+                  <th className="px-4 py-2 border">Username</th>
+                  <th className="px-4 py-2 border">Post Content</th>
+                  <th className="px-4 py-2 border">Hashtags</th>
+                  <th className="px-4 py-2 border">Post Date</th>
+                  <th className="px-4 py-2 border">Post URL</th>
+                </tr>
+              </thead>
+              <tbody>
+                {posts.map((post, idx) => (
+                  <tr key={idx} className="hover:bg-blue-50">
+                    <td className="px-4 py-2 border">{post.author_name || "N/A"}</td>
+                    <td className="px-4 py-2 border">{post.author_username || "N/A"}</td>
+                    <td className="px-4 py-2 border">{post.post_content || "N/A"}</td>
+                    <td className="px-4 py-2 border">
+                      {(post.hashtags || []).join(", ")}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {post.posted_date
+                        ? format(new Date(post.posted_date), "PPpp")
+                        : "N/A"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      <a
+                        href={post.post_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 underline"
+                      >
+                        View Post
+                      </a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <button
+            onClick={downloadCSV}
+            className="mt-4 px-6 py-3 bg-green-500 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300"
+          >
+            Download CSV
+          </button>
         </div>
       ) : (
-        !loading
-      )}
-
-      {posts.length > 0 && (
-        <button
-          onClick={downloadCSV}
-          className="mt-8 px-6 py-3 bg-green-500 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300"
-        >
-          Download CSV
-        </button>
+        !loading && (
+          <div className="mt-8 text-gray-600 font-medium text-center">
+            No data available. Start by fetching posts using a hashtag.
+          </div>
+        )
       )}
     </div>
   );
