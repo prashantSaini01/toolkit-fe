@@ -18,7 +18,7 @@ const InstagramScraper = () => {
   const [query, setQuery] = useState("");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(""); // Add error state
+  const [error, setError] = useState("");
   const token = localStorage.getItem("token");
 
   const handleScrape = async () => {
@@ -29,7 +29,7 @@ const InstagramScraper = () => {
     }
 
     setLoading(true);
-    setError(""); // Clear any existing error
+    setError("");
     try {
       const response = await axios.post(
         `${API_URL}/scrape_instagram`,
@@ -47,11 +47,10 @@ const InstagramScraper = () => {
         setError("Session expired. Please log in again.");
         localStorage.removeItem("token");
 
-        // Show alert and add delay before redirecting
-        window.alert("Session expired. Please log in again."); // Show alert
+        window.alert("Session expired. Please log in again.");
         setTimeout(() => {
-          navigate("/login"); // Redirect after delay
-        }, 2000); // 2-second delay
+          navigate("/login");
+        }, 2000);
       } else {
         setError("An error occurred while scraping Instagram.");
       }
@@ -93,12 +92,12 @@ const InstagramScraper = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-8 px-4">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-8 px-4">
       <h2 className="text-4xl text-center text-purple-800 font-bold mb-6">
         Instagram Scraper
       </h2>
 
-      {error && ( // Display error message if present
+      {error && (
         <div className="w-full max-w-lg mb-4 p-4 bg-red-100 text-red-600 border border-red-400 rounded-lg">
           {error}
         </div>
@@ -121,33 +120,6 @@ const InstagramScraper = () => {
         >
           {loading ? "Scraping..." : "Fetch Posts"}
         </button>
-      </div>
-
-      <div className="grid grid-cols-3 gap-4 mt-6 max-w-md text-center">
-        <div className="flex flex-col items-center">
-          <FaUser className="text-purple-600 text-3xl" />
-          <span className="text-sm text-gray-700 mt-2">Profile Name</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FaRegComment className="text-purple-600 text-3xl" />
-          <span className="text-sm text-gray-700 mt-2">Caption</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FaHeart className="text-purple-600 text-3xl" />
-          <span className="text-sm text-gray-700 mt-2"># of Likes</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FaCommentDots className="text-purple-600 text-3xl" />
-          <span className="text-sm text-gray-700 mt-2">Comments Count</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FaCalendarAlt className="text-purple-600 text-3xl" />
-          <span className="text-sm text-gray-700 mt-2">Date Posted</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FaLink className="text-purple-600 text-3xl" />
-          <span className="text-sm text-gray-700 mt-2">Post URL</span>
-        </div>
       </div>
 
       {loading && (
