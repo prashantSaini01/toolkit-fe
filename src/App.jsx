@@ -25,7 +25,7 @@ function App() {
         <Header />
 
         {/* Main content area */}
-        <main className="flex-grow container mx-auto p-4">
+        <main className="flex-grow container mx-auto p-4 mt-20">
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
               {/* Public routes */}
