@@ -3,25 +3,19 @@ import axios from "axios";
 import API_URL from "./config";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import {
-  FaUser,
-  FaAt,
-  FaPenFancy,
-  FaHashtag,
-  FaCalendarAlt,
-  FaLink,
-} from "react-icons/fa";
 
 const LinkedInScraper = () => {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(""); // Added error state
+  const [error, setError] = useState(""); // Error message state
   const token = localStorage.getItem("token");
 
+  // Handle LinkedIn scraping based on hashtag
   const handleScrape = async () => {
     const hashtag = query.trim();
+
     if (!hashtag) {
       setError("Please enter a hashtag to search.");
       return;
@@ -29,6 +23,7 @@ const LinkedInScraper = () => {
 
     setError(""); // Clear any existing error
     setLoading(true);
+
     try {
       const response = await axios.post(
         `${API_URL}/scrape_linkedin`,
@@ -40,20 +35,25 @@ const LinkedInScraper = () => {
           },
         }
       );
-      setPosts(response.data.response);
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        setError("Session expired. Please log in again.");
+
+      setPosts(response.data.response || []);
+      if (!response.data.response.length) {
+        setError("No posts found for the given hashtag.");
+      }
+    } catch (err) {
+      if (err.response?.status === 401) {
+        setError("Session expired. Redirecting to login...");
         localStorage.removeItem("token");
-        setTimeout(() => navigate("/login"), 2000); // Delay redirect
+        setTimeout(() => navigate("/login"), 2000);
       } else {
-        setError("An error occurred while scraping LinkedIn.");
+        setError(err.response?.data?.message || "An error occurred while scraping LinkedIn.");
       }
     } finally {
       setLoading(false);
     }
   };
 
+  // Download scraped data as CSV
   const downloadCSV = () => {
     if (!posts.length) {
       setError("No data available to download.");
@@ -79,21 +79,22 @@ const LinkedInScraper = () => {
     const blob = new Blob([csvContent], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
 
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "linkedin_posts.csv";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "linkedin_posts.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-8">
-      <h2 className="text-4xl text-center text-blue-800 font-bold mb-8">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-8 px-4">
+      <h1 className="text-4xl text-center text-purple-800 font-bold mb-6">
         LinkedIn Scraper
-      </h2>
+      </h1>
 
+      {/* Input Section */}
       <div className="w-full max-w-lg space-y-4">
         <input
           type="text"
@@ -127,7 +128,7 @@ const LinkedInScraper = () => {
         </div>
       )}
 
-      {/* Posts Table */}
+      {/* Data Table */}
       {posts.length > 0 ? (
         <div className="w-full max-w-4xl mt-10 p-4 bg-white border-2 border-gray-200 rounded-lg shadow-inner">
           <h3 className="text-xl font-semibold mb-4 text-center text-blue-800">
@@ -146,8 +147,8 @@ const LinkedInScraper = () => {
                 </tr>
               </thead>
               <tbody>
-                {posts.map((post, index) => (
-                  <tr key={index} className="hover:bg-blue-50">
+                {posts.map((post, idx) => (
+                  <tr key={idx} className="hover:bg-blue-50">
                     <td className="px-4 py-2 border">{post.author_name || "N/A"}</td>
                     <td className="px-4 py-2 border">{post.author_username || "N/A"}</td>
                     <td className="px-4 py-2 border">{post.post_content || "N/A"}</td>
@@ -183,7 +184,7 @@ const LinkedInScraper = () => {
         </div>
       ) : (
         !loading && (
-          <div className="mt-8 text-gray-600 font-medium">
+          <div className="mt-8 text-gray-600 font-medium text-center">
             No data available. Start by fetching posts using a hashtag.
           </div>
         )
