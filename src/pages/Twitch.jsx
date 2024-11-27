@@ -59,7 +59,7 @@ const TwitchVideos = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-8 px-4">
-      <h1 className="text-4xl font-bold text-blue-950 mb-6">Twitch Scraper</h1>
+      <h2 className="text-4xl text-center font-bold text-pink-500 mb-6">Twitch Scraper</h2>
 
       <form className="w-full max-w-lg" onSubmit={handleSubmit}>
         <input
@@ -67,7 +67,7 @@ const TwitchVideos = () => {
           value={keyword}
           onChange={(e) => setKeyword(e.target.value)}
           placeholder="Enter keyword"
-          className="w-full p-3 mb-4 border-2 border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-full p-3 mb-4 border-2 border-pink-500 rounded-lg focus:outline-none focus:ring-2 "
           required
         />
         <input
@@ -75,19 +75,19 @@ const TwitchVideos = () => {
           value={numVideos}
           onChange={(e) => setNumVideos(e.target.value)}
           placeholder="Number of videos to scrape"
-          className="w-full p-3 mb-6 border-2 border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-full p-3 mb-6 border-2 border-pink-500 rounded-lg focus:outline-none focus:ring-2 "
           min="1"
           max="50"
           required
         />
         <button
           type="submit"
-          className={`w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg shadow-md hover:shadow-lg transition-transform duration-300 ${
+          className={`w-full py-3 bg-gradient-to-r from-pink-500 to-indigo-600 text-white rounded-lg shadow-md hover:shadow-lg transition-transform duration-300 ${
             loading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'
           }`}
           disabled={loading}
         >
-          {loading ? 'Loading...' : 'Search'}
+          {loading ? 'Loading...' : 'Fetch Posts'}
         </button>
       </form>
 
