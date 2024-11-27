@@ -142,8 +142,8 @@ const YoutubeScraper = () => {
   };
 
   return (
-    <div className="min-h-screen bg-light flex flex-col items-center justify-center">
-      <h2 className="text-4xl text-center text-blue-950 font-bold mb-8">YouTube Scraper</h2>
+    <div className="min-h-screen bg-grey flex flex-col items-center justify-center py-8 px-4">
+      <h2 className="text-4xl text-center text-red-800 font-bold mb-6">YouTube Scraper</h2>
 
       <div className="w-full max-w-lg space-y-4">
         <input
@@ -151,26 +151,26 @@ const YoutubeScraper = () => {
           value={hashtag}
           onChange={(e) => setHashtag(e.target.value)}
           placeholder="Enter hashtag"
-          className="w-full p-4 text-lg border-2 border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-full p-4 text-lg border-2 border-red-800 rounded-lg focus:outline-none focus:ring-2 "
         />
         <input
           type="number"
           value={maxResults}
           onChange={(e) => setMaxResults(e.target.value)}
           placeholder="Number of videos to scrape"
-          className="w-full p-4 text-lg border-2 border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-full p-4 text-lg border-2 border-red-800 rounded-lg focus:outline-none focus:ring-2"
           required
         />
         <button
           onClick={handleScrape}
-          className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300"
+          className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-red-800 to-red-400 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300"
           disabled={loading}
         >
-          {loading ? 'Scraping...' : 'Scrape YouTube'}
+          {loading ? 'Scraping...' : 'Fetch Posts'}
         </button>
       </div>
 
-      {/* YouTube Data Icons */}
+      {/* YouTube Data Icons
       <div className="flex space-x-6 mt-6 mb-6">
         <div className="flex flex-col items-center">
           <FontAwesomeIcon icon={faImage} className="text-3xl text-blue-600" />
@@ -196,7 +196,7 @@ const YoutubeScraper = () => {
           <FontAwesomeIcon icon={faLink} className="text-3xl text-blue-600" />
           <span className="mt-2 text-gray-700 text-sm">Video URL</span>
         </div>
-      </div>
+      </div> */}
 
       {loading && (
         <div className="flex justify-center items-center mt-10">

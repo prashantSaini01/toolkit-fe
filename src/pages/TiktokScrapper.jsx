@@ -67,7 +67,7 @@ const TikTokScraper = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-8 px-4">
-      <h2 className="text-4xl text-center text-purple-800 font-bold mb-8">
+      <h2 className="text-4xl text-center text-grey-900 font-bold mb-6">
         TikTok Scraper
       </h2>
 
@@ -76,17 +76,17 @@ const TikTokScraper = () => {
           type="text"
           onChange={(e) => handleQueryChange(e.target.value)}
           placeholder="Enter hashtag (e.g., #ai)"
-          className="w-full p-4 text-lg border-2 border-purple-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+          className="w-full p-4 text-lg border-2 border-grey-900 rounded-lg focus:outline-none focus:ring-2 "
         />
         <input
           type="number"
           onChange={(e) => handlePostCountChange(e.target.value)}
           placeholder="Number of posts (e.g., 10)"
-          className="w-full p-4 text-lg border-2 border-purple-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-600"
+          className="w-full p-4 text-lg border-2 border-grey-900 rounded-lg focus:outline-none focus:ring-2"
         />
         <button
           onClick={handleScrape}
-          className={`w-full mt-6 px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300 ${
+          className={`w-full mt-6 px-6 py-3 bg-gradient-to-r from-gray-900 to-gray-600 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300 ${
             loading ? "opacity-50 cursor-not-allowed" : ""
           }`}
           disabled={loading || !query.trim()}

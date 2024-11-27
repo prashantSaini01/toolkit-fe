@@ -119,8 +119,8 @@ const TwitterScraper = () => {
   };
 
   return (
-    <div className="min-h-screen bg-light flex flex-col items-center justify-center p-6">
-      <h2 className="text-4xl text-center text-blue-950 font-bold mb-8">
+    <div className="min-h-screen bg-grey-50 flex flex-col items-center justify-center py-8 px-4">
+      <h2 className="text-4xl text-center text-blue-500 font-bold mb-6">
         Twitter Scraper
       </h2>
 
@@ -133,7 +133,7 @@ const TwitterScraper = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Enter a keyword (e.g., UFC)"
-          className="w-full p-4 text-lg border-2 border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-full p-4 text-lg border-2 border-blue-500 rounded-lg focus:outline-none focus:ring-2 "
           aria-label="Keyword input"
         />
         <button
@@ -143,7 +143,7 @@ const TwitterScraper = () => {
           }`}
           disabled={loading || !query.trim()}
         >
-          {loading ? "Scraping..." : "Start Scraping"}
+          {loading ? "Scraping..." : "Fetch Posts"}
         </button>
         {posts.length > 0}
       </form>
