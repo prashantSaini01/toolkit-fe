@@ -112,7 +112,7 @@ const TwitterScraper = () => {
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.setAttribute("download", "scraped_posts.csv");
+    link.setAttribute("download", "twitter_scrap_posts.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -183,7 +183,7 @@ const TwitterScraper = () => {
           </div>
           <button
             onClick={downloadCSV}
-            className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+            className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105  hover:bg-grey-900 transition-transform duration-300"
           >
             Download CSV
           </button>

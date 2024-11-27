@@ -134,7 +134,7 @@ const YoutubeScraper = () => {
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', 'youtube_videos.csv');
+    link.setAttribute('download', 'youtube_scrap_posts.csv');
     link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
@@ -206,16 +206,18 @@ const YoutubeScraper = () => {
 
       {error && <p className="text-red-600 text-lg">{error}</p>}
       {output.length > 0 && (
-        <>
-          {formatOutput(output)}
-          <button
-            onClick={downloadCSV}
-            className="mt-6 px-6 py-3 bg-blue-500 text-white rounded-lg shadow-md hover:shadow-lg"
-          >
-            Download CSV
-          </button>
-        </>
-      )}
+  <>
+    {formatOutput(output)}
+    <div className="w-full flex justify-start mt-4">
+      <button
+        onClick={downloadCSV}
+        className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 hover:bg-grey-900 transition-transform duration-300"
+      >
+        Download CSV
+      </button>
+    </div>
+  </>
+)}
     </div>
   );
 };

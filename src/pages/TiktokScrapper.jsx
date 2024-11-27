@@ -58,12 +58,27 @@ const TikTokScraper = () => {
   const handleQueryChange = debounce((value) => setQuery(value), 300);
   const handlePostCountChange = debounce((value) => setPostCount(Number(value)), 300);
 
-  const IconCard = ({ icon, label }) => (
-    <div className="flex flex-col items-center justify-center w-24 h-24 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg">
-      <div className="text-3xl mb-1">{icon}</div>
-      <div className="text-sm text-center font-medium">{label}</div>
-    </div>
-  );
+  const downloadCSV = () => {
+    if (posts.length === 0) {
+      alert("No data to download.");
+      return;
+    }
+
+    const headers = Object.keys(posts[0]);
+    const rows = posts.map((post) =>
+      headers.map((header) => `"${post[header] || ""}"`).join(",")
+    );
+    const csvContent = [headers.join(","), ...rows].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "TikTok_scrap_posts.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-8 px-4">
@@ -76,7 +91,7 @@ const TikTokScraper = () => {
           type="text"
           onChange={(e) => handleQueryChange(e.target.value)}
           placeholder="Enter hashtag (e.g., #ai)"
-          className="w-full p-4 text-lg border-2 border-grey-900 rounded-lg focus:outline-none focus:ring-2 "
+          className="w-full p-4 text-lg border-2 border-grey-900 rounded-lg focus:outline-none focus:ring-2"
         />
         <input
           type="number"
@@ -152,6 +167,12 @@ const TikTokScraper = () => {
               </tbody>
             </table>
           </div>
+          <button
+            onClick={downloadCSV}
+            className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105  hover:bg-grey-900 transition-transform duration-300"
+          >
+            Download as CSV
+          </button>
         </div>
       )}
     </div>

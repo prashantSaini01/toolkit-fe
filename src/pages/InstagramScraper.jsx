@@ -84,7 +84,7 @@ const InstagramScraper = () => {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "instagram_posts.csv";
+    a.download = "instagram_scrap_posts.csv";
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -175,7 +175,7 @@ const InstagramScraper = () => {
           </div>
           <button
             onClick={downloadCSV}
-            className="mt-4 px-6 py-3 bg-green-500 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300"
+           className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105  hover:bg-grey-900 transition-transform duration-300"
           >
             Download as CSV
           </button>

@@ -81,7 +81,7 @@ const LinkedInScraper = () => {
 
     const link = document.createElement("a");
     link.href = url;
-    link.download = "linkedin_posts.csv";
+    link.download = "linkedin_scrap_posts.csv";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -177,7 +177,7 @@ const LinkedInScraper = () => {
           </div>
           <button
             onClick={downloadCSV}
-            className="mt-4 px-6 py-3 bg-green-500 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300"
+           className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105  hover:bg-grey-900 transition-transform duration-300"
           >
             Download CSV
           </button>

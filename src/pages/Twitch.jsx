@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import API_URL from './config';
-import { FaVideo, FaUserAlt, FaCalendar, FaLink, FaImage } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 const TwitchVideos = () => {
@@ -57,6 +56,31 @@ const TwitchVideos = () => {
     fetchVideos();
   };
 
+  const downloadCSV = () => {
+    const headers = ['Thumbnail', 'Title', 'Channel', 'Published At', 'Video URL'];
+    const rows = videos.map((video) => [
+      video.thumbnail.replace('%{width}', '120').replace('%{height}', '90'),
+      video.title || 'N/A',
+      video.channel_name || 'N/A',
+      new Date(video.published_at).toLocaleDateString(),
+      video.channel_link,
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map((row) => row.map((value) => `"${value}"`).join(','))
+      .join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `twitch_scrap_posts.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-8 px-4">
       <h2 className="text-4xl text-center font-bold text-pink-500 mb-6">Twitch Scraper</h2>
@@ -99,7 +123,7 @@ const TwitchVideos = () => {
       )}
 
       {videos.length > 0 && (
-        <div className="mt-8 overflow-x-auto w-full max-w-4xl">
+        <div className="mt-8 w-full max-w-4xl">
           <table className="table-auto w-full border-collapse bg-white shadow-md rounded-lg">
             <thead>
               <tr className="bg-gray-200">
@@ -142,6 +166,13 @@ const TwitchVideos = () => {
               ))}
             </tbody>
           </table>
+
+          <button
+            onClick={downloadCSV}
+            className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105  hover:bg-grey-900 transition-transform duration-300"
+          >
+            Download as CSV
+          </button>
         </div>
       )}
     </div>
