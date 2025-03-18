@@ -8,54 +8,14 @@ import { faImage, faVideo, faUser, faCalendar, faAlignLeft, faLink } from '@fort
 const YoutubeScraper = () => {
   const navigate = useNavigate();
   const [hashtag, setHashtag] = useState('');
-  const [maxResults, setMaxResults] = useState(5); // Default to 5 results
+  const [maxResults, setMaxResults] = useState(5);
   const [output, setOutput] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const token = localStorage.getItem('token');  // Assuming you're storing token in localStorage
+  const [useCache, setUseCache] = useState(true);
+  const token = localStorage.getItem('token');
 
-  // Function to handle scraping
-  const handleScrape = async () => {
-    setLoading(true);
-    setOutput([]);
-    setError(null);
-  
-    try {
-      const response = await axios.post(
-        `${API_URL}/scrape_youtube`,
-        {
-          hashtag,
-          max_results: maxResults,
-        },
-        {
-          headers: { 'x-access-token': token }, // Send token in request headers
-        }
-      );
-  
-      if (response.data.response) {
-        setOutput(response.data.response);
-      } else {
-        setOutput([]);
-        setError('No valid data found.');
-      }
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        setError("Session expired. Please log in again.");
-        localStorage.removeItem("token");
-        
-        // Show alert and add delay before redirecting
-        window.alert("Session expired. Please log in again."); // Show alert
-        setTimeout(() => {
-          navigate("/login"); // Redirect after delay
-        }, 2000); // 2-second delay
-      } else {
-        setError("An error occurred while scraping YouTube.");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-  // Function to format output as a table
+  // Define formatOutput function inside the component
   const formatOutput = (data) => {
     if (!Array.isArray(data) || data.length === 0) {
       return <p>No videos found for the given query.</p>;
@@ -106,15 +66,53 @@ const YoutubeScraper = () => {
     );
   };
 
-  // Function to generate CSV from scraped data
+  const handleScrape = async () => {
+    setLoading(true);
+    setOutput([]);
+    setError(null);
+
+    try {
+      const response = await axios.post(
+        `${API_URL}/scrape_youtube`,
+        {
+          hashtag,
+          max_results: useCache ? null : maxResults, // Send null if useCache is true
+          use_cache: useCache,
+        },
+        {
+          headers: { 'x-access-token': token },
+        }
+      );
+
+      if (response.data.response) {
+        setOutput(response.data.response);
+      } else {
+        setOutput([]);
+        setError('No valid data found.');
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        setError("Session expired. Please log in again.");
+        localStorage.removeItem("token");
+        window.alert("Session expired. Please log in again.");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      } else {
+        setError("An error occurred while scraping YouTube.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const downloadCSV = () => {
     if (!output.length) return;
 
     const headers = ['Title', 'Description', 'URL', 'Channel Title', 'Published At', 'Thumbnail'];
 
-    // Map video data to CSV rows
     const csvRows = [
-      headers.join(','), // Add the headers
+      headers.join(','),
       ...output.map(video =>
         [
           `"${video.Title}"`,
@@ -130,7 +128,6 @@ const YoutubeScraper = () => {
     const csvContent = csvRows.join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
 
-    // Create a download link
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
@@ -158,9 +155,21 @@ const YoutubeScraper = () => {
           value={maxResults}
           onChange={(e) => setMaxResults(e.target.value)}
           placeholder="Number of videos to scrape"
-          className="w-full p-4 text-lg border-2 border-red-800 rounded-lg focus:outline-none focus:ring-2"
+          className={`w-full p-4 text-lg border-2 border-red-800 rounded-lg focus:outline-none focus:ring-2 ${
+            useCache ? 'bg-gray-200 cursor-not-allowed' : ''
+          }`}
+          disabled={useCache} // Disable the input if useCache is true
           required
         />
+        <div className="flex items-center space-x-2">
+          <input
+            type="checkbox"
+            checked={useCache}
+            onChange={(e) => setUseCache(e.target.checked)}
+            className="form-checkbox h-5 w-5 text-red-800"
+          />
+          <span className="text-gray-700">Use cached data</span>
+        </div>
         <button
           onClick={handleScrape}
           className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-red-800 to-red-400 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300"
@@ -170,34 +179,6 @@ const YoutubeScraper = () => {
         </button>
       </div>
 
-      {/* YouTube Data Icons
-      <div className="flex space-x-6 mt-6 mb-6">
-        <div className="flex flex-col items-center">
-          <FontAwesomeIcon icon={faImage} className="text-3xl text-blue-600" />
-          <span className="mt-2 text-gray-700 text-sm">Thumbnail</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FontAwesomeIcon icon={faVideo} className="text-3xl text-blue-600" />
-          <span className="mt-2 text-gray-700 text-sm">Video Title</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FontAwesomeIcon icon={faUser} className="text-3xl text-blue-600" />
-          <span className="mt-2 text-gray-700 text-sm">Channel Name</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FontAwesomeIcon icon={faCalendar} className="text-3xl text-blue-600" />
-          <span className="mt-2 text-gray-700 text-sm">Date Posted</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FontAwesomeIcon icon={faAlignLeft} className="text-3xl text-blue-600" />
-          <span className="mt-2 text-gray-700 text-sm">Description</span>
-        </div>
-        <div className="flex flex-col items-center">
-          <FontAwesomeIcon icon={faLink} className="text-3xl text-blue-600" />
-          <span className="mt-2 text-gray-700 text-sm">Video URL</span>
-        </div>
-      </div> */}
-
       {loading && (
         <div className="flex justify-center items-center mt-10">
           <div className="w-16 h-16 border-4 border-green-500 border-t-transparent border-solid rounded-full animate-spin"></div>
@@ -206,18 +187,18 @@ const YoutubeScraper = () => {
 
       {error && <p className="text-red-600 text-lg">{error}</p>}
       {output.length > 0 && (
-  <>
-    {formatOutput(output)}
-    <div className="w-full flex justify-start mt-4">
-      <button
-        onClick={downloadCSV}
-        className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 hover:bg-grey-900 transition-transform duration-300"
-      >
-        Download CSV
-      </button>
-    </div>
-  </>
-)}
+        <>
+          {formatOutput(output)}
+          <div className="w-full flex justify-start mt-4">
+            <button
+              onClick={downloadCSV}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 hover:bg-grey-900 transition-transform duration-300"
+            >
+              Download CSV
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };
