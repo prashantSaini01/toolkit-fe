@@ -2,20 +2,21 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import axios from 'axios';
 import API_URL from './config'; // Adjust the path if necessary
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faImage, faVideo, faUser, faCalendar, faAlignLeft, faLink } from '@fortawesome/free-solid-svg-icons';
+
 
 const YoutubeScraper = () => {
   const navigate = useNavigate();
   const [hashtag, setHashtag] = useState('');
   const [maxResults, setMaxResults] = useState(5);
   const [output, setOutput] = useState([]);
+  const [summary, setSummary] = useState('');
   const [loading, setLoading] = useState(false);
+  const [summaryLoading, setSummaryLoading] = useState(false);
   const [error, setError] = useState(null);
   const [useCache, setUseCache] = useState(true);
   const token = localStorage.getItem('token');
 
-  // Define formatOutput function inside the component
+  // Format the output into a table
   const formatOutput = (data) => {
     if (!Array.isArray(data) || data.length === 0) {
       return <p>No videos found for the given query.</p>;
@@ -32,6 +33,7 @@ const YoutubeScraper = () => {
               <th className="px-4 py-3 border-b border-gray-300">Published At</th>
               <th className="px-4 py-3 border-b border-gray-300">Description</th>
               <th className="px-4 py-3 border-b border-gray-300">Video URL</th>
+              <th className="px-4 py-3 border-b border-gray-300">Sentiment</th>
             </tr>
           </thead>
           <tbody>
@@ -49,15 +51,11 @@ const YoutubeScraper = () => {
                 <td className="px-4 py-2 border-b border-gray-200">{new Date(video['Published At']).toLocaleDateString()}</td>
                 <td className="px-4 py-2 border-b border-gray-200">{video.Description || 'No description'}</td>
                 <td className="px-4 py-2 border-b border-gray-200">
-                  <a
-                    href={video.URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
+                  <a href={video.URL} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                     Watch
                   </a>
                 </td>
+                <td className="px-4 py-2 border-b border-gray-200">{video['Sentiment Analysis']}</td>
               </tr>
             ))}
           </tbody>
@@ -66,17 +64,19 @@ const YoutubeScraper = () => {
     );
   };
 
+  // Fetch YouTube videos
   const handleScrape = async () => {
     setLoading(true);
     setOutput([]);
+    setSummary(''); // Reset summary when fetching new videos
     setError(null);
 
     try {
       const response = await axios.post(
-        `${API_URL}/scrape_youtube`,
+        `${API_URL}/scrape_youtube`, // Fixed typo in endpoint name
         {
           hashtag,
-          max_results: useCache ? null : maxResults, // Send null if useCache is true
+          max_results: useCache ? null : maxResults,
           use_cache: useCache,
         },
         {
@@ -84,20 +84,22 @@ const YoutubeScraper = () => {
         }
       );
 
+
+
       if (response.data.response) {
-        setOutput(response.data.response);
-      } else {
-        setOutput([]);
-        setError('No valid data found.');
-      }
+                setOutput(response.data.response);
+        
+                console.log(response.data.response);
+              } else {
+                setOutput([]);
+                setError('No valid data found.');
+              }
     } catch (error) {
       if (error.response && error.response.status === 401) {
         setError("Session expired. Please log in again.");
         localStorage.removeItem("token");
         window.alert("Session expired. Please log in again.");
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000);
+        setTimeout(() => navigate("/login"), 2000);
       } else {
         setError("An error occurred while scraping YouTube.");
       }
@@ -106,32 +108,61 @@ const YoutubeScraper = () => {
     }
   };
 
+  // Fetch summary from the /get-summary endpoint
+  const handleGetSummary = async () => {
+    setSummaryLoading(true);
+    setSummary('');
+    setError(null);
+
+    try {
+      const response = await axios.post(
+        `${API_URL}/get-summary`,
+        {
+          output
+        },
+        {
+          headers: { 'x-access-token': token },
+        }
+      );
+
+      if (response.data.summary) {
+        setSummary(response.data.summary);
+      } else {
+        setError('No summary generated.');
+      }
+    } catch (error) {
+      setError("An error occurred while fetching the summary.");
+    } finally {
+      setSummaryLoading(false);
+    }
+  };
+
+  // Download CSV
   const downloadCSV = () => {
     if (!output.length) return;
 
-    const headers = ['Title', 'Description', 'URL', 'Channel Title', 'Published At', 'Thumbnail'];
-
+    const headers = ['Title', 'Description', 'URL', 'Channel Title', 'Published At', 'Thumbnail', 'Sentiment Analysis'];
     const csvRows = [
       headers.join(','),
       ...output.map(video =>
         [
-          `"${video.Title}"`,
-          `"${video.Description}"`,
-          `"${video.URL}"`,
-          `"${video['Channel Title']}"`,
+          `"${video.Title || ''}"`,
+          `"${video.Description || ''}"`,
+          `"${video.URL || ''}"`,
+          `"${video['Channel Title'] || ''}"`,
           `"${new Date(video['Published At']).toLocaleDateString()}"`,
-          `"${video.Thumbnail}"`
+          `"${video.Thumbnail || ''}"`,
+          `"${video['Sentiment Analysis'] || ''}"`
         ].join(',')
       ),
     ];
 
     const csvContent = csvRows.join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
     link.setAttribute('href', url);
-    link.setAttribute('download', 'youtube_scrap_posts.csv');
+    link.setAttribute('download', 'youtube_scraped_posts.csv');
     link.style.display = 'none';
     document.body.appendChild(link);
     link.click();
@@ -139,7 +170,7 @@ const YoutubeScraper = () => {
   };
 
   return (
-    <div className="min-h-screen bg-grey flex flex-col items-center justify-center py-8 px-4">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-8 px-4">
       <h2 className="text-4xl text-center text-red-800 font-bold mb-6">YouTube Scraper</h2>
 
       <div className="w-full max-w-lg space-y-4">
@@ -148,7 +179,7 @@ const YoutubeScraper = () => {
           value={hashtag}
           onChange={(e) => setHashtag(e.target.value)}
           placeholder="Enter hashtag"
-          className="w-full p-4 text-lg border-2 border-red-800 rounded-lg focus:outline-none focus:ring-2 "
+          className="w-full p-4 text-lg border-2 border-red-800 rounded-lg focus:outline-none focus:ring-2"
         />
         <input
           type="number"
@@ -158,7 +189,7 @@ const YoutubeScraper = () => {
           className={`w-full p-4 text-lg border-2 border-red-800 rounded-lg focus:outline-none focus:ring-2 ${
             useCache ? 'bg-gray-200 cursor-not-allowed' : ''
           }`}
-          disabled={useCache} // Disable the input if useCache is true
+          disabled={useCache}
           required
         />
         <div className="flex items-center space-x-2">
@@ -185,19 +216,40 @@ const YoutubeScraper = () => {
         </div>
       )}
 
-      {error && <p className="text-red-600 text-lg">{error}</p>}
+      {error && <p className="text-red-600 text-lg mt-4">{error}</p>}
       {output.length > 0 && (
-        <>
+        <div className="w-full max-w-5xl">
           {formatOutput(output)}
-          <div className="w-full flex justify-start mt-4">
+          <div className="flex justify-start space-x-4 mt-4">
             <button
               onClick={downloadCSV}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 hover:bg-grey-900 transition-transform duration-300"
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 hover:bg-blue-700 transition-transform duration-300"
             >
               Download CSV
             </button>
+            <button
+              onClick={handleGetSummary}
+              className="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-transform duration-300"
+              disabled={summaryLoading}
+            >
+              {summaryLoading ? 'Fetching Summary...' : 'Get Summary'}
+            </button>
           </div>
-        </>
+          {summaryLoading && (
+            <div className="flex justify-center items-center mt-4">
+              <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent border-solid rounded-full animate-spin"></div>
+            </div>
+          )}
+          {summary && (
+            <div className="mt-6 bg-white p-6 rounded-xl shadow-lg max-w-3xl mx-auto border-l-4 border-indigo-500">
+              <h3 className="text-2xl font-semibold text-indigo-700 mb-4">Summary Insights</h3>
+              <div
+                className="text-gray-700"
+                dangerouslySetInnerHTML={{ __html: summary }}
+              />
+            </div>
+          )}
+        </div>
       )}
     </div>
   );

@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import Home from './pages/Home';
+import Abrassio from './pages/Abrassio';
 import InstagramScraper from './pages/InstagramScraper';
 import TwitterScraper from './pages/TwitterScraper';
 import LinkedinScraper from './pages/LinkedinScraper';
@@ -13,6 +13,8 @@ import YoutubeScraper from './pages/Youtube';
 import TwitchScraper from './pages/Twitch';
 import TikTokScraper from './pages/TiktokScrapper';
 import { ToastContainer } from 'react-toastify';
+import Homepage from './pages/Homepage';
+import ContentGenerator from './pages/ContentGenerator';
 
 function App() {
   return (
@@ -29,18 +31,20 @@ function App() {
           <Suspense fallback={<div>Loading...</div>}>
             <Routes>
               {/* Public routes */}
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<  Homepage/>} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/login" element={<Login />} />
 
               {/* Protected routes */}
-              <Route path="/home" element={<PrivateRoute><Home /></PrivateRoute>} />
+              <Route path="/home" element={<PrivateRoute><Homepage /></PrivateRoute>} />
+              <Route path="/abrassio" element={<PrivateRoute><Abrassio /></PrivateRoute>} />
               <Route path="/instagram" element={<PrivateRoute><InstagramScraper /></PrivateRoute>} />
               <Route path="/twitter" element={<PrivateRoute><TwitterScraper /></PrivateRoute>} />
               <Route path="/linkedin" element={<PrivateRoute><LinkedinScraper /></PrivateRoute>} />
               <Route path="/youtube" element={<PrivateRoute><YoutubeScraper /></PrivateRoute>} />
               <Route path="/twitch" element={<PrivateRoute><TwitchScraper/></PrivateRoute>} />
               <Route path="/tiktok" element={<PrivateRoute><TikTokScraper/></PrivateRoute>} />
+              <Route path="/socialspark" element={<PrivateRoute><ContentGenerator/></PrivateRoute>} />
             </Routes>
           </Suspense>
         </main>
