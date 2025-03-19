@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import API_URL from "./config";
 
 function ContentGenerator() {
   const [messages, setMessages] = useState([]);
@@ -10,7 +11,6 @@ function ContentGenerator() {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const token = localStorage.getItem("token");
-  const API_URL = "http://localhost:5000/generate_content";
 
   const handleGenerate = async (e) => {
     e.preventDefault();
@@ -26,7 +26,7 @@ function ContentGenerator() {
 
     try {
       const response = await axios.post(
-        API_URL,
+        `${API_URL}/generate_content`,
         {
           topic: topic.trim(),
           stop_after: stopAfter.trim() || undefined,
