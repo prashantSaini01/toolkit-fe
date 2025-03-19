@@ -14,6 +14,7 @@ import TwitchScraper from './pages/Twitch';
 import TikTokScraper from './pages/TiktokScrapper';
 import { ToastContainer } from 'react-toastify';
 import Homepage from './pages/Homepage';
+import ContentGenerator from './pages/ContentGenerator';
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
               <Route path="/youtube" element={<PrivateRoute><YoutubeScraper /></PrivateRoute>} />
               <Route path="/twitch" element={<PrivateRoute><TwitchScraper/></PrivateRoute>} />
               <Route path="/tiktok" element={<PrivateRoute><TikTokScraper/></PrivateRoute>} />
+              <Route path="/socialspark" element={<PrivateRoute><ContentGenerator/></PrivateRoute>} />
             </Routes>
           </Suspense>
         </main>

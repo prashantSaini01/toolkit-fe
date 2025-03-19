@@ -74,10 +74,10 @@ const Header = () => {
           </li>
           <li>
             <Link
-              to="/"
-              // className={`transition-colors duration-300 ${
-              //   isActive('/') ? 'text-red-600 font-semibold' : 'hover:text-red-600'
-              // }`}
+              to="/socialspark"
+              className={`transition-colors duration-300 ${
+                isActive('/socialspark') ? 'text-red-600 font-semibold' : 'hover:text-red-600'
+              }`}
             >
               Social Spark
             </Link>
@@ -165,7 +165,7 @@ const Header = () => {
                 <Link
                   to="/"
                   className={`block transition-colors duration-300 ${
-                    isActive('/') ? 'text-red-600 font-semibold' : 'hover:text-secondary'
+                    isActive('/socialspark') ? 'text-red-600 font-semibold' : 'hover:text-secondary'
                   }`}
                   onClick={handleMenuToggle}
                 >

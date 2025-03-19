@@ -61,7 +61,7 @@ const Homepage = () => {
             </p>
           </div>
           <Link
-            to="/social-spark"
+            to="/socialspark"
             className="bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-16 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300"
           >
             Use
