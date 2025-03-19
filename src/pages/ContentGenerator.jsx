@@ -7,10 +7,20 @@ function ContentGenerator() {
   const [finalContent, setFinalContent] = useState("");
   const [error, setError] = useState(null);
   const [topic, setTopic] = useState("");
-  const [stopAfter, setStopAfter] = useState("");
+  const [stopAfter, setStopAfter] = useState(""); // Default to empty string
   const [isGenerating, setIsGenerating] = useState(false);
 
   const token = localStorage.getItem("token");
+
+  // List of available nodes for the dropdown
+  const nodeOptions = [
+    { value: "", label: "None" }, // Default option
+    { value: "planner", label: "Planner" },
+    { value: "research_plan", label: "Research Plan" },
+    { value: "generate", label: "Generate" },
+    { value: "reflect", label: "Reflect" },
+    { value: "research_critique", label: "Research Critique" },
+  ];
 
   const handleGenerate = async (e) => {
     e.preventDefault();
@@ -29,7 +39,7 @@ function ContentGenerator() {
         `${API_URL}/generate_content`,
         {
           topic: topic.trim(),
-          stop_after: stopAfter.trim() || undefined,
+          stop_after: stopAfter.trim() || undefined, // Empty string becomes undefined
         },
         {
           headers: {
@@ -88,17 +98,22 @@ function ContentGenerator() {
             >
               Stop After (Optional)
             </label>
-            <input
+            <select
               id="stopAfter"
-              type="text"
               value={stopAfter}
               onChange={(e) => setStopAfter(e.target.value)}
-              placeholder="e.g., generate"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
               disabled={isGenerating}
-            />
+            >
+              {nodeOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
             <p className="mt-1 text-xs text-gray-500 italic">
-              Enter a node name (e.g., “generate”) to stop early.
+              Select a node to stop early or leave as &quot;None&quot; to run
+              fully.
             </p>
           </div>
           <button
@@ -160,13 +175,15 @@ function ContentGenerator() {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <p className="text-sm font-medium text-gray-800">
-                    Step: <span className="text-blue-600">{msg.node_transition}</span>
+                    Step:{" "}
+                    <span className="text-blue-600">{msg.node_transition}</span>
                   </p>
                   <p className="text-sm text-gray-600 mt-1 break-words leading-relaxed">
                     {msg.message}
                   </p>
                   <p className="text-xs text-gray-400 mt-2">
-                    Thread: {msg.thread_id} | Revision: {msg.revision} | Count: {msg.count}
+                    Thread: {msg.thread_id} | Revision: {msg.revision} | Count:{" "}
+                    {msg.count}
                   </p>
                 </div>
               ))}
@@ -177,7 +194,9 @@ function ContentGenerator() {
         {/* Final Content Section */}
         {finalContent && (
           <div className="mt-8">
-            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Final Content</h2>
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Final Content
+            </h2>
             <div className="p-6 bg-gradient-to-br from-white to-blue-50 border border-gray-200 rounded-lg shadow-md">
               <p className="text-gray-700 whitespace-pre-wrap leading-relaxed text-base">
                 {finalContent}
@@ -187,15 +206,25 @@ function ContentGenerator() {
         )}
       </div>
 
-      {/* Custom CSS for Animations */}
+      {/* eslint-disable react/no-unknown-property */}
       <style jsx>{`
         @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
         }
         @keyframes slideUp {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
         .animate-fade-in {
           animation: fadeIn 0.5s ease-in-out;
