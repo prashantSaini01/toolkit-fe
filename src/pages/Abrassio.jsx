@@ -9,13 +9,13 @@ import {
   FaTiktok,
 } from "react-icons/fa";
 
-const Home = () => {
+const Abrassio = () => {
   return (
     <div className="text-center p-20 bg-gradient-to-b from-blue-50 to-gray-100">
       {/* Hero Section */}
       <div className="mb-16">
         <h2 className="text-5xl font-bold text-gray-900 mb-6">
-          Welcome to Scraping Assistant
+          Welcome to Scraping Assistant 
         </h2>
         <p className="text-xl text-gray-700 mb-8">
           Web scraping is a powerful tool for collecting data from various
@@ -204,4 +204,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Abrassio;

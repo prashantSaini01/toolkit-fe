@@ -4,8 +4,8 @@ const Footer = () => {
   return (
     <footer className="bg-dark text-light py-6 shadow-inner">
       <div className="container mx-auto px-4 text-center">
-        <p className="text-sm">&copy; 2024 Scraping Assistant. All rights reserved.</p>
-        <div className="flex flex-wrap justify-center space-x-4 space-y-2 mt-4 md:space-y-0">
+        <p className="text-sm">&copy; 2025 INZINT AI Lab. All rights reserved.</p>
+        {/* <div className="flex flex-wrap justify-center space-x-4 space-y-2 mt-4 md:space-y-0">
           <a
             href="https://instagram.com"
             className="hover:text-primary transition-colors duration-300"
@@ -54,7 +54,7 @@ const Footer = () => {
           >
             TikTok
           </a>
-        </div>
+        </div> */}
       </div>
     </footer>
   );
