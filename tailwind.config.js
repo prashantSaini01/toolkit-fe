@@ -22,6 +22,9 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'), // Add the scrollbar plugin
+    require('@tailwindcss/typography'), // Already used for prose
+  ],
 }
 
