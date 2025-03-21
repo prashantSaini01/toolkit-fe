@@ -1,14 +1,13 @@
 /* eslint-disable react/no-unknown-property */
 import { useEffect, useState } from "react";
 import axios from "axios";
-import API_URL from "./config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTwitter,
   faLinkedin,
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
-
+const API_URL = "https://inzint-ai-labs.onrender.com";
 function ContentGenerator() {
   const [messages, setMessages] = useState([]);
   const [finalContent, setFinalContent] = useState({
