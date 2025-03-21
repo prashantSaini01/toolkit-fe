@@ -1,5 +1,4 @@
 
-
 // import React, { useState, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 // import axios from 'axios';
@@ -106,18 +105,21 @@
 
 //   // Handle "Get Newsletter Right Now" button click
 //   const handleGetNewsletter = async () => {
-//     if (subscribedTags.length === 0) return;
+//     if (subscribedTags.length === 0) {
+//       toast.info("No subscribed tags available to fetch newsletters.");
+//       return;
+//     }
 
 //     setNewsletterLoading(true);
 //     try {
 //       const response = await axios.post(
 //         `${API_URL}/get_newsletter_now`,
-//         { tags: subscribedTags.map(tag => tag.tag) },
+//         {}, // No body needed since the backend uses the current user's ID
 //         { headers: { 'x-access-token': token } }
 //       );
 
-//       if (response.data) {
-//         toast.success("Newsletter fetched successfully! Check your email or notifications.");
+//       if (response.data.message) {
+//         toast.success(response.data.message);
 //       }
 //     } catch (error) {
 //       if (error.response && error.response.status === 401) {
@@ -125,8 +127,10 @@
 //         localStorage.removeItem("token");
 //         toast.error("Session expired. Please log in again.");
 //         setTimeout(() => navigate("/login"), 2000);
+//       } else if (error.response && error.response.status === 404) {
+//         toast.info(error.response.data.message);
 //       } else {
-//         toast.error("Failed to fetch newsletter. Please try again.");
+//         toast.error("Failed to fetch newsletters. Please try again.");
 //       }
 //     } finally {
 //       setNewsletterLoading(false);
@@ -385,7 +389,7 @@
 //               className={`px-6 py-2 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex items-center gap-2 ${
 //                 subscribedTags.length === 0 || newsletterLoading
 //                   ? 'bg-gray-400 cursor-not-allowed'
-//                   : 'bg-gradient-to-r from-purple-600 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800'
+//                   : 'bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800'
 //               }`}
 //             >
 //               {newsletterLoading ? (
@@ -425,7 +429,7 @@
 //                   />
 //                 </svg>
 //               )}
-//               <span>{newsletterLoading ? 'Fetching...' : 'Get Newsletter Right Now'}</span>
+//               <span>{newsletterLoading ? 'Sending...' : 'Get Newsletter Right Now'}</span>
 //             </button>
 //           </div>
 //           {subscribedTags.length > 0 ? (
@@ -751,86 +755,79 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Main Insights Section */}
-        {(platform && query) && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Sentiment Analysis Section */}
-            <div className="lg:col-span-2 bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-gray-100">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-green-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2V13a2 2 0 00-2-2h-2a2 2 0 00-2 2v6a2 2 0 002 2z"
-                  />
-                </svg>
-                Sentiment Analysis
-              </h3>
-              <div className="flex flex-col lg:flex-row gap-8">
-                {/* Sentiment Pie Chart */}
-                <div className="lg:w-1/2">
-                  {sentimentData ? (
-                    <div className="relative">
-                      <Pie data={sentimentData} options={pieOptions} />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="bg-white/90 rounded-full px-4 py-2 shadow-lg">
-                          <p className="text-sm font-medium text-gray-600">Total: {sentimentData.datasets[0].data.reduce((a, b) => a + b, 0)}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="text-gray-500 italic">No sentiment data available.</p>
-                  )}
-                </div>
+ {/* Main Insights Section */}
+ {(platform && query) && (
+   <div className="grid grid-cols-1 gap-8">
+     {/* Sentiment Analysis Section */}
+     <div className="bg-white/90 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-gray-100">
+       <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+         <svg
+           xmlns="http://www.w3.org/2000/svg"
+           className="h-6 w-6 text-green-600"
+           fill="none"
+           viewBox="0 0 24 24"
+           stroke="currentColor"
+         >
+           <path
+             strokeLinecap="round"
+             strokeLinejoin="round"
+             strokeWidth={2}
+             d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2V13a2 2 0 00-2-2h-2a2 2 0 00-2 2v6a2 2 0 002 2z"
+           />
+         </svg>
+         Sentiment Analysis
+       </h3>
+       <div className="flex flex-col lg:flex-row-reverse gap-8">
+         {/* Sentiment Pie Chart */}
+         <div className="lg:w-1/3 flex justify-center items-center">
+           {sentimentData ? (
+             <div className="relative w-full max-w-md">
+               <Pie data={sentimentData} options={pieOptions} />
+               <div className="absolute inset-0 flex items-center justify-center">
+                 <div className="bg-white/95 rounded-full px-4 py-2 shadow-md border border-gray-200">
+                   <p className="text-sm font-semibold text-gray-700">
+                     Total: {sentimentData.datasets[0].data.reduce((a, b) => a + b, 0)}
+                   </p>
+                 </div>
+               </div>
+             </div>
+           ) : (
+             <p className="text-gray-500 italic text-center">No sentiment data available.</p>
+           )}
+         </div>
 
-                {/* Sentiment Summary */}
-                <div className="lg:w-1/2">
-                  <h4 className="text-lg font-semibold text-gray-700 mb-4">Summary</h4>
-                  {sentimentSummary ? (
-                    <div
-                      className="text-gray-600 prose prose-ul:pl-5 prose-li:marker:text-blue-600 max-h-60 overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-gray-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
-                      dangerouslySetInnerHTML={{ __html: sentimentSummary }}
-                    />
-                  ) : (
-                    <p className="text-gray-500 italic">No summary available.</p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Most Searched Hashtag */}
-            <div className="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-gray-100">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-yellow-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
-                  />
-                </svg>
-                Trending Hashtag
-              </h3>
-              <div className="bg-gradient-to-r from-yellow-100 to-yellow-200 p-6 rounded-xl shadow-inner">
-                <p className="text-3xl font-bold text-yellow-800">#{mostSearchedHashtag}</p>
-                <p className="text-sm text-gray-600 mt-2">Most searched tag in this query</p>
-              </div>
-            </div>
-          </div>
-        )}
+         {/* Sentiment Summary */}
+         <div className="lg:w-2/3">
+           <h4 className="text-xl font-semibold text-gray-700 mb-4 flex items-center gap-2">
+             <svg
+               xmlns="http://www.w3.org/2000/svg"
+               className="h-5 w-5 text-blue-600"
+               fill="none"
+               viewBox="0 0 24 24"
+               stroke="currentColor"
+             >
+               <path
+                 strokeLinecap="round"
+                 strokeLinejoin="round"
+                 strokeWidth={2}
+                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+               />
+             </svg>
+             Summary
+           </h4>
+           {sentimentSummary ? (
+             <div
+               className="text-gray-600 prose prose-ul:pl-5 prose-li:marker:text-blue-600 h-[450px] overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full p-6 bg-gradient-to-br from-gray-50 to-blue-50 rounded-lg shadow-inner border border-gray-200"
+               dangerouslySetInnerHTML={{ __html: sentimentSummary }}
+             />
+           ) : (
+             <p className="text-gray-500 italic p-6 bg-gray-50 rounded-lg">No summary available.</p>
+           )}
+         </div>
+       </div>
+     </div>
+   </div>
+ )}
 
         {/* Subscribed Tags Section */}
         <div className="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-gray-100">

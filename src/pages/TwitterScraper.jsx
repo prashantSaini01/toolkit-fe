@@ -277,7 +277,7 @@ const TwitterScraper = () => {
           },
         }
       );
-      setPosts(response.data.response);
+      setPosts(response.data);
     } catch (err) {
       if (err.response && err.response.status === 401) {
         setError("Session expired. Redirecting to login...");

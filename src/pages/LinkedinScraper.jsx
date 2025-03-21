@@ -231,8 +231,8 @@ const LinkedInScraper = () => {
         }
       );
 
-      setPosts(response.data.response || []);
-      if (!response.data.response.length) {
+      setPosts(response.data|| []);
+      if (!response.data.length) {
         setError("No posts found for the given hashtag.");
       }
     } catch (err) {

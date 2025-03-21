@@ -224,7 +224,8 @@ const TwitchVideos = () => {
       }
 
       const data = await response.json();
-      setVideos(data.response || []);
+      // console.log("Data",data);
+      setVideos(data|| []);
     } catch (err) {
       if (err.message.includes('Session expired')) {
         alert(err.message);

@@ -218,7 +218,7 @@ const TikTokScraper = () => {
           },
         }
       );
-      setPosts(response.data.response);
+      setPosts(response.data);
     } catch (err) {
       if (err.response && err.response.status === 401) {
         setError("Session expired. Please log in again.");
