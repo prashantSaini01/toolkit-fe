@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable react/no-unknown-property */
+import { useEffect, useState } from "react";
 import axios from "axios";
 import API_URL from "./config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,7 +11,11 @@ import {
 
 function ContentGenerator() {
   const [messages, setMessages] = useState([]);
-  const [finalContent, setFinalContent] = useState("");
+  const [finalContent, setFinalContent] = useState({
+    text: "",
+    image: null,
+    image_error: null,
+  });
   const [error, setError] = useState(null);
   const [topic, setTopic] = useState("");
   const [stopAfter, setStopAfter] = useState("");
@@ -39,7 +44,7 @@ function ContentGenerator() {
     }
 
     setMessages([]);
-    setFinalContent("");
+    setFinalContent({ text: "", image: null, image_error: null });
     setError(null);
     setIsGenerating(true);
     setCopied(false);
@@ -53,7 +58,13 @@ function ContentGenerator() {
 
       if (response.data.results) {
         setMessages(response.data.results);
-        setFinalContent(response.data.final_content || "");
+        setFinalContent(
+          response.data.final_content || {
+            text: "",
+            image: null,
+            image_error: null,
+          }
+        );
       } else {
         setError("No valid data returned.");
       }
@@ -67,20 +78,23 @@ function ContentGenerator() {
       setIsGenerating(false);
     }
   };
+  useEffect(() => {
+    console.log("Final Content:", finalContent);
+  }, [finalContent]);
 
   const handleCopyAndRedirect = (platform) => {
-    if (!finalContent) return;
+    if (!finalContent.text) return;
 
-    let contentToCopy = finalContent;
+    let contentToCopy = finalContent.text;
     switch (platform) {
       case "twitter":
-        contentToCopy = finalContent.slice(0, 280); // Twitter: 280 chars
+        contentToCopy = finalContent.text.slice(0, 280); // Twitter: 280 chars
         break;
       case "linkedin":
-        contentToCopy = finalContent.slice(0, 3000); // LinkedIn: ~3000 chars
+        contentToCopy = finalContent.text.slice(0, 3000); // LinkedIn: ~3000 chars
         break;
       case "instagram":
-        contentToCopy = finalContent.slice(0, 2200); // Instagram: ~2200 chars
+        contentToCopy = finalContent.text.slice(0, 2200); // Instagram: ~2200 chars
         break;
       default:
         break;
@@ -135,8 +149,8 @@ function ContentGenerator() {
     return { mainContent: mainContent.join("\n"), caption, hashtags, visual };
   };
 
-  const { mainContent, caption, hashtags, visual } = finalContent
-    ? parseFinalContent(finalContent)
+  const { mainContent, caption, hashtags, visual } = finalContent.text
+    ? parseFinalContent(finalContent.text)
     : { mainContent: "", caption: "", hashtags: "", visual: "" };
 
   return (
@@ -277,7 +291,7 @@ function ContentGenerator() {
         )}
 
         {/* Your Generated Content Section */}
-        {finalContent && (
+        {finalContent.text && (
           <div className="mt-8 relative">
             <h2 className="text-2xl font-semibold text-gray-800 mb-4">
               Your Generated Content
@@ -286,7 +300,21 @@ function ContentGenerator() {
               <div className="text-gray-700 whitespace-pre-wrap leading-relaxed text-base">
                 {mainContent}
               </div>
-              {visual && (
+              {finalContent.image && (
+                <div className="mt-4">
+                  <img
+                    src={finalContent.image}
+                    alt="Generated Visual"
+                    className="max-w-full h-auto rounded-lg shadow-md"
+                  />
+                </div>
+              )}
+              {finalContent.image_error && (
+                <div className="mt-2 text-red-600 text-sm">
+                  Image Generation Error: {finalContent.image_error}
+                </div>
+              )}
+              {visual && !finalContent.image && (
                 <div className="mt-2">
                   <span className="inline-flex items-center px-2 py-1 bg-yellow-100 text-yellow-800 text-sm font-medium rounded-full">
                     <svg
@@ -327,7 +355,7 @@ function ContentGenerator() {
               <button
                 onClick={() => handleCopyAndRedirect("twitter")}
                 className="group relative flex items-center px-4 py-2 bg-[#1DA1F2] text-white font-semibold rounded-full shadow-md hover:bg-[#1A91DA] transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={!finalContent}
+                disabled={!finalContent.text}
                 aria-label="Copy content and share to Twitter"
               >
                 <FontAwesomeIcon icon={faTwitter} className="mr-2" />
@@ -339,7 +367,7 @@ function ContentGenerator() {
               <button
                 onClick={() => handleCopyAndRedirect("linkedin")}
                 className="group relative flex items-center px-4 py-2 bg-[#0A66C2] text-white font-semibold rounded-full shadow-md hover:bg-[#0A548B] transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={!finalContent}
+                disabled={!finalContent.text}
                 aria-label="Copy content and share to LinkedIn"
               >
                 <FontAwesomeIcon icon={faLinkedin} className="mr-2" />
@@ -351,7 +379,7 @@ function ContentGenerator() {
               <button
                 onClick={() => handleCopyAndRedirect("instagram")}
                 className="group relative flex items-center px-4 py-2 bg-gradient-to-r from-[#405DE6] via-[#C13584] to-[#F77737] text-white font-semibold rounded-full shadow-md hover:brightness-110 transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={!finalContent}
+                disabled={!finalContent.text}
                 aria-label="Copy content and share to Instagram"
               >
                 <FontAwesomeIcon icon={faInstagram} className="mr-2" />
@@ -386,7 +414,6 @@ function ContentGenerator() {
         )}
       </div>
 
-      {/* eslint-disable react/no-unknown-property */}
       <style jsx>{`
         @keyframes fadeIn {
           from {
