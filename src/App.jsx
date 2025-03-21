@@ -15,13 +15,14 @@ import TikTokScraper from './pages/TiktokScrapper';
 import { ToastContainer } from 'react-toastify';
 import Homepage from './pages/Homepage';
 import ContentGenerator from './pages/ContentGenerator';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
         {/* ToastContainer for global notifications */}
-        <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
+       
 
         {/* Header */}
         <Header />
@@ -45,12 +46,15 @@ function App() {
               <Route path="/twitch" element={<PrivateRoute><TwitchScraper/></PrivateRoute>} />
               <Route path="/tiktok" element={<PrivateRoute><TikTokScraper/></PrivateRoute>} />
               <Route path="/socialspark" element={<PrivateRoute><ContentGenerator/></PrivateRoute>} />
+              <Route path="/dashboard" element={<PrivateRoute><Dashboard/></PrivateRoute>} />
+
             </Routes>
           </Suspense>
         </main>
 
         {/* Footer */}
         <Footer />
+        <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
       </div>
     </Router>
   );

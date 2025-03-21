@@ -98,6 +98,7 @@ const Header = () => {
 
         {/* Authentication Buttons */}
         <div className="hidden lg:flex space-x-4">
+          
           {!token ? (
             <>
               <Link
