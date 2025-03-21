@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaRobot, FaStar, FaBalanceScale } from "react-icons/fa"; // Added FaBalanceScale for Legal Bot
+import { FaRobot, FaStar, FaBalanceScale,FaBookOpen } from "react-icons/fa"; // Added FaBalanceScale for Legal Bot
 
 const Homepage = () => {
   const welcomeText = "Welcome to Inzint AI Lab".split(" ");
@@ -70,9 +70,9 @@ const Homepage = () => {
 
         {/* Legal Bot Card */}
         <div className="flex flex-col items-center bg-gradient-to-br from-green-100 to-green-200 p-8 rounded-xl shadow-xl w-80 transition-transform duration-300 hover:shadow-2xl">
-          <FaBalanceScale className="text-5xl text-green-600 mb-6" />
+          <FaBookOpen className="text-5xl text-green-600 mb-6" />
           <h3 className="text-2xl font-semibold text-gray-800 mb-4">
-            Legal Bot
+          DocuChat 
           </h3>
           <div className="text-gray-700 mb-6">
             <p className="text-base mb-2">
@@ -83,7 +83,7 @@ const Homepage = () => {
             </p>
           </div>
           <Link
-            to="/legal-bot"
+            to="/legalbot"
             className="bg-gradient-to-r from-green-500 to-teal-600 text-white py-3 px-16 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300"
           >
             Use
