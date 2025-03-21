@@ -35,6 +35,20 @@ function ContentGenerator() {
     },
   ];
 
+  // Wake up Render instance when component mounts
+  useEffect(() => {
+    const wakeUpInstance = async () => {
+      try {
+        await axios.get(`${API_URL}`);
+        console.log("Render instance woken up successfully");
+      } catch (err) {
+        console.warn("Failed to wake up Render instance:", err.message);
+        // Don’t set error state—silent failure is fine here
+      }
+    };
+    wakeUpInstance();
+  }, []);
+
   const handleGenerate = async (e) => {
     e.preventDefault();
     if (!topic.trim()) {
