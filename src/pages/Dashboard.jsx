@@ -603,7 +603,7 @@ const Dashboard = () => {
       } else if (error.response && error.response.status === 404) {
         toast.info(error.response.data.message);
       } else {
-        toast.error("Failed to fetch newsletters. Please try again.");
+        toast.error("Wait for sometime, the newsletter on its way ...");
       }
     } finally {
       setNewsletterLoading(false);
