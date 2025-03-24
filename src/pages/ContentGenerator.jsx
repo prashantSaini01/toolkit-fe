@@ -7,7 +7,9 @@ import {
   faLinkedin,
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
+
 const API_URL = "https://inzint-ai-labs.onrender.com";
+
 function ContentGenerator() {
   const [messages, setMessages] = useState([]);
   const [finalContent, setFinalContent] = useState({
@@ -19,6 +21,7 @@ function ContentGenerator() {
   const [topic, setTopic] = useState("");
   const [stopAfter, setStopAfter] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isServerReady, setIsServerReady] = useState(false); // New state for server readiness
   const [copied, setCopied] = useState(false);
 
   const token = localStorage.getItem("token");
@@ -35,22 +38,36 @@ function ContentGenerator() {
     },
   ];
 
-  // Wake up Render instance when component mounts
+  // Wake up Render instance and check server readiness
   useEffect(() => {
+    let intervalId;
     const wakeUpInstance = async () => {
       try {
-        await axios.get(`${API_URL}`);
-        console.log("Render instance woken up successfully");
+        const response = await axios.get(`${API_URL}/health`, {
+          timeout: 5000,
+        });
+        if (response.status === 200) {
+          console.log("Server is awake and ready");
+          setIsServerReady(true);
+          clearInterval(intervalId);
+        }
       } catch (err) {
-        console.warn("Failed to wake up Render instance:", err.message);
-        // Don’t set error state—silent failure is fine here
+        console.warn("Server not ready yet:", err.message);
       }
     };
-    wakeUpInstance();
+
+    wakeUpInstance(); // Initial attempt
+    intervalId = setInterval(wakeUpInstance, 3000); // Poll every 3 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on unmount
   }, []);
 
   const handleGenerate = async (e) => {
     e.preventDefault();
+    if (!isServerReady) {
+      setError("Server is waking up, please wait...");
+      return;
+    }
     if (!topic.trim()) {
       setError("Please enter a topic");
       return;
@@ -91,6 +108,7 @@ function ContentGenerator() {
       setIsGenerating(false);
     }
   };
+
   useEffect(() => {
     console.log("Final Content:", finalContent);
   }, [finalContent]);
@@ -189,7 +207,7 @@ function ContentGenerator() {
               onChange={(e) => setTopic(e.target.value)}
               placeholder="e.g., Tesla's Latest Innovations"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
-              disabled={isGenerating}
+              disabled={isGenerating || !isServerReady}
               aria-label="Enter topic for content generation"
             />
           </div>
@@ -208,7 +226,7 @@ function ContentGenerator() {
               value={stopAfter}
               onChange={(e) => setStopAfter(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:bg-gray-100 disabled:cursor-not-allowed"
-              disabled={isGenerating}
+              disabled={isGenerating || !isServerReady}
               aria-label="Select workflow stopping point"
             >
               {nodeOptions.map((option) => (
@@ -218,25 +236,52 @@ function ContentGenerator() {
               ))}
             </select>
             <p className="mt-2 text-xs text-gray-600 leading-relaxed">
-              Choose where to pause the process. &quot;Run Full Process (All
-              Steps)&quot; completes all steps from planning to final polish.
-              Stop early to review intermediate results—like a draft post or
-              research findings.
+              Choose where to pause the process. Run Full Process (All Steps)
+              completes all steps from planning to final polish. Stop early to
+              review intermediate results—like a draft post or research
+              findings.
             </p>
           </div>
           <button
             type="submit"
             className={`w-full py-3 px-6 rounded-lg text-white font-semibold shadow-md transform transition-all duration-300 ${
-              isGenerating
+              isGenerating || !isServerReady
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:scale-105"
             }`}
-            disabled={isGenerating}
+            disabled={isGenerating || !isServerReady}
             aria-label={
-              isGenerating ? "Generating content" : "Start content creation"
+              !isServerReady
+                ? "Server waking up"
+                : isGenerating
+                ? "Generating content"
+                : "Start content creation"
             }
           >
-            {isGenerating ? (
+            {!isServerReady ? (
+              <span className="flex items-center justify-center">
+                <svg
+                  className="animate-spin h-5 w-5 mr-2 text-white"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8h8a8 8 0 01-8 8v-8H4z"
+                  />
+                </svg>
+                Waking up server...
+              </span>
+            ) : isGenerating ? (
               <span className="flex items-center justify-center">
                 <svg
                   className="animate-spin h-5 w-5 mr-2 text-white"
