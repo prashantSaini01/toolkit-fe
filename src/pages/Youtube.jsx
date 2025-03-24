@@ -342,10 +342,13 @@ const YoutubeScraper = () => {
         }
       );
 
-      if (response.data.response) {
-        setOutput(response.data.response);
-        console.log(response.data.response);
-      } else {
+      if (response.data.response || response.data) {
+        if (response.data.response) {
+          setOutput(response.data.response);
+        } else {
+          setOutput(response.data);
+        }
+      }  else {
         setOutput([]);
         setError('No valid data found.');
       }
