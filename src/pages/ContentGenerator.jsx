@@ -43,7 +43,7 @@ function ContentGenerator() {
     let intervalId;
     const wakeUpInstance = async () => {
       try {
-        const response = await axios.get(`${API_URL}/health`, {
+        const response = await axios.get(`${API_URL}`, {
           timeout: 5000,
         });
         if (response.status === 200) {
