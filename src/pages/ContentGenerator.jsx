@@ -20,8 +20,9 @@ function ContentGenerator() {
   const [error, setError] = useState(null);
   const [topic, setTopic] = useState("");
   const [stopAfter, setStopAfter] = useState("");
+  const [includeImage, setIncludeImage] = useState(true); // New state for image inclusion
   const [isGenerating, setIsGenerating] = useState(false);
-  const [isServerReady, setIsServerReady] = useState(false); // New state for server readiness
+  const [isServerReady, setIsServerReady] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const token = localStorage.getItem("token");
@@ -38,7 +39,6 @@ function ContentGenerator() {
     },
   ];
 
-  // Wake up Render instance and check server readiness
   useEffect(() => {
     let intervalId;
     const wakeUpInstance = async () => {
@@ -56,10 +56,10 @@ function ContentGenerator() {
       }
     };
 
-    wakeUpInstance(); // Initial attempt
-    intervalId = setInterval(wakeUpInstance, 3000); // Poll every 3 seconds
+    wakeUpInstance();
+    intervalId = setInterval(wakeUpInstance, 3000);
 
-    return () => clearInterval(intervalId); // Cleanup on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   const handleGenerate = async (e) => {
@@ -82,7 +82,11 @@ function ContentGenerator() {
     try {
       const response = await axios.post(
         `${API_URL}/generate_content`,
-        { topic: topic.trim(), stop_after: stopAfter.trim() || undefined },
+        {
+          topic: topic.trim(),
+          stop_after: stopAfter.trim() || undefined,
+          include_image: includeImage, // Send include_image to backend
+        },
         { headers: { "x-access-token": token } }
       );
 
@@ -119,13 +123,13 @@ function ContentGenerator() {
     let contentToCopy = finalContent.text;
     switch (platform) {
       case "twitter":
-        contentToCopy = finalContent.text.slice(0, 280); // Twitter: 280 chars
+        contentToCopy = finalContent.text.slice(0, 280);
         break;
       case "linkedin":
-        contentToCopy = finalContent.text.slice(0, 3000); // LinkedIn: ~3000 chars
+        contentToCopy = finalContent.text.slice(0, 3000);
         break;
       case "instagram":
-        contentToCopy = finalContent.text.slice(0, 2200); // Instagram: ~2200 chars
+        contentToCopy = finalContent.text.slice(0, 2200);
         break;
       default:
         break;
@@ -241,6 +245,24 @@ function ContentGenerator() {
               review intermediate results—like a draft post or research
               findings.
             </p>
+          </div>
+          {/* New Checkbox for Image Inclusion */}
+          <div className="flex items-center">
+            <input
+              id="includeImage"
+              type="checkbox"
+              checked={includeImage}
+              onChange={(e) => setIncludeImage(e.target.checked)}
+              className="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isGenerating || !isServerReady}
+              aria-label="Include image in generated content"
+            />
+            <label
+              htmlFor="includeImage"
+              className="ml-2 text-sm font-medium text-gray-700"
+            >
+              Include Image in Generated Content
+            </label>
           </div>
           <button
             type="submit"
@@ -372,7 +394,7 @@ function ContentGenerator() {
                   Image Generation Error: {finalContent.image_error}
                 </div>
               )}
-              {visual && !finalContent.image && (
+              {visual && !finalContent.image && !finalContent.image_error && (
                 <div className="mt-2">
                   <span className="inline-flex items-center px-2 py-1 bg-yellow-100 text-yellow-800 text-sm font-medium rounded-full">
                     <svg
