@@ -8,8 +8,7 @@ import {
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
 
-const API_URL = import.meta.env.VITE_APP_WRITER_URL;
-console.log(API_URL)
+const API_URL = import.meta.env.VITE_WRITER_URL;
 
 function ContentGenerator() {
   const [messages, setMessages] = useState([]);
