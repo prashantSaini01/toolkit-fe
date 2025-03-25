@@ -258,16 +258,6 @@ const Dashboard = () => {
     </button>
 
     <div className="w-full max-w-7xl mx-auto space-y-10">
-      {/* Moved Add User button here */}
-      <button
-        onClick={openAddUserModal}
-        className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-700 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2 z-10"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-        </svg>
-        Add User
-      </button>
 
       <div className="text-center mb-12">
         <h2 className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-700 to-purple-700 animate-pulse">Insights Dashboard</h2>

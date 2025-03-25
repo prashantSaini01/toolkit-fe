@@ -18,6 +18,8 @@ import ContentGenerator from "./pages/ContentGenerator";
 import Dashboard from "./pages/Dashboard";
 import Lawbot from "./pages/lawbot";
 import WhyUs from "./pages/WhyContentGenerator";
+import ViraAI from "./pages/ViraAI";
+import AIvertise from "./pages/Aivertise";
 
 function App() {
   return (
@@ -131,6 +133,22 @@ function App() {
                 element={
                   <PrivateRoute>
                     <Lawbot />
+                  </PrivateRoute>
+                }
+              />
+               <Route
+                path="/vira-ai"
+                element={
+                  <PrivateRoute>
+                    <ViraAI />
+                  </PrivateRoute>
+                }
+              />
+               <Route
+                path="/aivertise"
+                element={
+                  <PrivateRoute>
+                    <AIvertise />
                   </PrivateRoute>
                 }
               />
