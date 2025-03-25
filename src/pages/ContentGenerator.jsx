@@ -8,7 +8,7 @@ import {
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
 
-const API_URL = "https://inzint-ai-labs.onrender.com";
+const API_URL = import.meta.env.VITE_WRITER_URL;
 
 function ContentGenerator() {
   const [messages, setMessages] = useState([]);
