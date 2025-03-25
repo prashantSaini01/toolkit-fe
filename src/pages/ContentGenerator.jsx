@@ -8,7 +8,8 @@ import {
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
 
-const API_URL = import.meta.env.VITE_WRITER_URL;
+const BASE_URL = import.meta.env.VITE_WRITER_URL;
+console.log("BASE",BASE_URL)
 
 function ContentGenerator() {
   const [messages, setMessages] = useState([]);
@@ -43,7 +44,7 @@ function ContentGenerator() {
     let intervalId;
     const wakeUpInstance = async () => {
       try {
-        const response = await axios.get(`${API_URL}`, {
+        const response = await axios.get(`${BASE_URL}`, {
           timeout: 5000,
         });
         if (response.status === 200) {
@@ -81,7 +82,7 @@ function ContentGenerator() {
 
     try {
       const response = await axios.post(
-        `${API_URL}/generate_content`,
+        `${BASE_URL}/generate_content`,
         {
           topic: topic.trim(),
           stop_after: stopAfter.trim() || undefined,
