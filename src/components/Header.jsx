@@ -94,6 +94,30 @@ const Header = () => {
               DocuChat 
             </Link>
           </li>
+          <li>
+            <Link
+              to="/vira-ai"
+              className={`transition-colors duration-300 ${
+                isActive('/vira-ai')
+                  ? 'text-red-600 font-semibold'
+                  : 'hover:text-red-600'
+              }`}
+            >
+              Vira AI 
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/aivertise"
+              className={`transition-colors duration-300 ${
+                isActive('/aivertise')
+                  ? 'text-red-600 font-semibold'
+                  : 'hover:text-red-600'
+              }`}
+            >
+              AIvertise
+            </Link>
+          </li>
         </ul>
 
         {/* Authentication Buttons */}
@@ -186,6 +210,30 @@ const Header = () => {
                  DocuChat 
                 </Link>
               </li>
+              <li>
+            <Link
+              to="/vira-ai"
+              className={`transition-colors duration-300 ${
+                isActive('/vira-ai')
+                  ? 'text-red-600 font-semibold'
+                  : 'hover:text-red-600'
+              }`}
+            >
+              Vira AI 
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="/aivertise"
+              className={`transition-colors duration-300 ${
+                isActive('/aivertise')
+                  ? 'text-red-600 font-semibold'
+                  : 'hover:text-red-600'
+              }`}
+            >
+              AIvertise
+            </Link>
+          </li>
             </ul>
             <div className="mt-6">
               {!token ? (
