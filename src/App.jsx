@@ -14,7 +14,7 @@ import TwitchScraper from "./pages/Twitch";
 import TikTokScraper from "./pages/TiktokScrapper";
 import { ToastContainer } from "react-toastify";
 import Homepage from "./pages/Homepage";
-import ContentGenerator from "./pages/ContentGenerator";
+import ContentGenerator from "./pages/writer/ContentGenerator";
 import Dashboard from "./pages/Dashboard";
 import Lawbot from "./pages/lawbot";
 import WhyUs from "./pages/WhyContentGenerator";
@@ -136,7 +136,7 @@ function App() {
                   </PrivateRoute>
                 }
               />
-               <Route
+              <Route
                 path="/vira-ai"
                 element={
                   <PrivateRoute>
@@ -144,7 +144,7 @@ function App() {
                   </PrivateRoute>
                 }
               />
-               <Route
+              <Route
                 path="/aivertise"
                 element={
                   <PrivateRoute>
