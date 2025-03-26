@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import API_URL from "./config"; // Adjust path to your API_URL config
+// import API_URL from "./config"; // Adjust path to your API_URL config
 
 const AIvertise = () => {
   const navigate = useNavigate();
@@ -58,7 +58,7 @@ const AIvertise = () => {
     formData.append("api_key", apiKey);
 
     try {
-      const response = await axios.post(`${API_URL}/generate_video`, formData, {
+      const response = await axios.post(`/generate_video`, formData, {
         headers: {
           "x-access-token": token,
           "Content-Type": "multipart/form-data",
@@ -69,7 +69,7 @@ const AIvertise = () => {
         // Construct the full video URL by prepending the base API_URL
         // Replace backslashes with forward slashes for web compatibility
         const relativeVideoPath = response.data.video_url.replace(/\\/g, "/");
-        const fullVideoUrl = `${API_URL}${relativeVideoPath}`;
+        const fullVideoUrl = `${relativeVideoPath}`;
         setVideoUrl(fullVideoUrl);
         toast.success("Video generated successfully!");
       } else {
@@ -78,7 +78,8 @@ const AIvertise = () => {
     } catch (err) {
       console.error("Error generating video:", err);
       const errorMessage =
-        err.response?.data?.message || "Failed to generate video. Please try again.";
+        err.response?.data?.message ||
+        "Failed to generate video. Please try again.";
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {

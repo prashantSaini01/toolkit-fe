@@ -1,7 +1,7 @@
 // import React, { useState } from "react";
 // import { useNavigate } from "react-router-dom";
 // import axios from "axios";
-// import API_URL from "./config";
+// // import API_URL from "./config";
 // import { format } from "date-fns";
 // import {
 //   FaUser,
@@ -32,7 +32,7 @@
 //     setError("");
 //     try {
 //       const response = await axios.post(
-//         `${API_URL}/scrape_instagram`,
+//         `/scrape_instagram`,
 //         { hashtag },
 //         {
 //           headers: {
@@ -187,12 +187,10 @@
 
 // export default InstagramScraper;
 
-
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import API_URL from "./config";
+// import API_URL from "./config";
 import { format } from "date-fns";
 import {
   FaUser,
@@ -224,7 +222,7 @@ const InstagramScraper = () => {
     setError("");
     try {
       const response = await axios.post(
-        `${API_URL}/scrape_instagram`,
+        `/scrape_instagram`,
         { hashtag, use_cache: useCache }, // Pass use_cache parameter
         {
           headers: {

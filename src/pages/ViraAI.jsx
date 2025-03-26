@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import API_URL from "./config";
+// import API_URL from "./config";
 
 const ViraAI = () => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const ViraAI = () => {
       setError(null);
 
       try {
-        const response = await axios.get(`${API_URL}/calls`, {
+        const response = await axios.get(`/calls`, {
           headers: {
             "x-access-token": token,
           },
@@ -54,7 +54,7 @@ const ViraAI = () => {
 
       try {
         const response = await axios.get(
-          `${API_URL}/call-transcript/${selectedCall._id}`,
+          `/call-transcript/${selectedCall._id}`,
           {
             headers: {
               "x-access-token": token,
@@ -169,8 +169,6 @@ const ViraAI = () => {
             </div>
           </div>
         </div>
-
-       
 
         <div className="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-gray-100">
           <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
@@ -314,7 +312,6 @@ const ViraAI = () => {
           )}
         </div>
       </div>
-      
 
       <ToastContainer position="top-right" autoClose={3000} />
     </div>

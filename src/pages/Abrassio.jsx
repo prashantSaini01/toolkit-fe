@@ -17,17 +17,14 @@
 //     const goToDashboard = () => {
 //       navigate('/dashboard');
 //     };
-  
-
-
 
 //   return (
 //     <div className="text-center p-20 bg-gradient-to-b from-blue-50 to-gray-100">
-     
+
 //       {/* Hero Section */}
 //       <div className="mb-16">
 //         <h2 className="text-5xl font-bold text-gray-900 mb-6">
-//           Welcome to Scraping Assistant 
+//           Welcome to Scraping Assistant
 //         </h2>
 //         <p className="text-xl text-gray-700 mb-8">
 //           Web scraping is a powerful tool for collecting data from various
@@ -219,11 +216,11 @@
 // export default Abrassio;
 
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import API_URL from './config'; // Adjust path if necessary
+import axios from "axios";
+import { toast } from "react-toastify";
+// import API_URL from './config'; // Adjust path if necessary
 import {
   FaInstagram,
   FaTwitter,
@@ -235,15 +232,20 @@ import {
 
 const Abrassio = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token'); // Assuming you have token-based authentication
+  const token = localStorage.getItem("token"); // Assuming you have token-based authentication
 
   // State for Add User modal
   const [showAddUserModal, setShowAddUserModal] = useState(false);
-  const [newUser, setNewUser] = useState({ username: '', email: '', password: '', role: 'user' });
+  const [newUser, setNewUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+    role: "user",
+  });
 
   // Navigate to dashboard
   const goToDashboard = () => {
-    navigate('/dashboard');
+    navigate("/dashboard");
   };
 
   // Handle add user
@@ -254,15 +256,13 @@ const Abrassio = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${API_URL}/add_user`,
-        newUser,
-        { headers: { 'x-access-token': token } }
-      );
+      const response = await axios.post(`/add_user`, newUser, {
+        headers: { "x-access-token": token },
+      });
 
       if (response.data.message) {
         toast.success(response.data.message);
-        setNewUser({ username: '', email: '', password: '', role: 'user' });
+        setNewUser({ username: "", email: "", password: "", role: "user" });
         setShowAddUserModal(false);
       }
     } catch (error) {
@@ -299,7 +299,7 @@ const Abrassio = () => {
       {/* Hero Section */}
       <div className="mb-16">
         <h2 className="text-5xl font-bold text-gray-900 mb-6">
-          Welcome to Scraping Assistant 
+          Welcome to Scraping Assistant
         </h2>
         <p className="text-xl text-gray-700 mb-8">
           Web scraping is a powerful tool for collecting data from various
@@ -489,32 +489,42 @@ const Abrassio = () => {
       {showAddUserModal && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-60 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-xl shadow-2xl w-full max-w-md transform transition-all duration-300 scale-100">
-            <h3 className="text-xl font-semibold text-gray-800 mb-4">Add New User</h3>
+            <h3 className="text-xl font-semibold text-gray-800 mb-4">
+              Add New User
+            </h3>
             <div className="space-y-4">
               <input
                 type="text"
                 value={newUser.username}
-                onChange={(e) => setNewUser({ ...newUser, username: e.target.value })}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, username: e.target.value })
+                }
                 placeholder="Username"
                 className="w-full p-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <input
                 type="email"
                 value={newUser.email}
-                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, email: e.target.value })
+                }
                 placeholder="Email"
                 className="w-full p-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <input
                 type="password"
                 value={newUser.password}
-                onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, password: e.target.value })
+                }
                 placeholder="Password"
                 className="w-full p-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               />
               <select
                 value={newUser.role}
-                onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, role: e.target.value })
+                }
                 className="w-full p-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               >
                 <option value="user">User</option>

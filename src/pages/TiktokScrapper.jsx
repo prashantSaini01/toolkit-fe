@@ -1,6 +1,6 @@
 // import React, { useState, useCallback } from "react";
 // import axios from "axios";
-// import API_URL from "./config";
+// // import API_URL from "./config";
 // import { useNavigate } from "react-router-dom";
 
 // const TikTokScraper = () => {
@@ -31,7 +31,7 @@
 //     setError(null);
 //     try {
 //       const response = await axios.post(
-//         `${API_URL}/scrape_tiktok`,
+//         `/scrape_tiktok`,
 //         { hashtag, post_count: postCount },
 //         {
 //           headers: {
@@ -181,11 +181,9 @@
 
 // export default TikTokScraper;
 
-
-
 import React, { useState, useCallback } from "react";
 import axios from "axios";
-import API_URL from "./config";
+// import API_URL from "./config";
 import { useNavigate } from "react-router-dom";
 
 const TikTokScraper = () => {
@@ -209,7 +207,7 @@ const TikTokScraper = () => {
     setError(null);
     try {
       const response = await axios.post(
-        `${API_URL}/scrape_tiktok`,
+        `/scrape_tiktok`,
         { hashtag, post_count: postCount, use_cache: useCache }, // Pass use_cache parameter
         {
           headers: {
