@@ -378,34 +378,7 @@ const Dashboard = () => {
           )}
         </div>
 
-        {/* Users Section */}
-        <div className="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-gray-100">
-          <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-            All Users
-          </h3>
-          {users.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-80 overflow-y-auto scrollbar scrollbar-thin scrollbar-thumb-indigo-300 scrollbar-track-gray-100 scrollbar-thumb-rounded-full scrollbar-track-rounded-full">
-              {users.map((user) => (
-                <div key={user._id} className="p-4 bg-indigo-50 rounded-xl shadow-sm hover:bg-indigo-100 hover:shadow-md transition-all duration-300 flex items-center group relative">
-                  <span className="font-medium text-gray-800 flex-grow truncate" title={user.username}>{user.username}</span>
-                  <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <span className="text-sm text-indigo-600 truncate" title={user.email}>{user.role}</span>
-                    <button onClick={() => openModal('user', user)} className="text-red-500 hover:text-red-700 flex-shrink-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-gray-500 italic">You are not authorized to see all Users.</p>
-          )}
-        </div>
+       
       </div>
 
       {/* Confirmation Modal (for unsubscribe or remove user) */}
