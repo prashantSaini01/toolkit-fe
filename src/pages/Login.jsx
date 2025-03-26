@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import API_URL from './config';
-import 'react-toastify/dist/ReactToastify.css';
+// import API_URL from './config';
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
@@ -21,7 +21,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post(`${API_URL}/login`, formData);
+      const response = await axios.post(`/login`, formData);
       localStorage.setItem("token", response.data.token);
       toast.success("Login successful!");
 
@@ -82,7 +82,10 @@ const Login = () => {
         <div className="mt-6">
           <p className="text-center text-gray-600">
             Don’t have an account?{" "}
-            <a href="/signup" className="text-blue-600 hover:underline font-medium">
+            <a
+              href="/signup"
+              className="text-blue-600 hover:underline font-medium"
+            >
               Sign up for free
             </a>
           </p>
