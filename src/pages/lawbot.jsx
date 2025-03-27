@@ -3,7 +3,7 @@
 // import SessionSelector from '../components/SessionSelector';
 // import DocumentUploader from '../components/DocumentUpload';
 // import ChatInterface from '../components/ChatInterface';
-// // import API_URL from "./config";
+// import API_URL from "./config";
 
 // axios.defaults.baseURL = API_URL;
 
@@ -50,9 +50,9 @@
 //     setIsLoading(true);
 //     setCurrentSession(sessionId);
 //     try {
-//       const messagesResponse = await axios.get(`/sessions/${sessionId}/messages`);
+//       const messagesResponse = await axios.get(`${API_URL}/sessions/${sessionId}/messages`);
 //       setChatHistory(messagesResponse.data);
-//       const pdfsResponse = await axios.get(`/sessions/${sessionId}/pdfs`);
+//       const pdfsResponse = await axios.get(`${API_URL}/sessions/${sessionId}/pdfs`);
 //       setUploadedPdfs(pdfsResponse.data);
 //     } catch (error) {
 //       console.error('Failed to load session:', error);
@@ -65,7 +65,7 @@
 //     if (currentSession) {
 //       setIsLoading(true);
 //       try {
-//         await axios.delete(`/sessions/${currentSession}`);
+//         await axios.delete(`${API_URL}/sessions/${currentSession}`);
 //         setCurrentSession(null);
 //         setChatHistory([]);
 //         setUploadedPdfs([]);
@@ -82,7 +82,7 @@
 //     if (currentSession) {
 //       setIsLoading(true);
 //       try {
-//         const response = await axios.get(`/sessions/${currentSession}/messages`);
+//         const response = await axios.get(`${API_URL}/sessions/${currentSession}/messages`);
 //         setChatHistory(response.data);
 //       } catch (error) {
 //         console.error('Failed to fetch chat history:', error);
@@ -96,7 +96,7 @@
 //     if (currentSession) {
 //       setIsLoading(true);
 //       try {
-//         const response = await axios.get(`/sessions/${currentSession}/pdfs`);
+//         const response = await axios.get(`${API_URL}/sessions/${currentSession}/pdfs`);
 //         setUploadedPdfs(response.data);
 //       } catch (error) {
 //         console.error('Failed to fetch PDFs:', error);
@@ -232,7 +232,7 @@ import axios from "axios";
 import SessionSelector from "../components/SessionSelector";
 import DocumentUploader from "../components/DocumentUpload";
 import ChatInterface from "../components/ChatInterface";
-// import API_URL from './config';
+import API_URL from "./config";
 
 axios.defaults.baseURL = API_URL;
 
@@ -264,8 +264,8 @@ function Lawbot() {
     setError(null);
     try {
       const [messagesResponse, pdfsResponse] = await Promise.all([
-        axios.get(`/sessions/${sessionId}/messages`),
-        axios.get(`/sessions/${sessionId}/pdfs`),
+        axios.get(`${API_URL}/sessions/${sessionId}/messages`),
+        axios.get(`${API_URL}/sessions/${sessionId}/pdfs`),
       ]);
       setChatHistory(messagesResponse.data);
       setUploadedPdfs(pdfsResponse.data);
@@ -309,7 +309,7 @@ function Lawbot() {
     setIsLoading(true);
     setError(null);
     try {
-      await axios.delete(`/sessions/${currentSession}`);
+      await axios.delete(`${API_URL}/sessions/${currentSession}`);
       setCurrentSession(null);
       setChatHistory([]);
       setUploadedPdfs([]);

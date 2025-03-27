@@ -1,5 +1,5 @@
 // import React, { useState } from 'react';
-// // import API_URL from './config';
+// import API_URL from './config';
 // import { useNavigate } from 'react-router-dom';
 
 // const TwitchVideos = () => {
@@ -17,7 +17,7 @@
 //     setError('');
 
 //     try {
-//       const response = await fetch(`/scrape_twitch`, {
+//       const response = await fetch(`${API_URL}/scrape_twitch`, {
 //         method: 'POST',
 //         headers: {
 //           'Content-Type': 'application/json',
@@ -182,7 +182,7 @@
 // export default TwitchVideos;
 
 import React, { useState } from "react";
-// import API_URL from './config';
+import API_URL from "./config";
 import { useNavigate } from "react-router-dom";
 
 const TwitchVideos = () => {
@@ -200,7 +200,7 @@ const TwitchVideos = () => {
     setError("");
 
     try {
-      const response = await fetch(`/scrape_twitch`, {
+      const response = await fetch(`${API_URL}/scrape_twitch`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,6 +1,6 @@
 // import React, { useState } from "react";
 // import axios from "axios";
-// // import API_URL from "./config";
+// import API_URL from "./config";
 // import { format } from "date-fns";
 // import { useNavigate } from "react-router-dom";
 
@@ -26,7 +26,7 @@
 
 //     try {
 //       const response = await axios.post(
-//         `/scrape_linkedin`,
+//         `${API_URL}/scrape_linkedin`,
 //         { hashtag },
 //         {
 //           headers: {
@@ -193,7 +193,7 @@
 
 import React, { useState } from "react";
 import axios from "axios";
-// import API_URL from "./config";
+import API_URL from "./config";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
@@ -219,7 +219,7 @@ const LinkedInScraper = () => {
 
     try {
       const response = await axios.post(
-        `/scrape_linkedin`,
+        `${API_URL}/scrape_linkedin`,
         { hashtag, use_cache: useCache }, // Pass use_cache parameter
         {
           headers: {

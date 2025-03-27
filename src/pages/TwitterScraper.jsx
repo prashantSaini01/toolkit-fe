@@ -1,6 +1,6 @@
 // import React, { useState } from "react";
 // import axios from "axios";
-// // import API_URL from "./config";
+// import API_URL from "./config";
 // import { format } from "date-fns";
 // import { useNavigate } from "react-router-dom";
 // import {
@@ -70,7 +70,7 @@
 //     setLoading(true);
 //     try {
 //       const response = await axios.post(
-//         `/scrape_twitter`,
+//         `${API_URL}/scrape_twitter`,
 //         { keyword },
 //         {
 //           headers: {
@@ -197,7 +197,7 @@
 
 import React, { useState } from "react";
 import axios from "axios";
-// import API_URL from "./config";
+import API_URL from "./config";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import {
@@ -268,7 +268,7 @@ const TwitterScraper = () => {
     setLoading(true);
     try {
       const response = await axios.post(
-        `/scrape_twitter`,
+        `${API_URL}/scrape_twitter`,
         { keyword, use_cache: useCache }, // Pass use_cache parameter
         {
           headers: {

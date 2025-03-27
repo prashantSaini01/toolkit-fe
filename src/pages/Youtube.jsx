@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-// import API_URL from './config'; // Adjust the path if necessary
+import API_URL from "./config"; // Adjust the path if necessary
 
 const YoutubeScraper = () => {
   const navigate = useNavigate();
@@ -95,7 +95,7 @@ const YoutubeScraper = () => {
 
     try {
       const response = await axios.post(
-        `/scrape_youtube`,
+        `${API_URL}/scrape_youtube`,
         {
           hashtag,
           max_results: useCache ? null : Number(maxResults),
@@ -138,7 +138,7 @@ const YoutubeScraper = () => {
 
     try {
       const response = await axios.post(
-        `/get-summary`,
+        `${API_URL}/get-summary`,
         { output },
         { headers: { "x-access-token": token } }
       );
@@ -169,7 +169,7 @@ const YoutubeScraper = () => {
 
     try {
       const response = await axios.post(
-        `/subscribe_newsletter`,
+        `${API_URL}/subscribe_newsletter`,
         {
           platform: "youtube",
           tag: hashtag,

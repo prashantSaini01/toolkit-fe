@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-// import API_URL from './config'; // Adjust path if necessary
+import API_URL from "./config"; // Adjust path if necessary
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
@@ -40,17 +40,20 @@ const Dashboard = () => {
       setError(null);
 
       try {
-        const queriesResponse = await axios.get(`/get_queries`, {
+        const queriesResponse = await axios.get(`${API_URL}/get_queries`, {
           headers: { "x-access-token": token },
         });
         setQueries(queriesResponse.data.queries || []);
 
-        const newslettersResponse = await axios.get(`/get_subscribed_tags`, {
-          headers: { "x-access-token": token },
-        });
+        const newslettersResponse = await axios.get(
+          `${API_URL}/get_subscribed_tags`,
+          {
+            headers: { "x-access-token": token },
+          }
+        );
         setSubscribedTags(newslettersResponse.data.subscribed_tags || []);
 
-        const usersResponse = await axios.get(`/get_users`, {
+        const usersResponse = await axios.get(`${API_URL}/get_users`, {
           headers: { "x-access-token": token },
         });
         setUsers(usersResponse.data.users || []);
@@ -85,7 +88,7 @@ const Dashboard = () => {
 
       try {
         const response = await axios.post(
-          `/get_sentiment_data`,
+          `${API_URL}/get_sentiment_data`,
           { platform, query },
           { headers: { "x-access-token": token } }
         );
@@ -130,7 +133,7 @@ const Dashboard = () => {
 
     try {
       const response = await axios.post(
-        `/unsubscribe_newsletter`,
+        `${API_URL}/unsubscribe_newsletter`,
         { platform: selectedTag.platform, tag: selectedTag.tag },
         { headers: { "x-access-token": token } }
       );
@@ -164,7 +167,7 @@ const Dashboard = () => {
 
     try {
       console.log("Adding user:", newUser);
-      const response = await axios.post(`/add_user`, newUser, {
+      const response = await axios.post(`${API_URL}/add_user`, newUser, {
         headers: { "x-access-token": token },
       });
 
@@ -195,7 +198,7 @@ const Dashboard = () => {
 
     try {
       const response = await axios.post(
-        `/remove_user`,
+        `${API_URL}/remove_user`,
         { user_id: selectedUser._id },
         { headers: { "x-access-token": token } }
       );
@@ -241,7 +244,7 @@ const Dashboard = () => {
     setNewsletterLoading(true);
     try {
       const response = await axios.post(
-        `/get_newsletter_now`,
+        `${API_URL}/get_newsletter_now`,
         {},
         { headers: { "x-access-token": token } }
       );

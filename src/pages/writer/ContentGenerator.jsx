@@ -9,7 +9,7 @@ import CreationProgress from "./CreationProgress";
 import GeneratedContent from "./GeneratedContent";
 import HistoryPanel from "./HistoryPanel";
 
-// const BASE_URL = import.meta.env.VITE_WRITER_URL;
+const BASE_URL = import.meta.env.VITE_WRITER_URL;
 
 function ContentGenerator() {
   const [messages, setMessages] = useState([]);
@@ -34,7 +34,7 @@ function ContentGenerator() {
   // Memoize fetch functions to prevent redefinition
   const fetchBrands = useCallback(async () => {
     try {
-      const response = await axios.get(`/get_brands`, {
+      const response = await axios.get(`${BASE_URL}/get_brands`, {
         headers: { "x-access-token": token },
       });
       const formattedBrands = response.data.brands.map((b) => ({
@@ -55,7 +55,7 @@ function ContentGenerator() {
 
   const fetchHistory = useCallback(async () => {
     try {
-      const response = await axios.get(`/get_history`, {
+      const response = await axios.get(`${BASE_URL}/get_history`, {
         headers: { "x-access-token": token },
       });
       setHistory(response.data.history);
@@ -72,7 +72,7 @@ function ContentGenerator() {
 
     const wakeUpInstance = async () => {
       try {
-        const response = await axios.get(``, { timeout: 5000 });
+        const response = await axios.get(`${BASE_URL}`, { timeout: 5000 });
         if (response.status === 200) {
           setIsServerReady(true);
           await Promise.all([fetchBrands(), fetchHistory()]); // Fetch data once server is ready
@@ -121,9 +121,13 @@ function ContentGenerator() {
           product_data: { source: "excel", data: products },
         }),
       };
-      const response = await axios.post(`/generate_content`, payload, {
-        headers: { "x-access-token": token },
-      });
+      const response = await axios.post(
+        `${BASE_URL}/generate_content`,
+        payload,
+        {
+          headers: { "x-access-token": token },
+        }
+      );
 
       if (response.data.results) {
         setMessages(response.data.results);

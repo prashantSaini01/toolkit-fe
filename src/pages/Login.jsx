@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import API_URL from "config";
 const Login = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post(`/login`, formData);
+      const response = await axios.post(`${API_URL}/login`, formData);
       localStorage.setItem("token", response.data.token);
       toast.success("Login successful!");
 

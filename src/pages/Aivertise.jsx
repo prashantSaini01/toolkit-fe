@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import API_URL from "./config"; // Adjust path to your API_URL config
+import API_URL from "./config"; // Adjust path to your API_URL config
 
 const AIvertise = () => {
   const navigate = useNavigate();
@@ -58,7 +58,7 @@ const AIvertise = () => {
     formData.append("api_key", apiKey);
 
     try {
-      const response = await axios.post(`/generate_video`, formData, {
+      const response = await axios.post(`${API_URL}/generate_video`, formData, {
         headers: {
           "x-access-token": token,
           "Content-Type": "multipart/form-data",

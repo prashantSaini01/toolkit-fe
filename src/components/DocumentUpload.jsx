@@ -1,37 +1,37 @@
 // import React, { useState } from 'react';
 // import axios from 'axios';
- 
+
 // function DocumentUploader({ sessionId, onUploadSuccess }) {
 //   const [files, setFiles] = useState([]);
 //   const [isUploading, setIsUploading] = useState(false);
 //   const [uploadProgress, setUploadProgress] = useState(0);
- 
+
 //   const handleFileChange = (e) => {
 //     if (e.target.files.length > 0) {
 //       setFiles(Array.from(e.target.files));
 //     }
 //   };
- 
+
 //   const handleUpload = async () => {
 //     if (!files.length) return;
-   
+
 //     setIsUploading(true);
 //     setUploadProgress(0);
-   
+
 //     const formData = new FormData();
 //     for (let file of files) {
 //       formData.append('pdfs', file);
 //     }
-   
+
 //     try {
-//       const response = await axios.post(`/sessions/${sessionId}/upload`, formData, {
+//       const response = await axios.post(`${API_URL}/sessions/${sessionId}/upload`, formData, {
 //         headers: { 'Content-Type': 'multipart/form-data' },
 //         onUploadProgress: (progressEvent) => {
 //           const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
 //           setUploadProgress(percentCompleted);
 //         }
 //       });
-     
+
 //       setFiles([]);
 //       onUploadSuccess();
 //       // Use a more subtle notification instead of an alert
@@ -42,15 +42,15 @@
 //       setIsUploading(false);
 //     }
 //   };
- 
+
 //   const removeFile = (index) => {
 //     setFiles(files.filter((_, i) => i !== index));
 //   };
- 
+
 //   return (
 //     <div className="space-y-4">
 //       <h3 className="text-md font-medium text-gray-900">Upload Documents</h3>
-     
+
 //       <div className="flex items-center justify-center w-full">
 //         <label className="flex flex-col w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
 //           <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -72,7 +72,7 @@
 //           />
 //         </label>
 //       </div>
-     
+
 //       {files.length > 0 && (
 //         <div className="mt-4">
 //           <div className="text-sm font-medium text-gray-700 mb-2">Selected files:</div>
@@ -99,7 +99,7 @@
 //           </ul>
 //         </div>
 //       )}
-     
+
 //       {isUploading && (
 //         <div className="mt-4">
 //           <div className="flex justify-between text-xs text-gray-500 mb-1">
@@ -114,7 +114,7 @@
 //           </div>
 //         </div>
 //       )}
-     
+
 //       <button
 //         onClick={handleUpload}
 //         disabled={!files.length || isUploading}
@@ -140,11 +140,11 @@
 //     </div>
 //   );
 // }
- 
+
 // export default DocumentUploader;
 
-import React, { useState,useRef } from 'react';
-import axios from 'axios';
+import React, { useState, useRef } from "react";
+import axios from "axios";
 
 function DocumentUploader({ sessionId, onUploadSuccess }) {
   const [files, setFiles] = useState([]);
@@ -165,19 +165,21 @@ function DocumentUploader({ sessionId, onUploadSuccess }) {
     if (!files.length) return;
     setIsUploading(true);
     const formData = new FormData();
-    files.forEach(file => formData.append('pdfs', file));
+    files.forEach((file) => formData.append("pdfs", file));
 
     try {
-      await axios.post(`/sessions/${sessionId}/upload`, formData, {
+      await axios.post(`${API_URL}/sessions/${sessionId}/upload`, formData, {
         onUploadProgress: (progressEvent) => {
-          const percent = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          const percent = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
           setUploadProgress(percent);
-        }
+        },
       });
       setFiles([]);
       onUploadSuccess();
     } catch (error) {
-      console.error('Upload failed:', error);
+      console.error("Upload failed:", error);
     } finally {
       setIsUploading(false);
     }
@@ -190,7 +192,7 @@ function DocumentUploader({ sessionId, onUploadSuccess }) {
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
         className={`border-2 border-dashed rounded-lg p-6 text-center ${
-          isUploading ? 'bg-gray-100' : 'hover:bg-gray-50'
+          isUploading ? "bg-gray-100" : "hover:bg-gray-50"
         }`}
       >
         <input
@@ -203,11 +205,21 @@ function DocumentUploader({ sessionId, onUploadSuccess }) {
           className="hidden"
         />
         <div className="space-y-2">
-          <svg className="mx-auto h-12 w-12 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+          <svg
+            className="mx-auto h-12 w-12 text-gray-400"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
           </svg>
           <p className="text-sm text-gray-600">
-            Drag and drop PDFs or{' '}
+            Drag and drop PDFs or{" "}
             <button
               onClick={() => fileInputRef.current?.click()}
               className="text-indigo-600 hover:underline"
@@ -222,7 +234,10 @@ function DocumentUploader({ sessionId, onUploadSuccess }) {
       {files.length > 0 && (
         <div className="space-y-2">
           {files.map((file, index) => (
-            <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+            <div
+              key={index}
+              className="flex items-center justify-between p-2 bg-gray-50 rounded"
+            >
               <span className="text-sm truncate">{file.name}</span>
               <button
                 onClick={() => setFiles(files.filter((_, i) => i !== index))}
@@ -238,7 +253,9 @@ function DocumentUploader({ sessionId, onUploadSuccess }) {
 
       {isUploading && (
         <div className="space-y-1">
-          <div className="text-sm text-gray-600">Uploading: {uploadProgress}%</div>
+          <div className="text-sm text-gray-600">
+            Uploading: {uploadProgress}%
+          </div>
           <div className="w-full bg-gray-200 rounded h-2">
             <div
               className="bg-indigo-600 h-2 rounded transition-all"
@@ -253,8 +270,8 @@ function DocumentUploader({ sessionId, onUploadSuccess }) {
         disabled={!files.length || isUploading}
         className={`w-full py-2 rounded-lg font-medium transition-colors ${
           files.length && !isUploading
-            ? 'bg-indigo-600 text-white hover:bg-indigo-700'
-            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            ? "bg-indigo-600 text-white hover:bg-indigo-700"
+            : "bg-gray-300 text-gray-500 cursor-not-allowed"
         }`}
       >
         Upload Documents

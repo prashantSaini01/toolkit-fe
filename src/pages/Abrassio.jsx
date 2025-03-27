@@ -220,7 +220,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-// import API_URL from './config'; // Adjust path if necessary
+import API_URL from "./config"; // Adjust path if necessary
 import {
   FaInstagram,
   FaTwitter,
@@ -256,7 +256,7 @@ const Abrassio = () => {
     }
 
     try {
-      const response = await axios.post(`/add_user`, newUser, {
+      const response = await axios.post(`${API_URL}/add_user`, newUser, {
         headers: { "x-access-token": token },
       });
 

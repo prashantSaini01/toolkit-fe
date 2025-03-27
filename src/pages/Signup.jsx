@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import API_URL from './config';
+import API_URL from "./config";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Signup = () => {
     const { email, password, fullname, username } = formData;
 
     try {
-      const response = await axios.post(`/register`, {
+      const response = await axios.post(`${API_URL}/register`, {
         email,
         password,
         fullname,
