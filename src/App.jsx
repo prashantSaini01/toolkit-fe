@@ -20,6 +20,7 @@ import Lawbot from "./pages/lawbot";
 import WhyUs from "./pages/WhyContentGenerator";
 import ViraAI from "./pages/ViraAI";
 import AIvertise from "./pages/Aivertise";
+import Users from "./pages/Users";
 
 function App() {
   return (
@@ -152,6 +153,7 @@ function App() {
                   </PrivateRoute>
                 }
               />
+ <Route path="/users" element={<Users />} />
             </Routes>
           </Suspense>
         </main>
