@@ -105,74 +105,8 @@ const Abrassio = () => {
 
       {/* Platform Scrapers */}
       <div className="flex justify-center flex-wrap gap-8">
-        {/* Instagram Scraper */}
-        <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
-        <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
-            <span className="text-white text-[10px] whitespace-nowrap">
-              In Development ..........................................................
-            </span>
-          </div>
-          <FaInstagram className="text-4xl text-pink-500 mb-4 relative z-10" />
-          <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
-            Instagram Scraper
-          </h3>
-          <p className="text-gray-600 mb-4 relative z-10">
-            Extract user profiles, posts, comments, and likes from Instagram.
-          </p>
-          <Link
-            to="/instagram"
-            className="bg-gradient-to-r from-pink-500 to-red-500 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
-          >
-            Start Scraping
-          </Link>
-        </div>
-
-        {/* Twitter Scraper */}
-        <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
-        <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
-            <span className="text-white text-[10px] whitespace-nowrap">
-              In Development ..........................................................
-            </span>
-          </div>
-          <FaTwitter className="text-4xl text-blue-500 mb-4 relative z-10" />
-          <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
-            Twitter Scraper
-          </h3>
-          <p className="text-gray-600 mb-4 relative z-10">
-            Collect tweets, hashtags, and user information from Twitter.
-          </p>
-          <Link
-            to="/twitter"
-            className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
-          >
-            Start Scraping
-          </Link>
-        </div>
-
-        {/* LinkedIn Scraper */}
-        <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
-        <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
-            <span className="text-white text-[10px] whitespace-nowrap">
-              In Development ..........................................................
-            </span>
-          </div>
-          <FaLinkedin className="text-4xl text-blue-700 mb-4 relative z-10" />
-          <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
-            LinkedIn Scraper
-          </h3>
-          <p className="text-gray-600 mb-4 relative z-10">
-            Scrape profiles, connections, and job listings from LinkedIn.
-          </p>
-          <Link
-            to="/linkedin"
-            className="bg-gradient-to-r from-blue-800 to-purple-800 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
-          >
-            Start Scraping
-          </Link>
-        </div>
-
-        {/* YouTube Scraper */}
-        <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
+         {/* YouTube Scraper */}
+         <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
           <FaYoutube className="text-4xl text-red-600 mb-4 relative z-10" />
           <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
             YouTube Scraper
@@ -187,9 +121,8 @@ const Abrassio = () => {
             Start Scraping
           </Link>
         </div>
-
-        {/* Twitch Scraper */}
-        <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
+         {/* Twitch Scraper */}
+         <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
           <FaTwitch className="text-4xl text-purple-600 mb-4 relative z-10" />
           <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
             Twitch Scraper
@@ -204,28 +137,103 @@ const Abrassio = () => {
             Start Scraping
           </Link>
         </div>
+{/* Twitter Scraper */}
+<div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
+  <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
+    <span className="text-white text-[10px] whitespace-nowrap">
+      Coming Soon ..........................................................
+    </span>
+  </div>
+  <FaTwitter className="text-4xl text-blue-500 mb-4 relative z-10" />
+  <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
+    Twitter Scraper
+  </h3>
+  <p className="text-gray-600 mb-4 relative z-10">
+    Collect tweets, hashtags, and user information from Twitter.
+  </p>
+  <Link
+    to="/twitter"
+    className={`bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-6 rounded-full shadow-lg transform transition-transform duration-300 relative z-10 ${
+      true ? 'pointer-events-none opacity-50' : 'hover:scale-105'
+    }`}
+  >
+    Start Scraping
+  </Link>
+</div>
 
-        {/* TikTok Scraper */}
-        <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
-        <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
-            <span className="text-white text-[10px] whitespace-nowrap">
-              In Development ..........................................................
-            </span>
-          </div>
-          <FaTiktok className="text-4xl text-black mb-4 relative z-10" />
-          <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
-            TikTok Scraper
-          </h3>
-          <p className="text-gray-600 mb-4 relative z-10">
-            Extract TikTok user profiles, videos, likes, and comments.
-          </p>
-          <Link
-            to="/tiktok"
-            className="bg-gradient-to-r from-gray-900 to-gray-600 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
-          >
-            Start Scraping
-          </Link>
-        </div>
+{/* Instagram Scraper */}
+<div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
+  <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
+    <span className="text-white text-[10px] whitespace-nowrap">
+      Coming Soon ..........................................................
+    </span>
+  </div>
+  <FaInstagram className="text-4xl text-pink-500 mb-4 relative z-10" />
+  <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
+    Instagram Scraper
+  </h3>
+  <p className="text-gray-600 mb-4 relative z-10">
+    Extract user profiles, posts, comments, and likes from Instagram.
+  </p>
+  <Link
+    to="/instagram"
+    className={`bg-gradient-to-r from-pink-500 to-red-500 text-white py-3 px-6 rounded-full shadow-lg transform transition-transform duration-300 relative z-10 ${
+      true ? 'pointer-events-none opacity-50' : 'hover:scale-105'
+    }`}
+  >
+    Start Scraping
+  </Link>
+</div>
+
+{/* TikTok Scraper */}
+<div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
+  <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
+    <span className="text-white text-[10px] whitespace-nowrap">
+      Coming Soon ..........................................................
+    </span>
+  </div>
+  <FaTiktok className="text-4xl text-black mb-4 relative z-10" />
+  <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
+    TikTok Scraper
+  </h3>
+  <p className="text-gray-600 mb-4 relative z-10">
+    Extract TikTok user profiles, videos, likes, and comments.
+  </p>
+  <Link
+    to="/tiktok"
+    className={`bg-gradient-to-r from-gray-900 to-gray-600 text-white py-3 px-6 rounded-full shadow-lg transform transition-transform duration-300 relative z-10 ${
+      true ? 'pointer-events-none opacity-50' : 'hover:scale-105'
+    }`}
+  >
+    Start Scraping
+  </Link>
+</div>
+
+{/* LinkedIn Scraper */}
+<div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
+  <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
+    <span className="text-white text-[10px] whitespace-nowrap">
+      Coming Soon ..........................................................
+    </span>
+  </div>
+  <FaLinkedin className="text-4xl text-blue-700 mb-4 relative z-10" />
+  <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
+    LinkedIn Scraper
+  </h3>
+  <p className="text-gray-600 mb-4 relative z-10">
+    Scrape profiles, connections, and job listings from LinkedIn.
+  </p>
+  <Link
+    to="/linkedin"
+    className={`bg-gradient-to-r from-blue-800 to-purple-800 text-white py-3 px-6 rounded-full shadow-lg transform transition-transform duration-300 relative z-10 ${
+      true ? 'pointer-events-none opacity-50' : 'hover:scale-105'
+    }`}
+  >
+    Start Scraping
+  </Link>
+</div>
+
+       
       </div>
 
       {/* Feature Cards Section */}

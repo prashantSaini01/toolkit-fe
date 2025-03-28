@@ -1,25 +1,29 @@
-import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import API_URL from './config'; // Adjust the path if necessary
+import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import API_URL from "./config"; // Adjust the path if necessary
 
 const YoutubeScraper = () => {
   const navigate = useNavigate();
-  const [hashtag, setHashtag] = useState('');
-  const [maxResults, setMaxResults] = useState('5'); // Default to string '5'
+  const [hashtag, setHashtag] = useState("");
+  const [maxResults, setMaxResults] = useState("5"); // Default to string '5'
   const [output, setOutput] = useState([]);
-  const [summary, setSummary] = useState('');
+  const [summary, setSummary] = useState("");
   const [loading, setLoading] = useState(false);
   const [summaryLoading, setSummaryLoading] = useState(false);
   const [error, setError] = useState(null);
   const [useCache, setUseCache] = useState(true);
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   // Format the output into a table
   const formatOutput = (data) => {
     if (!Array.isArray(data) || data.length === 0) {
-      return <p className="text-gray-500 italic">No videos found for the given query.</p>;
+      return (
+        <p className="text-gray-500 italic">
+          No videos found for the given query.
+        </p>
+      );
     }
 
     return (
@@ -38,24 +42,42 @@ const YoutubeScraper = () => {
           </thead>
           <tbody>
             {data.map((video, index) => (
-              <tr key={index} className="hover:bg-red-50 transition-colors duration-200">
+              <tr
+                key={index}
+                className="hover:bg-red-50 transition-colors duration-200"
+              >
                 <td className="px-4 py-2 border-b border-gray-200">
                   <img
-                    src={video.Thumbnail || 'https://via.placeholder.com/150'}
+                    src={video.Thumbnail || "https://via.placeholder.com/150"}
                     alt="Thumbnail"
                     className="w-20 h-auto rounded-md shadow-sm"
                   />
                 </td>
-                <td className="px-4 py-2 border-b border-gray-200 truncate max-w-xs">{video.Title || 'N/A'}</td>
-                <td className="px-4 py-2 border-b border-gray-200">{video['Channel Title'] || 'N/A'}</td>
-                <td className="px-4 py-2 border-b border-gray-200">{new Date(video['Published At']).toLocaleDateString()}</td>
-                <td className="px-4 py-2 border-b border-gray-200 truncate max-w-md">{video.Description || 'No description'}</td>
+                <td className="px-4 py-2 border-b border-gray-200 truncate max-w-xs">
+                  {video.Title || "N/A"}
+                </td>
                 <td className="px-4 py-2 border-b border-gray-200">
-                  <a href={video.URL} target="_blank" rel="noopener noreferrer" className="text-red-600 hover:underline">
+                  {video["Channel Title"] || "N/A"}
+                </td>
+                <td className="px-4 py-2 border-b border-gray-200">
+                  {new Date(video["Published At"]).toLocaleDateString()}
+                </td>
+                <td className="px-4 py-2 border-b border-gray-200 truncate max-w-md">
+                  {video.Description || "No description"}
+                </td>
+                <td className="px-4 py-2 border-b border-gray-200">
+                  <a
+                    href={video.URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-red-600 hover:underline"
+                  >
                     Watch
                   </a>
                 </td>
-                <td className="px-4 py-2 border-b border-gray-200">{video['Sentiment Analysis']}</td>
+                <td className="px-4 py-2 border-b border-gray-200">
+                  {video["Sentiment Analysis"]}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -68,7 +90,7 @@ const YoutubeScraper = () => {
   const handleScrape = async () => {
     setLoading(true);
     setOutput([]);
-    setSummary('');
+    setSummary("");
     setError(null);
 
     try {
@@ -80,7 +102,7 @@ const YoutubeScraper = () => {
           use_cache: useCache,
         },
         {
-          headers: { 'x-access-token': token },
+          headers: { "x-access-token": token },
         }
       );
 
@@ -92,7 +114,7 @@ const YoutubeScraper = () => {
         }
       } else {
         setOutput([]);
-        setError('No valid data found.');
+        setError("No valid data found.");
       }
     } catch (error) {
       if (error.response && error.response.status === 401) {
@@ -111,20 +133,20 @@ const YoutubeScraper = () => {
   // Fetch summary
   const handleGetSummary = async () => {
     setSummaryLoading(true);
-    setSummary('');
+    setSummary("");
     setError(null);
 
     try {
       const response = await axios.post(
         `${API_URL}/get-summary`,
         { output },
-        { headers: { 'x-access-token': token } }
+        { headers: { "x-access-token": token } }
       );
 
       if (response.data.summary) {
         setSummary(response.data.summary);
       } else {
-        setError('No summary generated.');
+        setError("No summary generated.");
       }
     } catch (error) {
       setError("An error occurred while fetching the summary.");
@@ -135,7 +157,7 @@ const YoutubeScraper = () => {
 
   // Navigate to dashboard
   const goToDashboard = () => {
-    navigate('/dashboard');
+    navigate("/dashboard");
   };
 
   // Subscribe to newsletter
@@ -153,7 +175,7 @@ const YoutubeScraper = () => {
           tag: hashtag,
         },
         {
-          headers: { 'x-access-token': token },
+          headers: { "x-access-token": token },
         }
       );
 
@@ -188,29 +210,37 @@ const YoutubeScraper = () => {
   const downloadCSV = () => {
     if (!output.length) return;
 
-    const headers = ['Title', 'Description', 'URL', 'Channel Title', 'Published At', 'Thumbnail', 'Sentiment Analysis'];
+    const headers = [
+      "Title",
+      "Description",
+      "URL",
+      "Channel Title",
+      "Published At",
+      "Thumbnail",
+      "Sentiment Analysis",
+    ];
     const csvRows = [
-      headers.join(','),
-      ...output.map(video =>
+      headers.join(","),
+      ...output.map((video) =>
         [
-          `"${video.Title || ''}"`,
-          `"${video.Description || ''}"`,
-          `"${video.URL || ''}"`,
-          `"${video['Channel Title'] || ''}"`,
-          `"${new Date(video['Published At']).toLocaleDateString()}"`,
-          `"${video.Thumbnail || ''}"`,
-          `"${video['Sentiment Analysis'] || ''}"`
-        ].join(',')
+          `"${video.Title || ""}"`,
+          `"${video.Description || ""}"`,
+          `"${video.URL || ""}"`,
+          `"${video["Channel Title"] || ""}"`,
+          `"${new Date(video["Published At"]).toLocaleDateString()}"`,
+          `"${video.Thumbnail || ""}"`,
+          `"${video["Sentiment Analysis"] || ""}"`,
+        ].join(",")
       ),
     ];
 
-    const csvContent = csvRows.join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
+    const csvContent = csvRows.join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'youtube_scraped_posts.csv');
-    link.style.display = 'none';
+    link.setAttribute("href", url);
+    link.setAttribute("download", "youtube_scraped_posts.csv");
+    link.style.display = "none";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -245,7 +275,9 @@ const YoutubeScraper = () => {
             value={maxResults}
             onChange={(e) => setMaxResults(e.target.value)}
             className={`w-full p-4 text-lg border-2 border-red-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-400 shadow-sm hover:shadow-md transition-all duration-300 ${
-              useCache ? 'bg-gray-200 cursor-not-allowed text-gray-500' : 'bg-gradient-to-r from-white to-red-50 text-gray-800'
+              useCache
+                ? "bg-gray-200 cursor-not-allowed text-gray-500"
+                : "bg-gradient-to-r from-white to-red-50 text-gray-800"
             }`}
             disabled={useCache}
           >
@@ -275,14 +307,30 @@ const YoutubeScraper = () => {
         >
           {loading ? (
             <span className="flex items-center justify-center gap-2">
-              <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+              <svg
+                className="animate-spin h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
               </svg>
               Scraping...
             </span>
           ) : (
-            'Fetch Videos'
+            "Fetch Videos"
           )}
         </button>
         {output.length > 0 && (
@@ -302,7 +350,9 @@ const YoutubeScraper = () => {
       )}
 
       {error && (
-        <p className="text-red-600 text-lg mt-6 bg-red-100 p-4 rounded-lg shadow-md">{error}</p>
+        <p className="text-red-600 text-lg mt-6 bg-red-100 p-4 rounded-lg shadow-md">
+          {error}
+        </p>
       )}
       {output.length > 0 && (
         <div className="w-full max-w-6xl mt-10">
@@ -321,14 +371,30 @@ const YoutubeScraper = () => {
             >
               {summaryLoading ? (
                 <span className="flex items-center justify-center gap-2">
-                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  <svg
+                    className="animate-spin h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
                   </svg>
                   Fetching...
                 </span>
               ) : (
-                'Get Summary'
+                "Get Summary"
               )}
             </button>
           </div>
@@ -340,12 +406,26 @@ const YoutubeScraper = () => {
           {summary && (
             <div className="mt-8 bg-white/90 backdrop-blur-md p-6 rounded-xl shadow-lg max-w-3xl mx-auto border-l-4 border-indigo-500">
               <h3 className="text-2xl font-semibold text-indigo-700 mb-4 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
                 </svg>
                 Summary Insights
               </h3>
-              <div className="text-gray-700 prose prose-indigo" dangerouslySetInnerHTML={{ __html: summary }} />
+              <div
+                className="text-gray-700 prose prose-indigo"
+                dangerouslySetInnerHTML={{ __html: summary }}
+              />
             </div>
           )}
         </div>

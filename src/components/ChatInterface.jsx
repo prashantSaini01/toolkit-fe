@@ -19,7 +19,7 @@
 //     if (!question.trim() || isLoading) return;
 //     try {
 //       setIsLoading(true);
-//       const response = await axios.post(`/sessions/${sessionId}/ask`, { question });
+//       const response = await axios.post(`${API_URL}/sessions/${sessionId}/ask`, { question });
 //       setQuestion('');
 //       onNewMessage();
 //     } catch (error) {
@@ -211,7 +211,7 @@ function ChatInterface({ sessionId, chatHistory, onNewMessage }) {
     if (!question.trim() || isLoading) return;
     setIsLoading(true);
     try {
-      await axios.post(`/sessions/${sessionId}/ask`, { question });
+      await axios.post(`${API_URL}/sessions/${sessionId}/ask`, { question });
       setQuestion('');
       onNewMessage();
     } catch (error) {

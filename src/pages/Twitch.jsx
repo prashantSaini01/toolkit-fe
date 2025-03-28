@@ -10,7 +10,7 @@
 //   const [keyword, setKeyword] = useState('');
 //   const [numVideos, setNumVideos] = useState(5);
 
-//   const token = localStorage.getItem('token'); 
+//   const token = localStorage.getItem('token');
 
 //   const fetchVideos = async () => {
 //     setLoading(true);
@@ -181,32 +181,30 @@
 
 // export default TwitchVideos;
 
-
-
-import React, { useState } from 'react';
-import API_URL from './config';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import API_URL from "./config";
+import { useNavigate } from "react-router-dom";
 
 const TwitchVideos = () => {
   const navigate = useNavigate();
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [keyword, setKeyword] = useState('');
+  const [error, setError] = useState("");
+  const [keyword, setKeyword] = useState("");
   const [numVideos, setNumVideos] = useState(5);
   const [useCache, setUseCache] = useState(true); // Use cache state
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
 
   const fetchVideos = async () => {
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
       const response = await fetch(`${API_URL}/scrape_twitch`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'x-access-token': token,
+          "Content-Type": "application/json",
+          "x-access-token": token,
         },
         body: JSON.stringify({
           keyword,
@@ -217,21 +215,21 @@ const TwitchVideos = () => {
 
       if (!response.ok) {
         if (response.status === 401) {
-          localStorage.removeItem('token');
-          throw new Error('Session expired. Please log in again.');
+          localStorage.removeItem("token");
+          throw new Error("Session expired. Please log in again.");
         }
-        throw new Error('Failed to fetch data from the server.');
+        throw new Error("Failed to fetch data from the server.");
       }
 
       const data = await response.json();
       // console.log("Data",data);
-      setVideos(data|| []);
+      setVideos(data || []);
     } catch (err) {
-      if (err.message.includes('Session expired')) {
+      if (err.message.includes("Session expired")) {
         alert(err.message);
-        setTimeout(() => navigate('/login'), 2000);
+        setTimeout(() => navigate("/login"), 2000);
       } else {
-        setError(err.message || 'An unexpected error occurred.');
+        setError(err.message || "An unexpected error occurred.");
       }
     } finally {
       setLoading(false);
@@ -244,25 +242,31 @@ const TwitchVideos = () => {
   };
 
   const downloadCSV = () => {
-    const headers = ['Thumbnail', 'Title', 'Channel', 'Published At', 'Video URL'];
+    const headers = [
+      "Thumbnail",
+      "Title",
+      "Channel",
+      "Published At",
+      "Video URL",
+    ];
     const rows = videos.map((video) => [
-      video.thumbnail.replace('%{width}', '120').replace('%{height}', '90'),
-      video.title || 'N/A',
-      video.channel_name || 'N/A',
+      video.thumbnail.replace("%{width}", "120").replace("%{height}", "90"),
+      video.title || "N/A",
+      video.channel_name || "N/A",
       new Date(video.published_at).toLocaleDateString(),
       video.channel_link,
     ]);
 
     const csvContent = [headers, ...rows]
-      .map((row) => row.map((value) => `"${value}"`).join(','))
-      .join('\n');
+      .map((row) => row.map((value) => `"${value}"`).join(","))
+      .join("\n");
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
 
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.setAttribute('download', `twitch_scrap_posts.csv`);
+    link.setAttribute("download", `twitch_scrap_posts.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -270,7 +274,9 @@ const TwitchVideos = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center py-8 px-4">
-      <h2 className="text-4xl text-center font-bold text-pink-500 mb-6">Twitch Scraper</h2>
+      <h2 className="text-4xl text-center font-bold text-pink-500 mb-6">
+        Twitch Scraper
+      </h2>
 
       <form className="w-full max-w-lg" onSubmit={handleSubmit}>
         <input
@@ -303,11 +309,11 @@ const TwitchVideos = () => {
         <button
           type="submit"
           className={`w-full py-3 bg-gradient-to-r from-pink-500 to-indigo-600 text-white rounded-lg shadow-md hover:shadow-lg transition-transform duration-300 ${
-            loading ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'
+            loading ? "opacity-50 cursor-not-allowed" : "hover:scale-105"
           }`}
           disabled={loading}
         >
-          {loading ? 'Scraping...' : 'Fetch Posts'}
+          {loading ? "Scraping..." : "Fetch Posts"}
         </button>
       </form>
 
@@ -338,13 +344,17 @@ const TwitchVideos = () => {
                 >
                   <td className="px-4 py-2 border-b">
                     <img
-                      src={video.thumbnail.replace('%{width}', '120').replace('%{height}', '90')}
+                      src={video.thumbnail
+                        .replace("%{width}", "120")
+                        .replace("%{height}", "90")}
                       alt="Thumbnail"
                       className="w-20 h-auto rounded-md"
                     />
                   </td>
-                  <td className="px-4 py-2 border-b">{video.title || 'N/A'}</td>
-                  <td className="px-4 py-2 border-b">{video.channel_name || 'N/A'}</td>
+                  <td className="px-4 py-2 border-b">{video.title || "N/A"}</td>
+                  <td className="px-4 py-2 border-b">
+                    {video.channel_name || "N/A"}
+                  </td>
                   <td className="px-4 py-2 border-b">
                     {new Date(video.published_at).toLocaleDateString()}
                   </td>

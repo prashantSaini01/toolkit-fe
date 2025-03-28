@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import API_URL from './config';
-import 'react-toastify/dist/ReactToastify.css';
-
+import "react-toastify/dist/ReactToastify.css";
+import API_URL from "./config";
 const Login = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const navigate = useNavigate();
@@ -82,7 +81,10 @@ const Login = () => {
         <div className="mt-6">
           <p className="text-center text-gray-600">
             Don’t have an account?{" "}
-            <a href="/signup" className="text-blue-600 hover:underline font-medium">
+            <a
+              href="/signup"
+              className="text-blue-600 hover:underline font-medium"
+            >
               Sign up for free
             </a>
           </p>

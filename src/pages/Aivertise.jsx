@@ -69,7 +69,7 @@ const AIvertise = () => {
         // Construct the full video URL by prepending the base API_URL
         // Replace backslashes with forward slashes for web compatibility
         const relativeVideoPath = response.data.video_url.replace(/\\/g, "/");
-        const fullVideoUrl = `${API_URL}${relativeVideoPath}`;
+        const fullVideoUrl = `${relativeVideoPath}`;
         setVideoUrl(fullVideoUrl);
         toast.success("Video generated successfully!");
       } else {
@@ -78,7 +78,8 @@ const AIvertise = () => {
     } catch (err) {
       console.error("Error generating video:", err);
       const errorMessage =
-        err.response?.data?.message || "Failed to generate video. Please try again.";
+        err.response?.data?.message ||
+        "Failed to generate video. Please try again.";
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {

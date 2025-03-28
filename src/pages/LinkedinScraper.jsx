@@ -191,8 +191,6 @@
 
 // export default LinkedInScraper;
 
-
-
 import React, { useState } from "react";
 import axios from "axios";
 import API_URL from "./config";
@@ -231,7 +229,7 @@ const LinkedInScraper = () => {
         }
       );
 
-      setPosts(response.data|| []);
+      setPosts(response.data || []);
       if (!response.data.length) {
         setError("No posts found for the given hashtag.");
       }
@@ -241,7 +239,10 @@ const LinkedInScraper = () => {
         localStorage.removeItem("token");
         setTimeout(() => navigate("/login"), 2000);
       } else {
-        setError(err.response?.data?.message || "An error occurred while scraping LinkedIn.");
+        setError(
+          err.response?.data?.message ||
+            "An error occurred while scraping LinkedIn."
+        );
       }
     } finally {
       setLoading(false);
@@ -317,9 +318,7 @@ const LinkedInScraper = () => {
       </div>
 
       {error && (
-        <div className="mt-4 text-red-600 text-center font-medium">
-          {error}
-        </div>
+        <div className="mt-4 text-red-600 text-center font-medium">{error}</div>
       )}
 
       {loading && (
@@ -348,9 +347,15 @@ const LinkedInScraper = () => {
               <tbody>
                 {posts.map((post, idx) => (
                   <tr key={idx} className="hover:bg-blue-50">
-                    <td className="px-4 py-2 border">{post.author_name || "N/A"}</td>
-                    <td className="px-4 py-2 border">{post.author_username || "N/A"}</td>
-                    <td className="px-4 py-2 border">{post.post_content || "N/A"}</td>
+                    <td className="px-4 py-2 border">
+                      {post.author_name || "N/A"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {post.author_username || "N/A"}
+                    </td>
+                    <td className="px-4 py-2 border">
+                      {post.post_content || "N/A"}
+                    </td>
                     <td className="px-4 py-2 border">
                       {(post.hashtags || []).join(", ")}
                     </td>
