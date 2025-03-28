@@ -1,18 +1,22 @@
+/* eslint-disable react/no-unknown-property */
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTwitter,
   faLinkedin,
   faInstagram,
 } from "@fortawesome/free-brands-svg-icons";
-import { useState } from "react";
 
-function GeneratedContent({ finalContent, activeBrand }) {
+function GeneratedContent() {
+  const { finalContent, activeBrand } = useSelector((state) => state.content);
   const [copied, setCopied] = useState(false);
 
   const parseFinalContent = (content) => {
     const lines = content.split("\n").filter((line) => line.trim());
-    let mainContent = [];
-    let caption = "",
+    let mainContent = [],
+      caption = "",
       hashtags = "",
       visual = "";
     lines.forEach((line) => {
@@ -49,6 +53,7 @@ function GeneratedContent({ finalContent, activeBrand }) {
     }
     navigator.clipboard.writeText(contentToCopy).then(() => {
       setCopied(true);
+      toast.success("Content copied to clipboard!");
       setTimeout(() => setCopied(false), 3000);
       const urls = {
         twitter: "https://twitter.com/intent/tweet",
@@ -60,11 +65,11 @@ function GeneratedContent({ finalContent, activeBrand }) {
   };
 
   return finalContent.text ? (
-    <div className="mt-8 relative">
+    <div className="mt-8">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">
         Your Generated Content
       </h2>
-      <div className="p-6 bg-gradient-to-br from-white to-blue-50 border border-gray-200 rounded-lg shadow-md space-y-4">
+      <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 space-y-4">
         {activeBrand && (
           <div className="flex items-center">
             {activeBrand.logo && (
@@ -124,35 +129,36 @@ function GeneratedContent({ finalContent, activeBrand }) {
       <div className="mt-6 flex flex-wrap gap-4 justify-center">
         <button
           onClick={() => handleCopyAndRedirect("twitter")}
-          className="group relative flex items-center px-4 py-2 bg-[#1DA1F2] text-white rounded-full shadow-md hover:bg-[#1A91DA] hover:scale-105 transition-all disabled:opacity-50"
+          className="group flex items-center px-4 py-2 bg-[#1DA1F2] text-white rounded-full shadow-md hover:bg-[#1A91DA] hover:scale-105 transition-all disabled:opacity-50"
           disabled={!finalContent.text}
         >
-          <FontAwesomeIcon icon={faTwitter} className="mr-2" /> Share to Twitter
-          <span className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded py-1 px-2 -top-8 left-1/2 transform -translate-x-1/2">
-            Copy & Share
-          </span>
+          <FontAwesomeIcon
+            icon={faTwitter}
+            className="mr-2 group-hover:animate-bounce"
+          />
+          Share to Twitter
         </button>
         <button
           onClick={() => handleCopyAndRedirect("linkedin")}
-          className="group relative flex items-center px-4 py-2 bg-[#0A66C2] text-white rounded-full shadow-md hover:bg-[#0A548B] hover:scale-105 transition-all disabled:opacity-50"
+          className="group flex items-center px-4 py-2 bg-[#0A66C2] text-white rounded-full shadow-md hover:bg-[#0A548B] hover:scale-105 transition-all disabled:opacity-50"
           disabled={!finalContent.text}
         >
-          <FontAwesomeIcon icon={faLinkedin} className="mr-2" /> Share to
-          LinkedIn
-          <span className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded py-1 px-2 -top-8 left-1/2 transform -translate-x-1/2">
-            Copy & Share
-          </span>
+          <FontAwesomeIcon
+            icon={faLinkedin}
+            className="mr-2 group-hover:animate-bounce"
+          />
+          Share to LinkedIn
         </button>
         <button
           onClick={() => handleCopyAndRedirect("instagram")}
-          className="group relative flex items-center px-4 py-2 bg-gradient-to-r from-[#405DE6] via-[#C13584] to-[#F77737] text-white rounded-full shadow-md hover:brightness-110 hover:scale-105 transition-all disabled:opacity-50"
+          className="group flex items-center px-4 py-2 bg-gradient-to-r from-[#405DE6] via-[#C13584] to-[#F77737] text-white rounded-full shadow-md hover:brightness-110 hover:scale-105 transition-all disabled:opacity-50"
           disabled={!finalContent.text}
         >
-          <FontAwesomeIcon icon={faInstagram} className="mr-2" /> Share to
-          Instagram
-          <span className="absolute invisible group-hover:visible opacity-0 group-hover:opacity-100 transition-opacity bg-gray-800 text-white text-xs rounded py-1 px-2 -top-8 left-1/2 transform -translate-x-1/2">
-            Copy & Share
-          </span>
+          <FontAwesomeIcon
+            icon={faInstagram}
+            className="mr-2 group-hover:animate-bounce"
+          />
+          Share to Instagram
         </button>
       </div>
       {copied && (
@@ -173,27 +179,17 @@ function GeneratedContent({ finalContent, activeBrand }) {
           Content copied!
         </div>
       )}
-      {/* eslint-disable react/no-unknown-property */}
       <style jsx>{`
-        .animate-fade-in-out {
-          animation: fadeInOut 3s ease-in-out forwards;
+        .animate-bounce {
+          animation: bounce 0.5s;
         }
-        @keyframes fadeInOut {
-          0% {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          10% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-          90% {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        @keyframes bounce {
+          0%,
           100% {
-            opacity: 0;
-            transform: translateY(-10px);
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-5px);
           }
         }
       `}</style>
