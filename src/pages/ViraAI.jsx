@@ -16,7 +16,8 @@ const ViraAI = () => {
   const [error, setError] = useState(null);
   const [selectedTranscript, setSelectedTranscript] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [daysToSearch, setDaysToSearch] = useState(7); // Default to 7 days
+  const [sortDirection, setSortDirection] = useState('descending'); // n
+  const [daysToSearch, setDaysToSearch] = useState(1); // Default to 7 days
   const entriesPerPage = 7;
 
   useEffect(() => {
@@ -30,7 +31,7 @@ const ViraAI = () => {
             "x-access-token": token,
           },
           params: {
-            days_to_search: daysToSearch, // Add query parameter
+            days_to_search: daysToSearch,
           },
         });
 
@@ -48,8 +49,18 @@ const ViraAI = () => {
         }));
 
         setCalls(mappedCalls);
-        setFilteredCalls(mappedCalls);
-        setCurrentPage(1); // Reset to first page on new data fetch
+        // Apply sorting if a direction is selected
+        if (sortDirection) {
+          const sortedCalls = [...mappedCalls].sort((a, b) => {
+            const dateA = new Date(a.callStartTime);
+            const dateB = new Date(b.callStartTime);
+            return sortDirection === 'ascending' ? dateA - dateB : dateB - dateA;
+          });
+          setFilteredCalls(sortedCalls);
+        } else {
+          setFilteredCalls(mappedCalls);
+        }
+        setCurrentPage(1);
       } catch (err) {
         console.error("Error fetching calls:", err);
         const errorMessage =
@@ -62,7 +73,7 @@ const ViraAI = () => {
     };
 
     fetchCalls();
-  }, [token, daysToSearch]); // Add daysToSearch as dependency
+  }, [token, daysToSearch, sortDirection]); 
 
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
@@ -76,6 +87,17 @@ const ViraAI = () => {
     );
     setFilteredCalls(filtered);
     setCurrentPage(1); // Reset to first page on search
+  };
+
+  const handleSort = (direction) => {
+    setSortDirection(direction);
+    const sortedCalls = [...filteredCalls].sort((a, b) => {
+      const dateA = new Date(a.callStartTime);
+      const dateB = new Date(b.callStartTime);
+      return direction === 'ascending' ? dateA - dateB : dateB - dateA;
+    });
+    setFilteredCalls(sortedCalls);
+    setCurrentPage(1);
   };
 
   const highlightText = (text, query) => {
@@ -168,7 +190,7 @@ const ViraAI = () => {
         <div className="bg-white/80 backdrop-blur-lg p-4 rounded-2xl shadow-2xl border border-gray-100 flex items-center gap-4">
           <input
             type="text"
-            placeholder="Search by name or number..."
+            placeholder="Search by number..."
             value={searchQuery}
             onChange={handleSearch}
             className="flex-1 p-4 bg-gradient-to-r from-gray-50 to-gray-100 border-2 border-indigo-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700 shadow-sm hover:shadow-md transition-shadow duration-300"
@@ -180,14 +202,15 @@ const ViraAI = () => {
           >
             <option value={1}>1 Day</option>
             <option value={3}>3 Days</option>
-            <option value={7}>7 Days</option>
+            {/* <option value={7}>7 Days</option>
             <option value={14}>14 Days</option>
-            <option value={30}>30 Days</option>
+            <option value={30}>30 Days</option> */}
           </select>
         </div>
 
         <div className="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-gray-100 overflow-x-auto">
-          <h3 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-6 w-6 text-indigo-600"
@@ -204,68 +227,88 @@ const ViraAI = () => {
             </svg>
             All Call Logs
           </h3>
-          {loading && (
-            <div className="flex justify-center items-center h-64">
-              <div className="w-16 h-16 border-4 border-t-transparent border-indigo-500 rounded-full animate-spin"></div>
-            </div>
-          )}
-          {error && !loading && (
-            <div className="text-center text-red-600 bg-red-50 p-4 rounded-lg">
-              <p>{error}</p>
-            </div>
-          )}
-          {!loading && !error && filteredCalls.length === 0 && (
-            <p className="text-gray-500 italic text-center">
-              No call logs available.
-            </p>
-          )}
-          {!loading && !error && filteredCalls.length > 0 && (
-            <>
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-indigo-100">
-                    <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200 w-48">
-                      From Number
-                    </th>
-                    <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200 w-48">
-                      To Number
-                    </th>
-                    <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200">
-                      E-mail
-                    </th>
-                    <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200">
-                      Name
-                    </th>
-                    <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200">
-                      Date & Time
-                    </th>
-                    <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200">
-                      Call-logs
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {currentEntries.map((call) => (
-                    <tr
-                      key={call._id}
-                      className="hover:bg-indigo-50 transition-colors duration-200"
-                    >
-                      <td className="p-4 border-b border-indigo-100 w-48">
-                        {highlightText(call.phoneNumber, searchQuery)}
-                      </td>
-                      <td className="p-4 border-b border-indigo-100 w-48">
-                        {highlightText(call.toNumber, searchQuery)}
-                      </td>
-                      <td className="p-4 border-b border-indigo-100">
-                        {call.email}
-                      </td>
-                      <td className="p-4 border-b border-indigo-100">
-                        {highlightText(call.username, searchQuery)}
-                      </td>
-                      <td className="p-4 border-b border-indigo-100">
-                        {formatDateTime(call.callStartTime, call.callEndTime)}
-                      </td>
-                      <td className="p-4 border-b border-indigo-100">
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleSort('descending')}
+              className={`px-3 py-1 rounded-lg flex items-center gap-1 ${
+                sortDirection === 'descending'
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+              title="Sort by latest first"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+              Latest
+            </button>
+            <button
+              onClick={() => handleSort('ascending')}
+              className={`px-3 py-1 rounded-lg flex items-center gap-1 ${
+                sortDirection === 'ascending'
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+              title="Sort by oldest first"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+              </svg>
+              Older
+            </button>
+          </div>
+        </div>
+
+        {loading && (
+          <div className="flex justify-center items-center h-64">
+            <div className="w-16 h-16 border-4 border-t-transparent border-indigo-500 rounded-full animate-spin"></div>
+          </div>
+        )}
+        {error && !loading && (
+          <div className="text-center text-red-600 bg-red-50 p-4 rounded-lg">
+            <p>{error}</p>
+          </div>
+        )}
+        {!loading && !error && filteredCalls.length === 0 && (
+          <p className="text-gray-500 italic text-center">
+            No call logs available.
+          </p>
+        )}
+        {!loading && !error && filteredCalls.length > 0 && (
+          <>
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-indigo-100">
+                  <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200 w-48">
+                    From Number
+                  </th>
+                  <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200 w-48">
+                    To Number
+                  </th>
+                  <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200">
+                    Call-logs
+                  </th>
+                  <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200">
+                    Transcript
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentEntries.map((call) => (
+                  <tr
+                    key={call._id}
+                    className="hover:bg-indigo-50 transition-colors duration-200"
+                  >
+                    <td className="p-4 border-b border-indigo-100 w-48">
+                      {highlightText(call.phoneNumber, searchQuery)}
+                    </td>
+                    <td className="p-4 border-b border-indigo-100 w-48">
+                      {highlightText(call.toNumber, searchQuery)}
+                    </td>
+                    <td className="p-4 border-b border-indigo-100">
+                      {formatDateTime(call.callStartTime, call.callEndTime)}
+                    </td>
+                    <td className="p-4 border-b border-indigo-100">
                         {call.transcript.length > 0 ? (
                           <ul className="space-y-1">
                             {call.transcript.slice(0, 1).map((entry, index) => (
@@ -277,9 +320,7 @@ const ViraAI = () => {
                             ))}
                             {call.transcript.length > 1 && (
                               <button
-                                onClick={() =>
-                                  openTranscriptModal(call.transcript)
-                                }
+                                onClick={() => openTranscriptModal(call.transcript)}
                                 className="text-indigo-600 hover:underline italic"
                               >
                                 ... (see more)
@@ -290,10 +331,10 @@ const ViraAI = () => {
                           "No transcript available"
                         )}
                       </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
               {/* Pagination Controls */}
               {totalPages > 1 && (

@@ -12,7 +12,7 @@ import {
   FaTwitch,
   FaTiktok,
   FaUsers,
-  FaChartBar,
+  FaChartBar
 } from "react-icons/fa";
 
 const Abrassio = () => {
@@ -47,9 +47,11 @@ const Abrassio = () => {
     }
 
     try {
-      const response = await axios.post(`${API_URL}/add_user`, newUser, {
-        headers: { "x-access-token": token },
-      });
+      const response = await axios.post(
+        `${API_URL}/add_user`,
+        newUser,
+        { headers: { "x-access-token": token } }
+      );
 
       if (response.data.message) {
         toast.success(response.data.message);
@@ -68,23 +70,23 @@ const Abrassio = () => {
 
   return (
     <div className="text-center p-20 bg-gradient-to-b from-blue-50 to-gray-100 relative">
-      {/* Top Right Buttons */}
-      <div className="absolute top-4 right-4 flex space-x-4">
-        <button
-          onClick={goToDashboard}
-          className="bg-blue-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-700 transition duration-300 flex items-center gap-2"
-        >
-          <FaChartBar className="text-lg" />
-          <span>Dashboard</span>
-        </button>
-        <button
-          onClick={goToUsers}
-          className="bg-green-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-green-700 transition duration-300 flex items-center gap-2"
-        >
-          <FaUsers className="text-lg" />
-          <span>Users</span>
-        </button>
-      </div>
+    {/* Top Right Buttons */}
+    <div className="absolute top-4 right-4 flex space-x-4">
+      <button
+        onClick={goToDashboard}
+        className="bg-blue-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-blue-700 transition duration-300 flex items-center gap-2"
+      >
+        <FaChartBar className="text-lg" />
+        <span>Dashboard</span>
+      </button>
+      <button
+        onClick={goToUsers}
+        className="bg-green-600 text-white py-2 px-6 rounded-full shadow-lg hover:bg-green-700 transition duration-300 flex items-center gap-2"
+      >
+        <FaUsers className="text-lg" />
+        <span>Users</span>
+      </button>
+    </div>
 
       {/* Hero Section */}
       <div className="mb-16">
@@ -103,12 +105,64 @@ const Abrassio = () => {
 
       {/* Platform Scrapers */}
       <div className="flex justify-center flex-wrap gap-8">
+         {/* YouTube Scraper */}
+         <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
+          <FaYoutube className="text-4xl text-red-600 mb-4 relative z-10" />
+          <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
+            YouTube Scraper
+          </h3>
+          <p className="text-gray-600 mb-4 relative z-10">
+            Gather video details, comments, and channel statistics from YouTube.
+          </p>
+          <Link
+            to="/youtube"
+            className="bg-gradient-to-r from-red-800 to-red-400 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
+          >
+            Start Scraping
+          </Link>
+        </div>
+         {/* Twitch Scraper */}
+         <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
+          <FaTwitch className="text-4xl text-purple-600 mb-4 relative z-10" />
+          <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
+            Twitch Scraper
+          </h3>
+          <p className="text-gray-600 mb-4 relative z-10">
+            Retrieve streams, chat messages, and viewer data from Twitch.
+          </p>
+          <Link
+            to="/twitch"
+            className="bg-gradient-to-r from-pink-500 to-indigo-600 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
+          >
+            Start Scraping
+          </Link>
+        </div>
+        {/* Twitter Scraper */}
+        <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
+        <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
+            <span className="text-white text-[10px] whitespace-nowrap">
+              Coming Soon ..........................................................
+            </span>
+          </div>
+          <FaTwitter className="text-4xl text-blue-500 mb-4 relative z-10" />
+          <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
+            Twitter Scraper
+          </h3>
+          <p className="text-gray-600 mb-4 relative z-10">
+            Collect tweets, hashtags, and user information from Twitter.
+          </p>
+          <Link
+            to="/twitter"
+            className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
+          >
+            Start Scraping
+          </Link>
+        </div>
         {/* Instagram Scraper */}
         <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
-          <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
+        <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
             <span className="text-white text-[10px] whitespace-nowrap">
-              In Development
-              ..........................................................
+            Coming Soon ..........................................................
             </span>
           </div>
           <FaInstagram className="text-4xl text-pink-500 mb-4 relative z-10" />
@@ -126,35 +180,38 @@ const Abrassio = () => {
           </Link>
         </div>
 
-        {/* Twitter Scraper */}
+        
+
+ 
+
+       
+
+        {/* TikTok Scraper */}
         <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
-          <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
+        <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
             <span className="text-white text-[10px] whitespace-nowrap">
-              In Development
-              ..........................................................
+            Coming Soon ..........................................................
             </span>
           </div>
-          <FaTwitter className="text-4xl text-blue-500 mb-4 relative z-10" />
+          <FaTiktok className="text-4xl text-black mb-4 relative z-10" />
           <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
-            Twitter Scraper
+            TikTok Scraper
           </h3>
           <p className="text-gray-600 mb-4 relative z-10">
-            Collect tweets, hashtags, and user information from Twitter.
+            Extract TikTok user profiles, videos, likes, and comments.
           </p>
           <Link
-            to="/twitter"
-            className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
+            to="/tiktok"
+            className="bg-gradient-to-r from-gray-900 to-gray-600 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
           >
             Start Scraping
           </Link>
         </div>
-
-        {/* LinkedIn Scraper */}
-        <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
-          <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
+               {/* LinkedIn Scraper */}
+               <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
+        <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
             <span className="text-white text-[10px] whitespace-nowrap">
-              In Development
-              ..........................................................
+            Coming Soon ..........................................................
             </span>
           </div>
           <FaLinkedin className="text-4xl text-blue-700 mb-4 relative z-10" />
@@ -172,62 +229,7 @@ const Abrassio = () => {
           </Link>
         </div>
 
-        {/* YouTube Scraper */}
-        <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
-          <FaYoutube className="text-4xl text-red-600 mb-4 relative z-10" />
-          <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
-            YouTube Scraper
-          </h3>
-          <p className="text-gray-600 mb-4 relative z-10">
-            Gather video details, comments, and channel statistics from YouTube.
-          </p>
-          <Link
-            to="/youtube"
-            className="bg-gradient-to-r from-red-800 to-red-400 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
-          >
-            Start Scraping
-          </Link>
-        </div>
-
-        {/* Twitch Scraper */}
-        <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
-          <FaTwitch className="text-4xl text-purple-600 mb-4 relative z-10" />
-          <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
-            Twitch Scraper
-          </h3>
-          <p className="text-gray-600 mb-4 relative z-10">
-            Retrieve streams, chat messages, and viewer data from Twitch.
-          </p>
-          <Link
-            to="/twitch"
-            className="bg-gradient-to-r from-pink-500 to-indigo-600 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
-          >
-            Start Scraping
-          </Link>
-        </div>
-
-        {/* TikTok Scraper */}
-        <div className="relative flex flex-col items-center bg-white p-6 rounded-lg shadow-lg w-60 hover:scale-105 transition-transform duration-300 hover:bg-blue-50 overflow-hidden">
-          <div className="absolute top-0 left-0 w-[150%] h-3 bg-black transform -rotate-45 -translate-x-1/4 translate-y-[-50%] opacity-70 shadow-md flex items-center justify-center">
-            <span className="text-white text-[10px] whitespace-nowrap">
-              In Development
-              ..........................................................
-            </span>
-          </div>
-          <FaTiktok className="text-4xl text-black mb-4 relative z-10" />
-          <h3 className="text-xl font-semibold text-gray-800 mb-2 relative z-10">
-            TikTok Scraper
-          </h3>
-          <p className="text-gray-600 mb-4 relative z-10">
-            Extract TikTok user profiles, videos, likes, and comments.
-          </p>
-          <Link
-            to="/tiktok"
-            className="bg-gradient-to-r from-gray-900 to-gray-600 text-white py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
-          >
-            Start Scraping
-          </Link>
-        </div>
+       
       </div>
 
       {/* Feature Cards Section */}
