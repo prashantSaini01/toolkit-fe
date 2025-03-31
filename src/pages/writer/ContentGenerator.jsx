@@ -12,11 +12,11 @@ import {
 } from "../../redux/contentSlice";
 import ContentSettings from "./ContentSettings";
 import BrandManagement from "./BrandManagement";
-import ProductUpload from "./ProductUpload";
 import CreationProgress from "./CreationProgress";
 import GeneratedContent from "./GeneratedContent";
 import HistoryPanel from "./HistoryPanel";
-
+import BatchContentSettings from "./BatchContentSettings";
+import BatchResults from "./BatchResults";
 const WAKE_UP_MESSAGES = [
   "Summoning the AI muse...",
   "Warming up the creativity engine...",
@@ -38,6 +38,7 @@ function ContentGenerator() {
     products,
   } = useSelector((state) => state.content);
   const [wakeUpMessage, setWakeUpMessage] = useState(WAKE_UP_MESSAGES[0]);
+  const [batchMode, setBatchMode] = useState(false);
 
   useEffect(() => {
     let intervalId;
@@ -117,83 +118,94 @@ function ContentGenerator() {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-transparent bg-clip-text">
             AI Content Generator
           </h1>
-          <button
-            onClick={() => dispatch(resetGeneration())}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
-          >
-            Reset
-          </button>
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => setBatchMode(!batchMode)}
+              className={`px-4 py-2 rounded-lg transition-colors ${
+                batchMode
+                  ? "bg-indigo-600 text-white"
+                  : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+              }`}
+            >
+              {batchMode ? "Switch to Single Mode" : "Switch to Batch Mode"}
+            </button>
+            <button
+              onClick={() => dispatch(resetGeneration())}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+            >
+              Reset
+            </button>
+          </div>
         </div>
       </header>
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3 bg-white rounded-xl shadow-lg p-8">
-          <form onSubmit={handleGenerate} className="space-y-6">
-            <ContentSettings />
-            <BrandManagement />
-            <ProductUpload />
-            <button
-              type="submit"
-              className={`relative w-full py-3 px-6 rounded-lg text-white font-semibold shadow-md transition-all duration-300 flex items-center justify-center overflow-hidden ${
-                isGenerating || !isServerReady
-                  ? "bg-gray-600 cursor-not-allowed"
-                  : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:scale-105 active:bg-indigo-800"
-              }`}
-              disabled={isGenerating || !isServerReady}
-            >
-              {console.log("[DEBUG] Button state:", {
-                isGenerating,
-                isServerReady,
-              })}
-              {isGenerating ? (
-                <>
-                  <svg
-                    className="animate-spin h-5 w-5 mr-2"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="white"
-                      strokeWidth="4"
-                      fill="none"
-                    />
-                  </svg>
-                  Generating...
-                </>
-              ) : !isServerReady ? (
-                <>
-                  <div className="absolute inset-0 bg-blue-500 animate-pulse-bar" />
-                  <span className="relative z-10 flex items-center">
+          {batchMode ? (
+            <BatchContentSettings />
+          ) : (
+            <form onSubmit={handleGenerate} className="space-y-6">
+              <ContentSettings />
+              <BrandManagement />
+              <button
+                type="submit"
+                className={`relative w-full py-3 px-6 rounded-lg text-white font-semibold shadow-md transition-all duration-300 flex items-center justify-center overflow-hidden ${
+                  isGenerating || !isServerReady
+                    ? "bg-gray-600 cursor-not-allowed"
+                    : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 hover:scale-105 active:bg-indigo-800"
+                }`}
+                disabled={isGenerating || !isServerReady}
+              >
+                {isGenerating ? (
+                  <>
                     <svg
-                      className="animate-spin h-5 w-5 mr-2 text-white"
-                      fill="none"
+                      className="animate-spin h-5 w-5 mr-2"
                       viewBox="0 0 24 24"
                     >
                       <circle
-                        className="opacity-25"
                         cx="12"
                         cy="12"
                         r="10"
-                        stroke="currentColor"
+                        stroke="white"
                         strokeWidth="4"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        fill="none"
                       />
                     </svg>
-                    {wakeUpMessage}
-                  </span>
-                </>
-              ) : (
-                "Start Content Creation"
-              )}
-            </button>
-          </form>
+                    Generating...
+                  </>
+                ) : !isServerReady ? (
+                  <>
+                    <div className="absolute inset-0 bg-blue-500 animate-pulse-bar" />
+                    <span className="relative z-10 flex items-center">
+                      <svg
+                        className="animate-spin h-5 w-5 mr-2 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        />
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        />
+                      </svg>
+                      {wakeUpMessage}
+                    </span>
+                  </>
+                ) : (
+                  "Start Content Creation"
+                )}
+              </button>
+            </form>
+          )}
           <CreationProgress />
-          <GeneratedContent />
+          {batchMode ? <BatchResults /> : <GeneratedContent />}
         </div>
         <div className="lg:col-span-1">
           <HistoryPanel />
