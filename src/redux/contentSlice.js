@@ -88,7 +88,8 @@ export const generateContent = createAsyncThunk(
         payload,
         { headers: { "x-access-token": token } }
       );
-      return response.data;
+      console.log("Generated Data", response.data);
+      return response.data.results; // Return the results array instead of the entire response.data
     } catch (err) {
       return rejectWithValue(err.response?.data?.error || err.message);
     }
@@ -110,7 +111,7 @@ export const wakeUpServer = createAsyncThunk(
 const contentSlice = createSlice({
   name: "content",
   initialState: {
-    data: [], // Unified storage for all generated content
+    data: [],
     error: null,
     isGenerating: false,
     isServerReady: false,
@@ -179,7 +180,7 @@ const contentSlice = createSlice({
       .addCase(generateContent.fulfilled, (state, action) => {
         state.isGenerating = false;
         state.status = "succeeded";
-        state.data = action.payload.data;
+        state.data = action.payload;
       })
       .addCase(generateContent.rejected, (state, action) => {
         state.isGenerating = false;
