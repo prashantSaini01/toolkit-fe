@@ -9,7 +9,7 @@ function HistoryPanel() {
   const [search, setSearch] = useState("");
 
   const filteredHistory = history.filter((entry) =>
-    entry.topic.toLowerCase().includes(search.toLowerCase())
+    entry.topic?.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleRegenerate = (entry) => {
@@ -55,9 +55,11 @@ function HistoryPanel() {
                     {new Date(entry.timestamp).toLocaleString()}
                   </p>
                   <p className="text-sm font-medium text-gray-800">
-                    Topic: {entry.topic}
+                    Topic: {entry.topic || "Untitled"}
                   </p>
-                  <p className="text-sm text-gray-600">Brand: {entry.brand}</p>
+                  <p className="text-sm text-gray-600">
+                    Brand: {entry.brand || "None"}
+                  </p>
                   <p className="text-sm text-gray-600 truncate">
                     {entry.content.text.slice(0, 50)}...
                   </p>

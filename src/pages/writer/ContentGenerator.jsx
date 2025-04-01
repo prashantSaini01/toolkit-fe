@@ -13,10 +13,10 @@ import {
 import ContentSettings from "./ContentSettings";
 import BrandManagement from "./BrandManagement";
 import CreationProgress from "./CreationProgress";
-import GeneratedContent from "./GeneratedContent";
-import HistoryPanel from "./HistoryPanel";
 import BatchContentSettings from "./BatchContentSettings";
 import BatchResults from "./BatchResults";
+import HistoryPanel from "./HistoryPanel";
+
 const WAKE_UP_MESSAGES = [
   "Summoning the AI muse...",
   "Warming up the creativity engine...",
@@ -35,18 +35,14 @@ function ContentGenerator() {
     stopAfter,
     includeImage,
     activeBrand,
-    products,
   } = useSelector((state) => state.content);
   const [wakeUpMessage, setWakeUpMessage] = useState(WAKE_UP_MESSAGES[0]);
   const [batchMode, setBatchMode] = useState(false);
 
   useEffect(() => {
-    let intervalId;
-    let messageIntervalId;
-
+    let intervalId, messageIntervalId;
     const checkServer = () => {
       dispatch(wakeUpServer()).then((result) => {
-        console.log("[DEBUG] wakeUpServer result:", result.payload);
         if (result.payload) {
           dispatch(fetchBrands());
           dispatch(fetchHistory());
@@ -55,7 +51,6 @@ function ContentGenerator() {
         }
       });
     };
-
     checkServer();
     intervalId = setInterval(checkServer, 3000);
     messageIntervalId = setInterval(() => {
@@ -63,7 +58,6 @@ function ContentGenerator() {
         WAKE_UP_MESSAGES[Math.floor(Math.random() * WAKE_UP_MESSAGES.length)]
       );
     }, 5000);
-
     return () => {
       clearInterval(intervalId);
       clearInterval(messageIntervalId);
@@ -71,9 +65,7 @@ function ContentGenerator() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (error) {
-      toast.error(error, { onClose: () => dispatch(clearError()) });
-    }
+    if (error) toast.error(error, { onClose: () => dispatch(clearError()) });
   }, [error, dispatch]);
 
   const handleGenerate = async (e) => {
@@ -88,7 +80,7 @@ function ContentGenerator() {
     }
     dispatch(resetGeneration());
     const payload = {
-      topic: topic.trim(),
+      topics: [topic.trim()], // Single topic as array for consistency
       stop_after: stopAfter.trim() || undefined,
       include_image: includeImage,
       ...(activeBrand && {
@@ -99,17 +91,9 @@ function ContentGenerator() {
           urls: activeBrand.urls,
         },
       }),
-      ...(products.length > 0 && {
-        product_data: { source: "excel", data: products },
-      }),
     };
     dispatch(generateContent(payload)).then(() => dispatch(fetchHistory()));
   };
-
-  console.log("[DEBUG] Rendering with states:", {
-    isGenerating,
-    isServerReady,
-  });
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -205,7 +189,7 @@ function ContentGenerator() {
             </form>
           )}
           <CreationProgress />
-          {batchMode ? <BatchResults /> : <GeneratedContent />}
+          <BatchResults /> {/* Unified rendering */}
         </div>
         <div className="lg:col-span-1">
           <HistoryPanel />

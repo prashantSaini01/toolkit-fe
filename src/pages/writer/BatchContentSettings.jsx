@@ -24,14 +24,10 @@ function BatchContentSettings() {
     setTopics(newTopics);
   };
 
-  const addTopicField = () => {
-    setTopics([...topics, ""]);
-  };
-
+  const addTopicField = () => setTopics([...topics, ""]);
   const removeTopicField = (index) => {
     if (topics.length <= 1) return;
-    const newTopics = topics.filter((_, i) => i !== index);
-    setTopics(newTopics);
+    setTopics(topics.filter((_, i) => i !== index));
   };
 
   const handleGenerate = async (e) => {
@@ -40,7 +36,6 @@ function BatchContentSettings() {
       toast.error("Server is still waking up, please wait...");
       return;
     }
-
     const validTopics = topics.filter((topic) => topic.trim());
     if (validTopics.length === 0) {
       toast.error("Please enter at least one valid topic");
@@ -48,7 +43,6 @@ function BatchContentSettings() {
     }
 
     dispatch(resetGeneration());
-
     const payload = {
       topics: validTopics,
       stop_after: stopAfter.trim() || undefined,
@@ -61,14 +55,13 @@ function BatchContentSettings() {
           urls: activeBrand.urls,
         },
       }),
-      ...(batchName.trim() && { batch_name: batchName.trim() }),
     };
 
     try {
       await dispatch(generateContent(payload)).unwrap();
       toast.success(`Generated ${validTopics.length} posts successfully!`);
     } catch (err) {
-      toast.error(`Batch generation failed: ${err}`);
+      toast.error(`Generation failed: ${err}`);
     }
   };
 
@@ -91,7 +84,6 @@ function BatchContentSettings() {
             disabled={isGenerating || !isServerReady}
           />
         </div>
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Topics
@@ -127,10 +119,8 @@ function BatchContentSettings() {
             Add Topic
           </button>
         </div>
-
         <ContentSettings />
         <BrandManagement />
-
         <button
           type="submit"
           onClick={handleGenerate}
