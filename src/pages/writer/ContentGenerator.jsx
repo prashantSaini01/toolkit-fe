@@ -195,7 +195,7 @@ function ContentGenerator() {
           <HistoryPanel />
         </div>
       </div>
-      <style jsx>{`
+      <style jsx="true">{`
         .animate-pulse-bar {
           animation: pulseBar 2s infinite ease-in-out;
           opacity: 0.3;
