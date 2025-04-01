@@ -188,7 +188,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to="/lawbot"
+                  to="/try-it"
                   className={`block transition-colors duration-300 ${
                     isActive('/socialspark') ? 'text-red-600 font-semibold' : 'hover:text-secondary'
                   }`}

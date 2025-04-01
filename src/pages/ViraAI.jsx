@@ -15,10 +15,13 @@ const ViraAI = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedTranscript, setSelectedTranscript] = useState(null);
+  const [selectedAppointment, setSelectedAppointment] = useState(null); // For modal
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortDirection, setSortDirection] = useState('descending'); // n
-  const [daysToSearch, setDaysToSearch] = useState(3); // Default to 7 days
+  const [sortDirection, setSortDirection] = useState("descending");
+  const [daysToSearch, setDaysToSearch] = useState(1);
   const entriesPerPage = 7;
+
+  const calendarId = "5e8e29a689c0ec7f93a3ed065f7ad6f21e25696863e8977f10fd6dc6cc8ef4cf@group.calendar.google.com";
 
   useEffect(() => {
     const fetchCalls = async () => {
@@ -27,12 +30,8 @@ const ViraAI = () => {
 
       try {
         const response = await axios.get(`${API_URL}/calls`, {
-          headers: {
-            "x-access-token": token,
-          },
-          params: {
-            days_to_search: daysToSearch,
-          },
+          headers: { "x-access-token": token },
+          params: { days_to_search: daysToSearch },
         });
 
         const mappedCalls = response.data.map((call) => ({
@@ -49,17 +48,12 @@ const ViraAI = () => {
         }));
 
         setCalls(mappedCalls);
-        // Apply sorting if a direction is selected
-        if (sortDirection) {
-          const sortedCalls = [...mappedCalls].sort((a, b) => {
-            const dateA = new Date(a.callStartTime);
-            const dateB = new Date(b.callStartTime);
-            return sortDirection === 'ascending' ? dateA - dateB : dateB - dateA;
-          });
-          setFilteredCalls(sortedCalls);
-        } else {
-          setFilteredCalls(mappedCalls);
-        }
+        const sortedCalls = [...mappedCalls].sort((a, b) => {
+          const dateA = new Date(a.callStartTime);
+          const dateB = new Date(b.callStartTime);
+          return sortDirection === "ascending" ? dateA - dateB : dateB - dateA;
+        });
+        setFilteredCalls(sortedCalls);
         setCurrentPage(1);
       } catch (err) {
         console.error("Error fetching calls:", err);
@@ -73,12 +67,11 @@ const ViraAI = () => {
     };
 
     fetchCalls();
-  }, [token, daysToSearch, sortDirection]); 
+  }, [token, daysToSearch, sortDirection]);
 
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
     setSearchQuery(query);
-
     const filtered = calls.filter(
       (call) =>
         call.phoneNumber.toLowerCase().includes(query) ||
@@ -86,7 +79,7 @@ const ViraAI = () => {
         call.toNumber.toLowerCase().includes(query)
     );
     setFilteredCalls(filtered);
-    setCurrentPage(1); // Reset to first page on search
+    setCurrentPage(1);
   };
 
   const handleSort = (direction) => {
@@ -94,7 +87,7 @@ const ViraAI = () => {
     const sortedCalls = [...filteredCalls].sort((a, b) => {
       const dateA = new Date(a.callStartTime);
       const dateB = new Date(b.callStartTime);
-      return direction === 'ascending' ? dateA - dateB : dateB - dateA;
+      return direction === "ascending" ? dateA - dateB : dateB - dateA;
     });
     setFilteredCalls(sortedCalls);
     setCurrentPage(1);
@@ -102,7 +95,7 @@ const ViraAI = () => {
 
   const highlightText = (text, query) => {
     if (!query || !text) return text;
-    const regex = new RegExp(`(${query})`, "gi");
+    const regex = new RegExp((`${query}`), "gi");
     const parts = text.split(regex);
     return parts.map((part, index) =>
       part.toLowerCase() === query.toLowerCase() ? (
@@ -115,13 +108,11 @@ const ViraAI = () => {
     );
   };
 
-  const openTranscriptModal = (transcript) => {
-    setSelectedTranscript(transcript);
-  };
+  const openTranscriptModal = (transcript) => setSelectedTranscript(transcript);
+  const closeTranscriptModal = () => setSelectedTranscript(null);
 
-  const closeTranscriptModal = () => {
-    setSelectedTranscript(null);
-  };
+  const openAppointmentModal = (callStartTime) => setSelectedAppointment(callStartTime);
+  const closeAppointmentModal = () => setSelectedAppointment(null);
 
   const goToHome = () => navigate("/");
 
@@ -143,13 +134,15 @@ const ViraAI = () => {
     return `${startDate} - ${endDate}`;
   };
 
-  // Pagination logic
+  const getCalendarIframeUrl = (callStartTime) => {
+    const date = new Date(callStartTime);
+    const formattedDate = `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`;
+    return `https://calendar.google.com/calendar/embed?mode=AGENDA&dates=${formattedDate}/${formattedDate}&src=${calendarId}&ctz=Asia/Kolkata`;
+  };
+
   const indexOfLastEntry = currentPage * entriesPerPage;
   const indexOfFirstEntry = indexOfLastEntry - entriesPerPage;
-  const currentEntries = filteredCalls.slice(
-    indexOfFirstEntry,
-    indexOfLastEntry
-  );
+  const currentEntries = filteredCalls.slice(indexOfFirstEntry, indexOfLastEntry);
   const totalPages = Math.ceil(filteredCalls.length / entriesPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -183,7 +176,7 @@ const ViraAI = () => {
             Vira AI Call Logs
           </h2>
           <p className="mt-2 text-lg text-gray-600">
-            View and manage your call logs
+            View and manage your call logs and appointments
           </p>
         </div>
 
@@ -202,113 +195,113 @@ const ViraAI = () => {
           >
             <option value={1}>1 Day</option>
             <option value={3}>3 Days</option>
-            {/* <option value={7}>7 Days</option>
-            <option value={14}>14 Days</option>
-            <option value={30}>30 Days</option> */}
           </select>
         </div>
 
         <div className="bg-white/80 backdrop-blur-lg p-8 rounded-2xl shadow-2xl border border-gray-100 overflow-x-auto">
-        <div className="flex justify-between items-center mb-6">
-          <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-indigo-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 10h18M3 6h18M3 14h18M3 18h18"
-              />
-            </svg>
-            All Call Logs
-          </h3>
-          <div className="flex gap-2">
-            <button
-              onClick={() => handleSort('descending')}
-              className={`px-3 py-1 rounded-lg flex items-center gap-1 ${
-                sortDirection === 'descending'
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-              title="Sort by latest first"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-indigo-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 10h18M3 6h18M3 14h18M3 18h18"
+                />
               </svg>
-              Latest
-            </button>
-            <button
-              onClick={() => handleSort('ascending')}
-              className={`px-3 py-1 rounded-lg flex items-center gap-1 ${
-                sortDirection === 'ascending'
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-              title="Sort by oldest first"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
-              </svg>
-              Older
-            </button>
+              All Call Logs
+            </h3>
+            <div className="flex gap-2">
+              <button
+                onClick={() => handleSort("descending")}
+                className={`px-3 py-1 rounded-lg flex items-center gap-1 ${
+                  sortDirection === "descending"
+                    ? "bg-indigo-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+                title="Sort by latest first"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+                Latest
+              </button>
+              <button
+                onClick={() => handleSort("ascending")}
+                className={`px-3 py-1 rounded-lg flex items-center gap-1 ${
+                  sortDirection === "ascending"
+                    ? "bg-indigo-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+                title="Sort by oldest first"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+                </svg>
+                Older
+              </button>
+            </div>
           </div>
-        </div>
 
-        {loading && (
-          <div className="flex justify-center items-center h-64">
-            <div className="w-16 h-16 border-4 border-t-transparent border-indigo-500 rounded-full animate-spin"></div>
-          </div>
-        )}
-        {error && !loading && (
-          <div className="text-center text-red-600 bg-red-50 p-4 rounded-lg">
-            <p>{error}</p>
-          </div>
-        )}
-        {!loading && !error && filteredCalls.length === 0 && (
-          <p className="text-gray-500 italic text-center">
-            No call logs available.
-          </p>
-        )}
-        {!loading && !error && filteredCalls.length > 0 && (
-          <>
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-indigo-100">
-                  <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200 w-48">
-                    From Number
-                  </th>
-                  <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200 w-48">
-                    To Number
-                  </th>
-                  <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200">
-                    Call-logs
-                  </th>
-                  <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200">
-                    Transcript
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentEntries.map((call) => (
-                  <tr
-                    key={call._id}
-                    className="hover:bg-indigo-50 transition-colors duration-200"
-                  >
-                    <td className="p-4 border-b border-indigo-100 w-48">
-                      {highlightText(call.phoneNumber, searchQuery)}
-                    </td>
-                    <td className="p-4 border-b border-indigo-100 w-48">
-                      {highlightText(call.toNumber, searchQuery)}
-                    </td>
-                    <td className="p-4 border-b border-indigo-100">
-                      {formatDateTime(call.callStartTime, call.callEndTime)}
-                    </td>
-                    <td className="p-4 border-b border-indigo-100">
+          {loading && (
+            <div className="flex justify-center items-center h-64">
+              <div className="w-16 h-16 border-4 border-t-transparent border-indigo-500 rounded-full animate-spin"></div>
+            </div>
+          )}
+          {error && !loading && (
+            <div className="text-center text-red-600 bg-red-50 p-4 rounded-lg">
+              <p>{error}</p>
+            </div>
+          )}
+          {!loading && !error && filteredCalls.length === 0 && (
+            <p className="text-gray-500 italic text-center">
+              No call logs available.
+            </p>
+          )}
+          {!loading && !error && filteredCalls.length > 0 && (
+            <>
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-indigo-100">
+                    <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200 w-48">
+                      From Number
+                    </th>
+                    <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200 w-48">
+                      To Number
+                    </th>
+                    <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200">
+                      Call-logs
+                    </th>
+                    <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200">
+                      Transcript
+                    </th>
+                    <th className="p-4 text-indigo-800 font-semibold border-b-2 border-indigo-200">
+                      Appointment
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentEntries.map((call) => (
+                    <tr
+                      key={call._id}
+                      className="hover:bg-indigo-50 transition-colors duration-200"
+                    >
+                      <td className="p-4 border-b border-indigo-100 w-48">
+                        {highlightText(call.phoneNumber, searchQuery)}
+                      </td>
+                      <td className="p-4 border-b border-indigo-100 w-48">
+                        {highlightText(call.toNumber, searchQuery)}
+                      </td>
+                      <td className="p-4 border-b border-indigo-100">
+                        {formatDateTime(call.callStartTime, call.callEndTime)}
+                      </td>
+                      <td className="p-4 border-b border-indigo-100">
                         {call.transcript.length > 0 ? (
                           <ul className="space-y-1">
                             {call.transcript.slice(0, 1).map((entry, index) => (
@@ -331,12 +324,32 @@ const ViraAI = () => {
                           "No transcript available"
                         )}
                       </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      <td className="p-4 border-b border-indigo-100">
+                        <div className="relative group">
+                          <button
+                            onClick={() => openAppointmentModal(call.callStartTime)}
+                            className="text-indigo-600 hover:underline italic"
+                          >
+                            View Appointment
+                          </button>
+                          <div className="absolute hidden group-hover:block z-10 -top-48 left-0 w-64 h-48 bg-white shadow-lg rounded-lg overflow-hidden transform transition-all duration-300">
+                            <iframe
+                              src={getCalendarIframeUrl(call.callStartTime)}
+                              style={{ border: 0 }}
+                              width="100%"
+                              height="100%"
+                              frameBorder="0"
+                              scrolling="no"
+                              title="Appointment Calendar"
+                            ></iframe>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
 
-              {/* Pagination Controls */}
               {totalPages > 1 && (
                 <div className="mt-6 flex justify-center items-center gap-4">
                   <button
@@ -368,9 +381,7 @@ const ViraAI = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[80vh] overflow-y-auto shadow-xl">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-indigo-800">
-                Full Transcript
-              </h3>
+              <h3 className="text-xl font-bold text-indigo-800">Full Transcript</h3>
               <button
                 onClick={closeTranscriptModal}
                 className="text-gray-600 hover:text-gray-800"
@@ -401,6 +412,45 @@ const ViraAI = () => {
                 </li>
               ))}
             </ul>
+          </div>
+        </div>
+      )}
+
+      {/* Appointment Modal */}
+      {selectedAppointment && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-3xl max-h-[80vh] overflow-y-auto shadow-xl">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold text-indigo-800">Appointment Details</h3>
+              <button
+                onClick={closeAppointmentModal}
+                className="text-gray-600 hover:text-gray-800"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+            <iframe
+              src={getCalendarIframeUrl(selectedAppointment)}
+              style={{ border: 0 }}
+              width="100%"
+              height="500"
+              frameBorder="0"
+              scrolling="no"
+              title="Appointment Calendar"
+            ></iframe>
           </div>
         </div>
       )}
