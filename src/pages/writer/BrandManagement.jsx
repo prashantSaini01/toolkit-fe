@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setActiveBrand, addBrand } from "../../redux/contentSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -72,6 +72,10 @@ function BrandManagement() {
     setNewBrand({ ...newBrand, urls: updatedUrls });
   };
 
+  useEffect(() => {
+    console.log("Brands in BrandManagement:", brands);
+  }, [brands]);
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
       <button
@@ -104,7 +108,7 @@ function BrandManagement() {
             >
               <span>No Brand</span>
             </div>
-            {brands.map((brand) => (
+            {(brands || []).map((brand) => (
               <div
                 key={brand.id}
                 onClick={() => dispatch(setActiveBrand(brand))}

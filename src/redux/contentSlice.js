@@ -36,16 +36,18 @@ export const fetchBrands = createAsyncThunk(
       const response = await axios.get(`${WRITER_URL}/get_brands`, {
         headers: { "x-access-token": token },
       });
-      return response.data.data.map((b) => ({
-        id: b.brand + Date.now().toString(),
-        name: b.brand,
-        tone: b.content.text.split("Tone: ")[1]?.split("\n")[0] || "Neutral",
-        logo: b.content.image_base64
-          ? `data:image/jpeg;base64,${b.content.image_base64}`
-          : null,
-        urls: b.content.text.split("URLs: ")[1]?.split(", ") || [],
+      console.log("Brands Response:", response.data);
+
+      // Map the response.brands array to the expected brand format
+      return (response.data?.brands || []).map((b) => ({
+        id: (b.name || "unknown") + Date.now().toString(),
+        name: b.name || "Unknown Brand",
+        tone: b.tone || "Neutral",
+        logo: b.logo_base64 ? `data:image/jpeg;base64,${b.logo_base64}` : null,
+        urls: b.urls || [],
       }));
     } catch (err) {
+      console.error("Error fetching brands:", err);
       return rejectWithValue(err.response?.data?.error || err.message);
     }
   }
@@ -63,8 +65,10 @@ export const fetchHistory = createAsyncThunk(
       const response = await axios.get(`${WRITER_URL}/get_history`, {
         headers: { "x-access-token": token },
       });
-      return response.data.data;
+      console.log("History Response:", response.data);
+      return response.data?.history || [];
     } catch (err) {
+      console.error("Error fetching history:", err);
       return rejectWithValue(err.response?.data?.error || err.message);
     }
   }
@@ -111,8 +115,8 @@ const contentSlice = createSlice({
     isGenerating: false,
     isServerReady: false,
     topic: "",
-    stopAfter: "",
-    includeImage: true,
+    stopAfter: "generate",
+    includeImage: false,
     brands: [],
     activeBrand: null,
     history: [],

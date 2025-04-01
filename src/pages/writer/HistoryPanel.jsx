@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setTopic, setActiveBrand } from "../../redux/contentSlice";
 
@@ -8,8 +8,9 @@ function HistoryPanel() {
   const [isOpen, setIsOpen] = useState(false);
   const [search, setSearch] = useState("");
 
-  const filteredHistory = history.filter((entry) =>
-    entry.topic?.toLowerCase().includes(search.toLowerCase())
+  // Ensure history is an array before filtering
+  const filteredHistory = (history || []).filter((entry) =>
+    (entry.topic || "").toLowerCase().includes(search.toLowerCase())
   );
 
   const handleRegenerate = (entry) => {
@@ -18,6 +19,9 @@ function HistoryPanel() {
       setActiveBrand(brands.find((b) => b.name === entry.brand) || null)
     );
   };
+  useEffect(() => {
+    console.log("Brands in BrandManagement:", history);
+  }, [history]);
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 h-full">
