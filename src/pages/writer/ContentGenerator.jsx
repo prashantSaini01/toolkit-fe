@@ -9,7 +9,7 @@ import {
   wakeUpServer,
   resetGeneration,
   clearError,
-} from "../../redux/contentSlice";
+} from "../../redux/slices/content/contentSlice";
 import ContentSettings from "./ContentSettings";
 import BrandManagement from "./BrandManagement";
 import CreationProgress from "./CreationProgress";

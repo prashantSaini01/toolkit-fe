@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { generateContent, resetGeneration } from "../../redux/contentSlice";
+import { generateContent, resetGeneration } from "../../redux/slices/content/contentSlice";
 import { toast } from "react-toastify";
 import ContentSettings from "./ContentSettings";
 import BrandManagement from "./BrandManagement";

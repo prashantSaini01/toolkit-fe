@@ -3,7 +3,7 @@ import {
   setTopic,
   setStopAfter,
   setIncludeImage,
-} from "../../redux/contentSlice";
+} from "../../redux/slices/content/contentSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle, faPen, faCog } from "@fortawesome/free-solid-svg-icons";
 

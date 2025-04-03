@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setTopic, setActiveBrand } from "../../redux/contentSlice";
+import { setTopic, setActiveBrand } from "../../redux/slices/content/contentSlice";
 
 function HistoryPanel() {
   const dispatch = useDispatch();

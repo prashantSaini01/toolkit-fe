@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setProducts } from "../../redux/contentSlice";
+import { setProducts } from "../../redux/content/contentSlice";
 
 function ProductUpload() {
   const dispatch = useDispatch();

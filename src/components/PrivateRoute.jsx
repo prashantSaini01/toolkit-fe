@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -44,5 +45,18 @@ const PrivateRoute = ({ children }) => {
 PrivateRoute.propTypes = {
   children: PropTypes.node.isRequired,
 };
+=======
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+
+
+
+const PrivateRoute = () => {
+  const auth = { token: !!localStorage.getItem('token') };
+return (
+    auth.token ? <Outlet/> : <Navigate to='/login'/>
+  )
+}
+>>>>>>> Stashed changes
 
 export default PrivateRoute;
