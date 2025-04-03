@@ -2,25 +2,25 @@ import React, { Suspense } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Abrassio from "./pages/Abrassio";
-import InstagramScraper from "./pages/InstagramScraper";
-import TwitterScraper from "./pages/TwitterScraper";
-import LinkedinScraper from "./pages/LinkedinScraper";
-import SignUp from "./pages/Signup";
-import Login from "./pages/Login";
+import Abrassio from "./pages/abrassio/Abrassio"
+import InstagramScraper from "./pages/abrassio/InstagramScraper";
+import TwitterScraper from "./pages/abrassio/TwitterScraper";
+import LinkedinScraper from "./pages/abrassio/LinkedinScraper";
+import SignUp from "./pages/auth/Signup";
+import Login from "./pages/auth/Login";
 import PrivateRoute from "./components/PrivateRoute";
-import YoutubeScraper from "./pages/Youtube";
-import TwitchScraper from "./pages/Twitch";
-import TikTokScraper from "./pages/TiktokScrapper";
+import YoutubeScraper from "./pages/abrassio/Youtube";
+import TwitchScraper from "./pages/abrassio/Twitch";
+import TikTokScraper from "./pages/abrassio/TiktokScrapper";
 import { ToastContainer } from "react-toastify";
 import Homepage from "./pages/Homepage";
 import ContentGenerator from "./pages/writer/ContentGenerator";
-import Dashboard from "./pages/Dashboard";
-import Lawbot from "./pages/lawbot";
-import WhyUs from "./pages/WhyContentGenerator";
-import ViraAI from "./pages/ViraAI";
-import AIvertise from "./pages/Aivertise";
-import Users from "./pages/Users";
+import Dashboard from "./pages/abrassio/Dashboard";
+import Lawbot from "./pages/docuChat/lawbot";
+import WhyUs from './pages/writer/WhyContentGenerator'
+import ViraAI from "./pages/viraAI/ViraAI";
+import AIvertise from "./pages/aivertise/Aivertise";
+import Users from "./pages/abrassio/Users";
 
 function App() {
   return (

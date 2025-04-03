@@ -1,5 +1,5 @@
 import axios from "axios";
-import API_URL from "../components/config"; // Adjust path if necessary
+import API_URL from "../components/config"
 
 // Create an Axios instance
 const api = axios.create({

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
-import api from "../../../components/config"
+import api from "../../../components/axiosConfig"
 // Async Thunk for scraping Instagram
 export const scrapeInstagram = createAsyncThunk(
   "instagramScraper/scrapeInstagram",

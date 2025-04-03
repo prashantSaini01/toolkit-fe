@@ -94,7 +94,7 @@ const Header = () => {
               DocuChat 
             </Link>
           </li>
-          <li>
+          {/* <li>
             <Link
               to="/vira-ai"
               className={`transition-colors duration-300 ${
@@ -105,14 +105,7 @@ const Header = () => {
             >
               Vira AI 
             </Link>
-            <button
-  onClick={() => window.location.href = "https://main.d1qe5opaoqwg72.amplifyapp.com/"}
-  className="transition-colors duration-300"
->
-  Use
-</button>
-
-          </li>
+          </li> */}
           <li>
             <Link
               to="/aivertise"
@@ -217,14 +210,18 @@ const Header = () => {
                  DocuChat 
                 </Link>
               </li>
-              <li>
-              <button
-  onClick={() => window.location.href = "https://main.d1qe5opaoqwg72.amplifyapp.com/"}
-  className="transition-colors duration-300"
->
-  Use
-</button>
-          </li>
+              {/* <li>
+            <Link
+              to="/vira-ai"
+              className={`transition-colors duration-300 ${
+                isActive('/vira-ai')
+                  ? 'text-red-600 font-semibold'
+                  : 'hover:text-red-600'
+              }`}
+            >
+              Vira AI 
+            </Link>
+          </li> */}
           <li>
             <Link
               to="/aivertise"
