@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-const WRITER_URL = import.meta.env.VITE_WRITER_URL;
-
+const WRITER_URL = import.meta.env.VITE_WRITER_URL || "http://localhost:5000";
+ 
 const token = localStorage.getItem("token");
-
+ 
 const retryWakeUpServer = async (
   dispatch,
   rejectWithValue,
@@ -23,7 +23,7 @@ const retryWakeUpServer = async (
   }
   return false;
 };
-
+ 
 export const fetchBrands = createAsyncThunk(
   "content/fetchBrands",
   async (_, { getState, dispatch, rejectWithValue }) => {
@@ -33,17 +33,26 @@ export const fetchBrands = createAsyncThunk(
       dispatch(serverReady());
     }
     try {
-      const response = await axios.get(`${WRITER_URL}/get_brands`, {
-        headers: { "x-access-token": token },
-      });
-      console.log("Brands Response:", response.data);
-
+      const response = await axios.get(
+        `${WRITER_URL}/get_brands`,
+        {
+          headers: { "x-access-token": token },
+        }
+      );
+      console.log("Brands Response:", response);
+      console.log(
+        "Brands Response 2:",
+        response.data?.brands || response.data?.data || []
+      );
+ 
       // Map the response.brands array to the expected brand format
-      return (response.data?.brands || []).map((b) => ({
-        id: (b.name || "unknown") + Date.now().toString(),
-        name: b.name || "Unknown Brand",
-        tone: b.tone || "Neutral",
-        logo: b.logo_base64 ? `data:image/jpeg;base64,${b.logo_base64}` : null,
+      return (response.data?.brands || response.data?.data || []).map((b) => ({
+        id: (b.brand || "unknown") + Date.now().toString(),
+        name: b.brand || "Unknown Brand",
+        tone: b.content.text || "Neutral",
+        logo: b.content.image_base64
+          ? `data:image/jpeg;base64,${b.content.image_base64}`
+          : null,
         urls: b.urls || [],
       }));
     } catch (err) {
@@ -52,7 +61,7 @@ export const fetchBrands = createAsyncThunk(
     }
   }
 );
-
+ 
 export const fetchHistory = createAsyncThunk(
   "content/fetchHistory",
   async (_, { getState, dispatch, rejectWithValue }) => {
@@ -62,18 +71,25 @@ export const fetchHistory = createAsyncThunk(
       dispatch(serverReady());
     }
     try {
-      const response = await axios.get(`${WRITER_URL}/get_history`, {
-        headers: { "x-access-token": token },
-      });
-      console.log("History Response:", response.data);
-      return response.data?.history || [];
+      const response = await axios.get(
+        `${WRITER_URL}/get_history`,
+        {
+          headers: { "x-access-token": token },
+        }
+      );
+      console.log("History Response:", response.data.data);
+      console.log(
+        "History Response 2:",
+        response.data?.history || response.data?.data || []
+      );
+      return response.data?.history || response.data?.data || [];
     } catch (err) {
       console.error("Error fetching history:", err);
       return rejectWithValue(err.response?.data?.error || err.message);
     }
   }
 );
-
+ 
 export const generateContent = createAsyncThunk(
   "content/generateContent",
   async (payload, { getState, dispatch, rejectWithValue }) => {
@@ -88,14 +104,14 @@ export const generateContent = createAsyncThunk(
         payload,
         { headers: { "x-access-token": token } }
       );
-      console.log("Generated Data", response.data);
-      return response.data.results; // Return the results array instead of the entire response.data
+      console.log("Generated Data", response);
+      return response.data?.results || response.data?.data || []; // Return the results array instead of the entire response.data
     } catch (err) {
       return rejectWithValue(err.response?.data?.error || err.message);
     }
   }
 );
-
+ 
 export const wakeUpServer = createAsyncThunk(
   "content/wakeUpServer",
   async (_, { dispatch, rejectWithValue }) => {
@@ -107,7 +123,7 @@ export const wakeUpServer = createAsyncThunk(
     return false;
   }
 );
-
+ 
 const contentSlice = createSlice({
   name: "content",
   initialState: {
@@ -195,7 +211,7 @@ const contentSlice = createSlice({
       });
   },
 });
-
+ 
 export const {
   setTopic,
   setStopAfter,

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unknown-property */
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -10,12 +9,13 @@ import {
   resetGeneration,
   clearError,
 } from "../../redux/slices/content/contentSlice";
-import ContentSettings from "./ContentSettings";
-import BrandManagement from "./BrandManagement";
-import CreationProgress from "./CreationProgress";
-import BatchContentSettings from "./BatchContentSettings";
-import BatchResults from "./BatchResults";
-import HistoryPanel from "./HistoryPanel";
+
+import BrandManagement from "../writer/brand/BrandManagement";
+import CreationProgress from "../writer/progress/CreationProgress";
+import BatchContentSettings from "../writer/settings/BatchContentSettings";
+import BatchResults from "../writer/results/BatchResults";
+import HistoryPanel from "../writer/history/HistoryPanel";
+import ContentSettings from "../writer/settings/ContentSettings";
 
 const WAKE_UP_MESSAGES = [
   "Summoning the AI muse...",

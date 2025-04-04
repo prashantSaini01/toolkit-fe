@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setActiveBrand, addBrand } from "../../redux/slices/content/contentSlice";
+import { setActiveBrand, addBrand } from "../../../redux/slices/content/contentSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 

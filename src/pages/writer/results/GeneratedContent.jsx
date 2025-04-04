@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unknown-property */
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";

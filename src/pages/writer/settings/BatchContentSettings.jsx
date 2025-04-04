@@ -1,20 +1,14 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { generateContent, resetGeneration } from "../../redux/slices/content/contentSlice";
+import { generateContent, resetGeneration } from "../../../redux/slices/content/contentSlice";
 import { toast } from "react-toastify";
 import ContentSettings from "./ContentSettings";
-import BrandManagement from "./BrandManagement";
+import BrandManagement from "../brand/BrandManagement";
 
 function BatchContentSettings() {
   const dispatch = useDispatch();
-  const {
-    error,
-    isGenerating,
-    isServerReady,
-    stopAfter,
-    includeImage,
-    activeBrand,
-  } = useSelector((state) => state.content);
+  const { isGenerating, isServerReady, stopAfter, includeImage, activeBrand } =
+    useSelector((state) => state.content);
   const [topics, setTopics] = useState([""]);
   const [batchName, setBatchName] = useState("");
 

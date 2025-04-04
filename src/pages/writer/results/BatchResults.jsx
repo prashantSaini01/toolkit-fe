@@ -65,11 +65,10 @@ function BatchResults() {
       <div className="space-y-6">
         {data.map((item, index) => {
           const { mainContent, caption, hashtags, visual } = parseContent(
-            item.final_content?.text // Use final_content instead of content
+            item.content?.text // Use content instead of content
           );
           // Only mark as error if text content indicates failure
-          const hasError =
-            item.final_content?.text?.startsWith("Error:") || false;
+          const hasError = item.content?.text?.startsWith("Error:") || false;
 
           return (
             <div
@@ -90,16 +89,14 @@ function BatchResults() {
                 {!hasError && (
                   <div className="flex space-x-3">
                     <button
-                      onClick={() => handleCopy(item.final_content?.text)}
+                      onClick={() => handleCopy(item.content?.text)}
                       className="text-blue-600 hover:text-blue-800"
                       title="Copy content"
                     >
                       <FontAwesomeIcon icon={faCopy} />
                     </button>
                     <button
-                      onClick={() =>
-                        handleShare("twitter", item.final_content?.text)
-                      }
+                      onClick={() => handleShare("twitter", item.content?.text)}
                       className="text-[#1DA1F2] hover:text-[#1A91DA]"
                       title="Share to Twitter"
                     >
@@ -107,7 +104,7 @@ function BatchResults() {
                     </button>
                     <button
                       onClick={() =>
-                        handleShare("linkedin", item.final_content?.text)
+                        handleShare("linkedin", item.content?.text)
                       }
                       className="text-[#0A66C2] hover:text-[#0A548B]"
                       title="Share to LinkedIn"
@@ -116,7 +113,7 @@ function BatchResults() {
                     </button>
                     <button
                       onClick={() =>
-                        handleShare("instagram", item.final_content?.text)
+                        handleShare("instagram", item.content?.text)
                       }
                       className="text-gradient-to-r from-[#405DE6] via-[#C13584] to-[#F77737] hover:brightness-110"
                       title="Share to Instagram"
@@ -131,7 +128,7 @@ function BatchResults() {
                 <div className="text-red-600 space-y-2">
                   <p className="font-medium">Error generating content:</p>
                   <div className="p-3 bg-red-100 rounded text-sm overflow-x-auto">
-                    {item.final_content?.text?.replace("Error: ", "")}
+                    {item.content?.text?.replace("Error: ", "")}
                   </div>
                 </div>
               ) : (
@@ -139,21 +136,21 @@ function BatchResults() {
                   <div className="text-gray-700 whitespace-pre-wrap mb-4">
                     {mainContent}
                   </div>
-                  {item.final_content?.image && (
+                  {item.content?.image_base64 && (
                     <img
-                      src={`data:image/jpeg;base64,${item.final_content.image}`}
+                      src={`data:image_base64/jpeg;base64,${item.content.image_base64}`}
                       alt={`Visual for ${item.topic}`}
                       className="max-w-full h-auto rounded-lg shadow-md mb-4"
                     />
                   )}
-                  {item.final_content?.image_error && (
+                  {item.content?.image_error && (
                     <div className="text-yellow-600 text-sm mb-4 p-2 bg-yellow-50 rounded">
-                      Image Generation: {item.final_content.image_error}
+                      Image Generation: {item.content.image_error}
                     </div>
                   )}
                   {visual &&
-                    !item.final_content?.image &&
-                    !item.final_content?.image_error && (
+                    !item.content?.image_base64 &&
+                    !item.content?.image_error && (
                       <div className="text-gray-600 text-sm mb-4">
                         <span className="font-medium">Visual suggestion:</span>{" "}
                         {visual}

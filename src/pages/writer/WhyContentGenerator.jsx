@@ -9,7 +9,7 @@ import {
   faNetworkWired,
   faEye,
 } from "@fortawesome/free-solid-svg-icons";
-
+ 
 function WhyUs() {
   const differentiators = [
     {
@@ -49,7 +49,7 @@ function WhyUs() {
         "Transparent steps show you the magic, not just the result, at every stage.",
     },
   ];
-
+ 
   const comparisonData = [
     {
       feature: "Instagram-Specific Workflow",
@@ -94,7 +94,7 @@ function WhyUs() {
       writesonic: "Partial",
     },
   ];
-
+ 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col items-center justify-center p-6">
       <div className="w-full max-w-5xl bg-white rounded-xl shadow-2xl p-8 transform transition-all duration-300 hover:shadow-3xl">
@@ -114,7 +114,7 @@ function WhyUs() {
             Try It Now
           </Link>
         </section>
-
+ 
         {/* The Problem Section */}
         <section className="py-12 text-center border-b border-gray-200">
           <h2 className="text-3xl font-semibold text-gray-800 mb-6">
@@ -144,7 +144,7 @@ function WhyUs() {
             </div>
           </div>
         </section>
-
+ 
         {/* Differentiators Section */}
         <section className="py-12">
           <h2 className="text-3xl font-semibold text-gray-800 mb-8 text-center">
@@ -170,7 +170,7 @@ function WhyUs() {
             ))}
           </div>
         </section>
-
+ 
         {/* Comparison Table */}
         <section className="py-12 border-t border-gray-200">
           <h2 className="text-3xl font-semibold text-gray-800 mb-8 text-center">
@@ -224,7 +224,7 @@ function WhyUs() {
             </table>
           </div>
         </section>
-
+ 
         {/* Proof Points Section */}
         <section className="py-12 border-t border-gray-200">
           <h2 className="text-3xl font-semibold text-gray-800 mb-8 text-center">
@@ -258,7 +258,7 @@ function WhyUs() {
             </div>
           </div>
         </section>
-
+ 
         {/* Call to Action Section */}
         <section className="py-12 text-center bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg">
           <h2 className="text-3xl font-semibold text-gray-800 mb-4">
@@ -274,7 +274,7 @@ function WhyUs() {
             Get Started Free
           </Link>
         </section>
-
+ 
         {/* Technical Note */}
         <footer className="py-6 text-center text-gray-500 text-sm">
           <p>
@@ -286,5 +286,6 @@ function WhyUs() {
     </div>
   );
 }
-
+ 
 export default WhyUs;
+ 
