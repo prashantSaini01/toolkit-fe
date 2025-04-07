@@ -238,18 +238,13 @@ const Homepage = () => {
               Handles calls, appointments, and inquiries seamlessly.
             </p>
           </div>
-{/*           <Link
+          <Link
             to="/vira-ai"
             className="bg-gradient-to-r from-indigo-500 to-blue-600 text-white py-3 px-16 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
           >
             Use
-          </Link> */}
-            <button
-  onClick={() => window.location.href = "https://main.d1qe5opaoqwg72.amplifyapp.com/"}
-  className="bg-gradient-to-r from-indigo-500 to-blue-600 text-white py-3 px-16 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 relative z-10"
->
-  Use
-</button>
+          </Link>
+
 
         </div>
 

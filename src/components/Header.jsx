@@ -94,7 +94,7 @@ const Header = () => {
               DocuChat 
             </Link>
           </li>
-          {/* <li>
+          <li>
             <Link
               to="/vira-ai"
               className={`transition-colors duration-300 ${
@@ -105,7 +105,7 @@ const Header = () => {
             >
               Vira AI 
             </Link>
-          </li> */}
+          </li>
           <li>
             <Link
               to="/aivertise"
@@ -210,7 +210,7 @@ const Header = () => {
                  DocuChat 
                 </Link>
               </li>
-              {/* <li>
+              <li>
             <Link
               to="/vira-ai"
               className={`transition-colors duration-300 ${
@@ -221,7 +221,7 @@ const Header = () => {
             >
               Vira AI 
             </Link>
-          </li> */}
+          </li>
           <li>
             <Link
               to="/aivertise"
