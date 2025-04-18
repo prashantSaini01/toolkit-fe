@@ -28,13 +28,13 @@ const Header = () => {
   return (
     <header className="bg-gray-50 p-3 shadow-custom fixed top-0 left-0 w-full z-50">
       <nav className="container mx-auto flex justify-between items-center ">
-        {/* Logo and Title */}
+        {/* Title */}
         <div className="flex items-center space-x-4 mx-10">
-          <img src={logo} alt="Logo" className="h-10 w-13 rounded-sm object-cover" />
-          <h1 className="text-3xl md:text-3xl font-bold tracking-wide text-black">
-            AI Lab
-          </h1>
-        </div>
+  <h1 className="text-3xl md:text-3xl font-bold tracking-wide text-black">
+    <span className="text-red-600">Toolkit</span> Studio
+  </h1>
+</div>
+
 
         {/* Mobile Menu Toggle */}
         <div className="block lg:hidden">
@@ -69,7 +69,7 @@ const Header = () => {
                   : 'hover:text-red-600'
               }`}
             >
-              Abrassio
+              Scrapion
             </Link>
           </li>
           <li>
@@ -79,7 +79,7 @@ const Header = () => {
                 isActive('/socialspark') ? 'text-red-600 font-semibold' : 'hover:text-red-600'
               }`}
             >
-              Social Spark
+              Inkwave
             </Link>
           </li>
           <li>
@@ -91,31 +91,7 @@ const Header = () => {
                   : 'hover:text-red-600'
               }`}
             >
-              DocuChat 
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/vira-ai"
-              className={`transition-colors duration-300 ${
-                isActive('/vira-ai')
-                  ? 'text-red-600 font-semibold'
-                  : 'hover:text-red-600'
-              }`}
-            >
-              Vira AI 
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/aivertise"
-              className={`transition-colors duration-300 ${
-                isActive('/aivertise')
-                  ? 'text-red-600 font-semibold'
-                  : 'hover:text-red-600'
-              }`}
-            >
-              AIvertise
+              DocTalks
             </Link>
           </li>
         </ul>
@@ -183,7 +159,7 @@ const Header = () => {
                   }`}
                   onClick={handleMenuToggle}
                 >
-                  Abrassio
+                  Scrapion
                 </Link>
               </li>
               <li>
@@ -194,7 +170,7 @@ const Header = () => {
                   }`}
                   onClick={handleMenuToggle}
                 >
-                  Social Spark
+                  Inkwave
                 </Link>
               </li>
               <li>
@@ -207,33 +183,10 @@ const Header = () => {
                   }`}
                   onClick={handleMenuToggle}
                 >
-                 DocuChat 
+                DocTalks
                 </Link>
               </li>
-              <li>
-            <Link
-              to="/vira-ai"
-              className={`transition-colors duration-300 ${
-                isActive('/vira-ai')
-                  ? 'text-red-600 font-semibold'
-                  : 'hover:text-red-600'
-              }`}
-            >
-              Vira AI 
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/aivertise"
-              className={`transition-colors duration-300 ${
-                isActive('/aivertise')
-                  ? 'text-red-600 font-semibold'
-                  : 'hover:text-red-600'
-              }`}
-            >
-              AIvertise
-            </Link>
-          </li>
+            
             </ul>
             <div className="mt-6">
               {!token ? (
