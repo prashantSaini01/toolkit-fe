@@ -10,12 +10,12 @@ import {
   clearError,
 } from "../../redux/slices/content/contentSlice";
 
-import BrandManagement from "../writer/brand/BrandManagement";
-import CreationProgress from "../writer/progress/CreationProgress";
-import BatchContentSettings from "../writer/settings/BatchContentSettings";
-import BatchResults from "../writer/results/BatchResults";
-import HistoryPanel from "../writer/history/HistoryPanel";
-import ContentSettings from "../writer/settings/ContentSettings";
+import BrandManagement from "./brand/BrandManagement";
+import CreationProgress from "./progress/CreationProgress";
+import BatchContentSettings from "./settings/BatchContentSettings";
+import BatchResults from "./results/BatchResults";
+import HistoryPanel from "./history/HistoryPanel";
+import ContentSettings from "./settings/ContentSettings";
 
 const WAKE_UP_MESSAGES = [
   "Summoning the AI muse...",

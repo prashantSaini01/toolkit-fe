@@ -43,7 +43,7 @@ const Homepage = () => {
             </p>
           </div>
           <Link
-            to="/abrassio"
+            to="/scrapion"
             className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 px-16 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300"
           >
             Use
@@ -70,7 +70,7 @@ const Homepage = () => {
             </p>
           </div>
           <Link
-            to="/socialspark"
+            to="/inkwave"
             className="bg-gradient-to-r from-purple-500 to-pink-600 text-white py-3 px-16 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300"
           >
             Use
@@ -97,7 +97,7 @@ const Homepage = () => {
             </p>
           </div>
           <Link
-            to="/legalbot"
+            to="/doctalks"
             className="bg-gradient-to-r from-green-500 to-teal-600 text-white py-3 px-16 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300"
           >
             Use

@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Abrassio from './pages/abrassio/Abrassio'
+import Abrassio from './pages/abrassio/Scrapion'
 import InstagramScraper from "./pages/abrassio/InstagramScraper";
 import TwitterScraper from "./pages/abrassio/TwitterScraper";
 import LinkedinScraper from "./pages/abrassio/LinkedinScraper";
@@ -11,12 +11,10 @@ import YoutubeScraper from "./pages/abrassio/Youtube";
 import TwitchScraper from "./pages/abrassio/Twitch";
 import TikTokScraper from "./pages/abrassio/TiktokScrapper";
 import Homepage from "./pages/Homepage";
-import ContentGenerator from "./pages/writer/ContentGenerator";
+import ContentGenerator from "./pages/writer/Inkwave";
 import Dashboard from "./pages/abrassio/Dashboard";
-import Lawbot from "./pages/docuChat/lawbot";
+import Lawbot from "./pages/docuChat/DocTalks";
 import WhyUs from "./pages/writer/WhyContentGenerator";
-import ViraAI from "./pages/viraAI/ViraAI";
-import AIvertise from "./pages/aivertise/Aivertise";
 import Users from "./pages/abrassio/Users";
 
 const RoutesConfig = () => {
@@ -25,24 +23,22 @@ const RoutesConfig = () => {
       {/* Public routes */}
       <Route path="/signup" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Homepage />} />
 
       {/* Protected routes */}
       <Route element={<PrivateRoute />}>
-        <Route path="/" element={<Homepage />} />
+        
         <Route path="/home" element={<Homepage />} />
-        <Route path="/abrassio" element={<Abrassio />} />
+        <Route path="/scrapion" element={<Abrassio />} />
         <Route path="/instagram" element={<InstagramScraper />} />
         <Route path="/twitter" element={<TwitterScraper />} />
         <Route path="/linkedin" element={<LinkedinScraper />} />
         <Route path="/youtube" element={<YoutubeScraper />} />
         <Route path="/twitch" element={<TwitchScraper />} />
         <Route path="/tiktok" element={<TikTokScraper />} />
-        <Route path="/socialspark" element={<WhyUs />} />
-        <Route path="/try-it" element={<ContentGenerator />} />
+        <Route path="/inkwave" element={<ContentGenerator />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/legalbot" element={<Lawbot />} />
-        <Route path="/vira-ai" element={<ViraAI />} />
-        <Route path="/aivertise" element={<AIvertise />} />
+        <Route path="/doctalks" element={<Lawbot />} />
         <Route path="/users" element={<Users />} />
       </Route>
     </Routes>
