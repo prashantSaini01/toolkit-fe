@@ -62,7 +62,7 @@ const Header = () => {
           </li>
           <li>
             <Link
-              to="/abrassio"
+              to="/scrapion"
               className={`transition-colors duration-300 ${
                 isActive('/abrassio')
                   ? 'text-red-600 font-semibold'
@@ -74,7 +74,7 @@ const Header = () => {
           </li>
           <li>
             <Link
-              to="/socialspark"
+              to="/inkwave"
               className={`transition-colors duration-300 ${
                 isActive('/socialspark') ? 'text-red-600 font-semibold' : 'hover:text-red-600'
               }`}
@@ -84,7 +84,7 @@ const Header = () => {
           </li>
           <li>
             <Link
-              to="/legalbot"
+              to="/doctalks"
               className={`transition-colors duration-300 ${
                 isActive('/legalbot')
                   ? 'text-red-600 font-semibold'
@@ -151,7 +151,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to="/abrassio"
+                  to="/scrapion"
                   className={`block transition-colors duration-300 ${
                     isActive('/abrassio')
                       ? 'text-red-600 font-semibold'
@@ -164,7 +164,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to="/try-it"
+                  to="/inkwave"
                   className={`block transition-colors duration-300 ${
                     isActive('/socialspark') ? 'text-red-600 font-semibold' : 'hover:text-secondary'
                   }`}
@@ -175,7 +175,7 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to="/"
+                  to="/doctalks"
                   className={`block transition-colors duration-300 ${
                     isActive('/lawbot')
                       ? 'text-red-600 font-semibold'

@@ -100,10 +100,10 @@ function ContentGenerator() {
       <header className="sticky top-0 z-10 bg-white shadow-md rounded-b-lg p-4 mb-6">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 text-transparent bg-clip-text">
-            AI Content Generator
+            Inkwave - AI Content Generator
           </h1>
           <div className="flex items-center space-x-4">
-            <button
+            {/* <button
               onClick={() => setBatchMode(!batchMode)}
               className={`px-4 py-2 rounded-lg transition-colors ${
                 batchMode
@@ -112,7 +112,7 @@ function ContentGenerator() {
               }`}
             >
               {batchMode ? "Switch to Single Mode" : "Switch to Batch Mode"}
-            </button>
+            </button> */}
             <button
               onClick={() => dispatch(resetGeneration())}
               className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
@@ -129,7 +129,7 @@ function ContentGenerator() {
           ) : (
             <form onSubmit={handleGenerate} className="space-y-6">
               <ContentSettings />
-              <BrandManagement />
+              {/* <BrandManagement /> */}
               <button
                 type="submit"
                 className={`relative w-full py-3 px-6 rounded-lg text-white font-semibold shadow-md transition-all duration-300 flex items-center justify-center overflow-hidden ${
@@ -188,11 +188,11 @@ function ContentGenerator() {
               </button>
             </form>
           )}
-          <CreationProgress />
+          {/* <CreationProgress /> */}
           <BatchResults /> {/* Unified rendering */}
         </div>
         <div className="lg:col-span-1">
-          <HistoryPanel />
+          {/* <HistoryPanel /> */}
         </div>
       </div>
       <style jsx="true">{`

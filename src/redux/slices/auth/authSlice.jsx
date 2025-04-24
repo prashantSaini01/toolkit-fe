@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
 import axios from "axios"; // Use raw axios for signup and login (no token required)
-import API_URL from "../../../components/config"
+
+
+const API_URL = "http://127.0.0.1:5000/auth"
 
 // Async Thunk for signup
 export const signup = createAsyncThunk(

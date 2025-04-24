@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import Abrassio from './pages/abrassio/Scrapion'
+import Abrassio from './pages/abrassio/Scrapion';
 import InstagramScraper from "./pages/abrassio/InstagramScraper";
 import TwitterScraper from "./pages/abrassio/TwitterScraper";
 import LinkedinScraper from "./pages/abrassio/LinkedinScraper";
@@ -21,13 +21,12 @@ const RoutesConfig = () => {
   return (
     <Routes>
       {/* Public routes */}
+      <Route path="/" element={<Homepage />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/" element={<Homepage />} />
 
-      {/* Protected routes */}
+      {/* Protected route wrapper */}
       <Route element={<PrivateRoute />}>
-        
         <Route path="/home" element={<Homepage />} />
         <Route path="/scrapion" element={<Abrassio />} />
         <Route path="/instagram" element={<InstagramScraper />} />

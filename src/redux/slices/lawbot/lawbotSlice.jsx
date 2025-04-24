@@ -1,13 +1,290 @@
+// import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+// import api from "../../../components/axiosConfig";
+
+// // Async Thunk for fetching sessions
+// export const fetchSessions = createAsyncThunk(
+//   "lawbot/fetchSessions",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const response = await api.get("/docu_chat/sessions");
+//       return response.data;
+//     } catch (error) {
+//       console.error("Failed to fetch sessions:", error);
+//       return rejectWithValue("Failed to fetch sessions.");
+//     }
+//   }
+// );
+
+// // Async Thunk for creating a new session
+// export const createNewSession = createAsyncThunk(
+//   "lawbot/createNewSession",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const response = await api.post("/docu_chat/sessions");
+//       return response.data.session_id;
+//     } catch (error) {
+//       console.error("Failed to create new session:", error);
+//       return rejectWithValue("Failed to create new session.");
+//     }
+//   }
+// );
+
+// // Async Thunk for renaming a session
+// export const renameSession = createAsyncThunk(
+//   "lawbot/renameSession",
+//   async ({ oldSessionId, newName }, { rejectWithValue }) => {
+//     try {
+//       const response = await api.put(`/docu_chat/sessions/${oldSessionId}/rename`, {
+//         new_name: newName,
+//       });
+//       return { oldSessionId, newName };
+//     } catch (error) {
+//       console.error("Failed to rename session:", error);
+//       return rejectWithValue("Failed to rename session.");
+//     }
+//   }
+// );
+
+// // Async Thunk for selecting a session (fetching messages and PDFs)
+// export const selectSession = createAsyncThunk(
+//   "lawbot/selectSession",
+//   async (sessionId, { rejectWithValue }) => {
+//     try {
+//       const messagesResponse = await api.get(`/docu_chat/sessions/${sessionId}/messages`);
+//       const pdfsResponse = await api.get(`/docu_chat/sessions/${sessionId}/pdfs`);
+//       return {
+//         sessionId,
+//         chatHistory: messagesResponse.data,
+//         uploadedPdfs: pdfsResponse.data,
+//       };
+//     } catch (error) {
+//       console.error("Failed to load session:", error);
+//       return rejectWithValue("Failed to load session.");
+//     }
+//   }
+// );
+
+// // Async Thunk for deleting a session
+// export const deleteSession = createAsyncThunk(
+//   "lawbot/deleteSession",
+//   async (sessionId, { rejectWithValue }) => {
+//     try {
+//       await api.delete(`/docu_chat/sessions/${sessionId}`);
+//       return sessionId;
+//     } catch (error) {
+//       console.error("Failed to delete session:", error);
+//       return rejectWithValue("Failed to delete session.");
+//     }
+//   }
+// );
+
+// // Async Thunk for fetching chat history
+// export const fetchChatHistory = createAsyncThunk(
+//   "lawbot/fetchChatHistory",
+//   async (sessionId, { rejectWithValue }) => {
+//     try {
+//       const response = await api.get(`/docu_chat/sessions/${sessionId}/messages`);
+//       return response.data;
+//     } catch (error) {
+//       console.error("Failed to fetch chat history:", error);
+//       return rejectWithValue("Failed to fetch chat history.");
+//     }
+//   }
+// );
+
+// // Async Thunk for fetching uploaded PDFs
+// export const fetchUploadedPdfs = createAsyncThunk(
+//   "lawbot/fetchUploadedPdfs",
+//   async (sessionId, { rejectWithValue }) => {
+//     try {
+//       const response = await api.get(`/docu_chat/sessions/${sessionId}/pdfs`);
+//       return response.data;
+//     } catch (error) {
+//       console.error("Failed to fetch PDFs:", error);
+//       return rejectWithValue("Failed to fetch PDFs.");
+//     }
+//   }
+// );
+
+// // Async Thunk for generating embed code
+// export const generateEmbedCode = createAsyncThunk(
+//   "lawbot/generateEmbedCode",
+//   async (sessionId, { rejectWithValue }) => {
+//     try {
+//       const response = await api.get(`/docu_chat/sessions/${sessionId}/embed?documentsOnly=true`);
+//       return response.data.embed_code;
+//     } catch (error) {
+//       console.error("Failed to generate embed code:", error);
+//       return rejectWithValue("Error generating embed code. Please try again.");
+//     }
+//   }
+// );
+
+// // Slice
+// const lawbotSlice = createSlice({
+//   name: "lawbot",
+//   initialState: {
+//     sessions: [],
+//     currentSession: null,
+//     chatHistory: [],
+//     uploadedPdfs: [],
+//     embedCode: "",
+//     isLoading: false,
+//     error: null,
+//   },
+//   reducers: {
+//     clearSession: (state) => {
+//       state.currentSession = null;
+//       state.chatHistory = [];
+//       state.uploadedPdfs = [];
+//       state.embedCode = "";
+//       state.error = null;
+//     },
+//   },
+//   extraReducers: (builder) => {
+//     builder
+//       // Fetch Sessions
+//       .addCase(fetchSessions.pending, (state) => {
+//         state.isLoading = true;
+//         state.error = null;
+//       })
+//       .addCase(fetchSessions.fulfilled, (state, action) => {
+//         state.isLoading = false;
+//         state.sessions = action.payload;
+//       })
+//       .addCase(fetchSessions.rejected, (state, action) => {
+//         state.isLoading = false;
+//         state.error = action.payload;
+//       })
+//       // Create New Session
+//       .addCase(createNewSession.pending, (state) => {
+//         state.isLoading = true;
+//         state.error = null;
+//       })
+//       .addCase(createNewSession.fulfilled, (state, action) => {
+//         state.isLoading = false;
+//         state.currentSession = action.payload;
+//         state.sessions = [...state.sessions, action.payload];
+//         state.chatHistory = [];
+//         state.uploadedPdfs = [];
+//         state.embedCode = "";
+//       })
+//       .addCase(createNewSession.rejected, (state, action) => {
+//         state.isLoading = false;
+//         state.error = action.payload;
+//       })
+//       // Rename Session
+//       .addCase(renameSession.pending, (state) => {
+//         state.isLoading = true;
+//         state.error = null;
+//       })
+//       .addCase(renameSession.fulfilled, (state, action) => {
+//         state.isLoading = false;
+//         const { oldSessionId, newName } = action.payload;
+//         state.sessions = state.sessions.map((session) =>
+//           session === oldSessionId ? newName : session
+//         );
+//         if (state.currentSession === oldSessionId) {
+//           state.currentSession = newName;
+//         }
+//       })
+//       .addCase(renameSession.rejected, (state, action) => {
+//         state.isLoading = false;
+//         state.error = action.payload;
+//       })
+//       // Select Session
+//       .addCase(selectSession.pending, (state) => {
+//         state.isLoading = true;
+//         state.error = null;
+//       })
+//       .addCase(selectSession.fulfilled, (state, action) => {
+//         state.isLoading = false;
+//         state.currentSession = action.payload.sessionId;
+//         state.chatHistory = action.payload.chatHistory;
+//         state.uploadedPdfs = action.payload.uploadedPdfs;
+//         state.embedCode = "";
+//       })
+//       .addCase(selectSession.rejected, (state, action) => {
+//         state.isLoading = false;
+//         state.error = action.payload;
+//       })
+//       // Delete Session
+//       .addCase(deleteSession.pending, (state) => {
+//         state.isLoading = true;
+//         state.error = null;
+//       })
+//       .addCase(deleteSession.fulfilled, (state, action) => {
+//         state.isLoading = false;
+//         state.currentSession = null;
+//         state.chatHistory = [];
+//         state.uploadedPdfs = [];
+//         state.embedCode = "";
+//         state.sessions = state.sessions.filter((id) => id !== action.payload);
+//       })
+//       .addCase(deleteSession.rejected, (state, action) => {
+//         state.isLoading = false;
+//         state.error = action.payload;
+//       })
+//       // Fetch Chat History
+//       .addCase(fetchChatHistory.pending, (state) => {
+//         state.isLoading = true;
+//         state.error = null;
+//       })
+//       .addCase(fetchChatHistory.fulfilled, (state, action) => {
+//         state.isLoading = false;
+//         state.chatHistory = action.payload;
+//       })
+//       .addCase(fetchChatHistory.rejected, (state, action) => {
+//         state.isLoading = false;
+//         state.error = action.payload;
+//       })
+//       // Fetch Uploaded PDFs
+//       .addCase(fetchUploadedPdfs.pending, (state) => {
+//         state.isLoading = true;
+//         state.error = null;
+//       })
+//       .addCase(fetchUploadedPdfs.fulfilled, (state, action) => {
+//         state.isLoading = false;
+//         state.uploadedPdfs = action.payload;
+//       })
+//       .addCase(fetchUploadedPdfs.rejected, (state, action) => {
+//         state.isLoading = false;
+//         state.error = action.payload;
+//       })
+//       // Generate Embed Code
+//       .addCase(generateEmbedCode.pending, (state) => {
+//         state.isLoading = true;
+//         state.error = null;
+//       })
+//       .addCase(generateEmbedCode.fulfilled, (state, action) => {
+//         state.isLoading = false;
+//         state.embedCode = action.payload;
+//       })
+//       .addCase(generateEmbedCode.rejected, (state, action) => {
+//         state.isLoading = false;
+//         state.embedCode = action.payload; // Set error message as embedCode
+//       });
+//   },
+// });
+
+// export const { clearSession } = lawbotSlice.actions;
+// export default lawbotSlice.reducer;
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../../components/axiosConfig";
+
 
 // Async Thunk for fetching sessions
 export const fetchSessions = createAsyncThunk(
   "lawbot/fetchSessions",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.get("/sessions");
-      return response.data;
+      const response = await api.get("/docu_chat/sessions");
+      // Transform the response to extract session_ids
+      return response.data.map((session) => ({
+        id: session.session_id,
+        agentConfig: session.agent_config,
+        createdAt: session.created_at,
+      }));
     } catch (error) {
       console.error("Failed to fetch sessions:", error);
       return rejectWithValue("Failed to fetch sessions.");
@@ -20,7 +297,7 @@ export const createNewSession = createAsyncThunk(
   "lawbot/createNewSession",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await api.post("/sessions");
+      const response = await api.post("/docu_chat/sessions");
       return response.data.session_id;
     } catch (error) {
       console.error("Failed to create new session:", error);
@@ -34,9 +311,12 @@ export const renameSession = createAsyncThunk(
   "lawbot/renameSession",
   async ({ oldSessionId, newName }, { rejectWithValue }) => {
     try {
-      const response = await api.put(`/sessions/${oldSessionId}/rename`, {
-        new_name: newName,
-      });
+      const response = await api.put(
+        `/docu_chat/sessions/${oldSessionId}/rename`,
+        {
+          new_name: newName,
+        }
+      );
       return { oldSessionId, newName };
     } catch (error) {
       console.error("Failed to rename session:", error);
@@ -50,8 +330,12 @@ export const selectSession = createAsyncThunk(
   "lawbot/selectSession",
   async (sessionId, { rejectWithValue }) => {
     try {
-      const messagesResponse = await api.get(`/sessions/${sessionId}/messages`);
-      const pdfsResponse = await api.get(`/sessions/${sessionId}/pdfs`);
+      const messagesResponse = await api.get(
+        `/docu_chat/sessions/${sessionId}/messages`
+      );
+      const pdfsResponse = await api.get(
+        `/docu_chat/sessions/${sessionId}/pdfs`
+      );
       return {
         sessionId,
         chatHistory: messagesResponse.data,
@@ -69,7 +353,7 @@ export const deleteSession = createAsyncThunk(
   "lawbot/deleteSession",
   async (sessionId, { rejectWithValue }) => {
     try {
-      await api.delete(`/sessions/${sessionId}`);
+      await api.delete(`/docu_chat/sessions/${sessionId}`);
       return sessionId;
     } catch (error) {
       console.error("Failed to delete session:", error);
@@ -83,7 +367,9 @@ export const fetchChatHistory = createAsyncThunk(
   "lawbot/fetchChatHistory",
   async (sessionId, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/sessions/${sessionId}/messages`);
+      const response = await api.get(
+        `/docu_chat/sessions/${sessionId}/messages`
+      );
       return response.data;
     } catch (error) {
       console.error("Failed to fetch chat history:", error);
@@ -97,7 +383,9 @@ export const fetchUploadedPdfs = createAsyncThunk(
   "lawbot/fetchUploadedPdfs",
   async (sessionId, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/sessions/${sessionId}/pdfs`);
+      const response = await api.get(
+        `/docu_chat/sessions/${sessionId}/pdfs`
+      );
       return response.data;
     } catch (error) {
       console.error("Failed to fetch PDFs:", error);
@@ -111,11 +399,45 @@ export const generateEmbedCode = createAsyncThunk(
   "lawbot/generateEmbedCode",
   async (sessionId, { rejectWithValue }) => {
     try {
-      const response = await api.get(`/sessions/${sessionId}/embed?documentsOnly=true`);
+      const response = await api.get(
+        `/docu_chat/sessions/${sessionId}/embed?documentsOnly=true`
+      );
       return response.data.embed_code;
     } catch (error) {
       console.error("Failed to generate embed code:", error);
       return rejectWithValue("Error generating embed code. Please try again.");
+    }
+  }
+);
+
+// Add these new async thunks after the existing ones
+export const updateAgentConfig = createAsyncThunk(
+  "lawbot/updateAgentConfig",
+  async ({ sessionId, config }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(
+        `/docu_chat/sessions/${sessionId}/config`,
+        config
+      );
+      return response.data.agent_config;
+    } catch (error) {
+      console.error("Failed to update agent config:", error);
+      return rejectWithValue("Failed to update agent configuration.");
+    }
+  }
+);
+
+export const fetchAgentConfig = createAsyncThunk(
+  "lawbot/fetchAgentConfig",
+  async (sessionId, { rejectWithValue }) => {
+    try {
+      const response = await api.get(
+        `/docu_chat/sessions/${sessionId}/config`
+      );
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch agent config:", error);
+      return rejectWithValue("Failed to fetch agent configuration.");
     }
   }
 );
@@ -131,6 +453,12 @@ const lawbotSlice = createSlice({
     embedCode: "",
     isLoading: false,
     error: null,
+    agentConfig: {
+      name: "",
+      role: "",
+      expertise: "",
+      tone: "professional",
+    },
   },
   reducers: {
     clearSession: (state) => {
@@ -263,6 +591,31 @@ const lawbotSlice = createSlice({
       .addCase(generateEmbedCode.rejected, (state, action) => {
         state.isLoading = false;
         state.embedCode = action.payload; // Set error message as embedCode
+      })
+      // Add these new cases
+      .addCase(updateAgentConfig.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(updateAgentConfig.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.agentConfig = action.payload;
+      })
+      .addCase(updateAgentConfig.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(fetchAgentConfig.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(fetchAgentConfig.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.agentConfig = action.payload;
+      })
+      .addCase(fetchAgentConfig.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
       });
   },
 });

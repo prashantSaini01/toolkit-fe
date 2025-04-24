@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-const WRITER_URL = import.meta.env.VITE_WRITER_URL || "http://localhost:5000";
+import API_URL from "../../../components/config";
+const WRITER_URL = `${API_URL}`;
  
 const token = localStorage.getItem("token");
  
@@ -34,7 +35,7 @@ export const fetchBrands = createAsyncThunk(
     }
     try {
       const response = await axios.get(
-        `${WRITER_URL}/get_brands`,
+        `${WRITER_URL}/social_spark/get_brands`,
         {
           headers: { "x-access-token": token },
         }
@@ -72,7 +73,7 @@ export const fetchHistory = createAsyncThunk(
     }
     try {
       const response = await axios.get(
-        `${WRITER_URL}/get_history`,
+        `${WRITER_URL}/social_spark/get_history`,
         {
           headers: { "x-access-token": token },
         }
@@ -100,7 +101,7 @@ export const generateContent = createAsyncThunk(
     }
     try {
       const response = await axios.post(
-        `${WRITER_URL}/generate_content`,
+        `${WRITER_URL}/social_spark/generate_content`,
         payload,
         { headers: { "x-access-token": token } }
       );

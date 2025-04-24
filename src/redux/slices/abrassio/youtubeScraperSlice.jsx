@@ -7,7 +7,7 @@ export const scrapeYoutube = createAsyncThunk(
   "youtubeScraper/scrapeYoutube",
   async ({ hashtag, maxResults, useCache }, { rejectWithValue }) => {
     try {
-      const response = await api.post("/scrape_youtube", {
+      const response = await api.post("abrassio/scrape_youtube", {
         hashtag,
         max_results: useCache ? null : Number(maxResults),
         use_cache: useCache,
@@ -33,7 +33,7 @@ export const getSummary = createAsyncThunk(
   "youtubeScraper/getSummary",
   async (output, { rejectWithValue }) => {
     try {
-      const response = await api.post("/get-summary", { output });
+      const response = await api.post("abrassio/get-summary", { output });
       if (response.data.summary) {
         return response.data.summary;
       } else {
@@ -50,7 +50,7 @@ export const subscribeNewsletter = createAsyncThunk(
   "youtubeScraper/subscribeNewsletter",
   async ({ platform, tag }, { rejectWithValue }) => {
     try {
-      const response = await api.post("/subscribe_newsletter", { platform, tag });
+      const response = await api.post("abrassio_newsletter/subscribe_newsletter", { platform, tag });
       toast.success(`"${tag}" subscribed for daily newsletter!`, {
         position: "top-right",
         autoClose: 3000,

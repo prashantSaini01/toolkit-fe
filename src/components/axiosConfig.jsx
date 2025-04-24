@@ -5,7 +5,7 @@ import API_URL from "../components/config"
 const api = axios.create({
 
   // For deployment
-  baseURL: API_URL,
+  baseURL: `${API_URL}`,
 
   // For Production
   // baseURL: "/api"
